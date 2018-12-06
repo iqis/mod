@@ -1,0 +1,11 @@
+Package: ntr
+Type: Package
+Title: A lightweight source management system
+Version: 0.1.2.9000
+Author: Siqi Zhang
+Maintainer: Siqi Zhang <iqis.gnahz@gmail.com>
+Description: Not 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
