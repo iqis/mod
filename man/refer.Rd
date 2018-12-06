@@ -7,9 +7,9 @@
 refer(source, target = parent.frame())
 }
 \arguments{
-\item{source}{an environment that provides the objects}
+\item{source}{the providing environment}
 
-\item{target}{an environment that receives the objects}
+\item{target}{the receiving environment}
 }
 \description{
 Exposes the objects in one environment to another

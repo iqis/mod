@@ -7,8 +7,16 @@
 provide(...)
 }
 \arguments{
-\item{...}{dot-dot-dot}
+\item{...}{dot-dot-dot: name of any object to be accessible by user}
 }
 \description{
 Provide objects from a module
+}
+\examples{
+
+provide(a)
+
+a <- 1
+b <- 2
+c <- 3
 }

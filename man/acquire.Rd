@@ -18,3 +18,14 @@ an environment containing objects from the module
 any hidden object (which name/symbol preceded by `.`) are only accessible through
 function defined in the module.
 }
+\examples{
+my_module_path <- system.file("misc", "my_module.R", package = "ntr")
+
+my_module <- acquire(my_module_path)
+
+ls(my_module)
+
+my_module$a
+my_module$e(123)
+
+}
