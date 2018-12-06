@@ -55,7 +55,6 @@ provide <- function(...) {
 #' function defined in the module.
 #'
 #'
-#'
 #' @param file path to an R file
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @return an environment containing objects from the module
