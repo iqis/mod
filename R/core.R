@@ -13,7 +13,7 @@
 #' @param ... dot-dot-dot: name of any object to be accessible by user
 #' @export
 provide <- function(...) {
-        `if`(identical(globalenv(), parent.frame()), stop("only use in a module, to use interactively is not meaningful"))
+        `if`(identical(globalenv(), parent.frame()), stop("Only use in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         assign(x = ".provide", value = dots, envir = parent.frame())
 }
@@ -78,16 +78,15 @@ refer <- function(source, target = parent.frame()){
 #' Load and attach a module to the search path. This method disregards `provide()` statement.
 #'
 #' @example
-#' enter("C:/Users/siqi/OneDrive/R-Play/lispr/R/my_module.R")
+#' enter("~/R/my_module.R")
 #'
 #' @param file path to an R file
 #' @param name name of the module to be used in search path
+#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #' @export
-enter <- function(file, as = paste0(basename(file)), ...){
-        env <- new.env()
-        sys.source(file = file, envir = env)
-
+enter <- function(file, as = paste0(basename(file)), all_objects = FALSE, ...){
+        env <- acquire(file = file, all_objects = all_objects)
         attach(what = env, name = paste0("module:",as), ...)
 }
 
