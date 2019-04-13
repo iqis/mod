@@ -80,14 +80,19 @@ refer <- function(source, target = parent.frame()){
 #' @example
 #' enter("~/R/my_module.R")
 #'
-#' @param file path to an R file
+#' @param module path to an R file or a symbol for a module object
 #' @param name name of the module to be used in search path
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #' @export
-enter <- function(file, as = paste0(basename(file)), all_objects = FALSE, ...){
-        env <- acquire(file = file, all_objects = all_objects)
+enter <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...){
+        if (file.exists(module)) {
+                env <- acquire(file = file, all_objects = all_objects)
+        } else {
+                env <- module
+        }
         attach(what = env, name = paste0("module:",as), ...)
+
 }
 
 
