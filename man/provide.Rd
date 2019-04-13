@@ -14,9 +14,12 @@ Provide objects from a module
 }
 \examples{
 
-provide(a)
+\dontrun{
+provide(a, c)
 
 a <- 1
 b <- 2
 c <- 3
+d <- 4
+}
 }

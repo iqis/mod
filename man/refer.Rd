@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{refer}
 \alias{refer}
-\title{Exposes the objects in one environment to another}
+\title{Exposes the objects from one environment to another}
 \usage{
 refer(source, target = parent.frame())
 }
@@ -12,5 +12,5 @@ refer(source, target = parent.frame())
 \item{target}{the receiving environment}
 }
 \description{
-Exposes the objects in one environment to another
+Exposes the objects from one environment to another
 }

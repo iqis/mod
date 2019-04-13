@@ -2,14 +2,18 @@
 #'
 #' @examples
 #'
-#' provide(a)
+#' \dontrun{
+#' provide(a, c)
 #'
 #' a <- 1
 #' b <- 2
 #' c <- 3
+#' d <- 4
+#' }
 #' @param ... dot-dot-dot: name of any object to be accessible by user
 #' @export
 provide <- function(...) {
+        `if`(identical(globalenv(), parent.frame()), stop("only use in a module, to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         assign(x = ".provide", value = dots, envir = parent.frame())
 }
@@ -22,7 +26,6 @@ provide <- function(...) {
 #'
 #' @examples
 #' my_module_path <- system.file("misc", "my_module.R", package = "ntr")
-#'
 #' my_module <- acquire(my_module_path)
 #'
 #' ls(my_module)
@@ -58,10 +61,7 @@ acquire <- function(file, all_objects = FALSE) {
 }
 
 
-
-## use()? procure() grab() bring()
-
-#' Exposes the objects in one environment to another
+#' Exposes the objects from one environment to another
 #'
 #'@param source the providing environment
 #'@param target the receiving environment
@@ -72,3 +72,42 @@ refer <- function(source, target = parent.frame()){
                 assign(x = obj_name, value = get(obj_name, envir = as.environment(source)), envir = target)
         }
 }
+
+#' Enter a module
+#'
+#' Load and attach a module to the search path. This method disregards `provide()` statement.
+#'
+#' @example
+#' enter("C:/Users/siqi/OneDrive/R-Play/lispr/R/my_module.R")
+#'
+#' @param file path to an R file
+#' @param name name of the module to be used in search path
+#' @param ... dot-dot-dot, any additional arguments for 'attach' function
+#' @export
+enter <- function(file, as = paste0(basename(file)), ...){
+        env <- new.env()
+        sys.source(file = file, envir = env)
+
+        attach(what = env, name = paste0("module:",as), ...)
+}
+
+
+#' Exit from a module
+#'
+#' Detach a module from the search path.
+#'
+#' @param  name name of the module to exit from
+#' @export
+exit <- function(name) {
+        if (missing(name)) {
+                search_path <- search()
+                name <- search_path[grepl("module:", search_path)][1]
+        } else {
+                name <- paste0("module:", name)
+        }
+
+        if (is.na(name)) stop("no module attached in search path")
+
+        detach(name = name, character.only = TRUE)
+}
+

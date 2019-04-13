@@ -20,7 +20,6 @@ function defined in the module.
 }
 \examples{
 my_module_path <- system.file("misc", "my_module.R", package = "ntr")
-
 my_module <- acquire(my_module_path)
 
 ls(my_module)
