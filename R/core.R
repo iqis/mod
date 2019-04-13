@@ -57,6 +57,8 @@ acquire <- function(file, all_objects = FALSE) {
 
         lockEnvironment(private$.public, bindings = TRUE)
 
+        class(private$.public) <- c("module", class(private$.public))
+
         return(private$.public)
 }
 
