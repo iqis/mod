@@ -62,6 +62,10 @@ acquire <- function(file, all_objects = FALSE) {
         return(private$.public)
 }
 
+#'@export
+is_module <- function(x) {
+        inherits(x, "module")
+}
 
 #' Exposes the objects from one environment to another
 #'

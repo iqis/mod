@@ -1,4 +1,4 @@
-Package: ntr
+Package: modular
 Type: Package
 Title: A lightweight module system
 Version: 0.1.2.9000
