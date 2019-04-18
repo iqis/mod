@@ -3,8 +3,9 @@ Type: Package
 Title: A lightweight module system
 Version: 0.1.2.9000
 Authors@R: c(
-        person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut,"cre"))
-        )
+  person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
+  person()
+  )
 Description: Very Good, for now.
 License: GPL-3
 Encoding: UTF-8
