@@ -4,10 +4,12 @@
 \alias{enter}
 \title{Enter a module}
 \usage{
-enter(file, as = paste0(basename(file)), ...)
+enter(module, as = paste0(basename(file)), all_objects = FALSE, ...)
 }
 \arguments{
-\item{file}{path to an R file}
+\item{module}{path to an R file or a symbol for a module object}
+
+\item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
 
 \item{...}{dot-dot-dot, any additional arguments for 'attach' function}
 

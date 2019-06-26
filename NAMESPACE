@@ -3,5 +3,6 @@
 export(acquire)
 export(enter)
 export(exit)
+export(is_module)
 export(provide)
 export(refer)
