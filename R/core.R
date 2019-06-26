@@ -82,13 +82,13 @@ refer <- function(source, target = parent.frame()){
         }
 }
 
-#' Enter a module
+#' Use a module
 #'
 #' Load and attach a module to the search path
 #'
 #' @examples
 #' \dontrun{
-#' enter("~/R/my_module.R")
+#' use("~/R/my_module.R")
 #' }
 #' @param module path to an R file or a symbol for a module object
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
@@ -96,7 +96,7 @@ refer <- function(source, target = parent.frame()){
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #'
 #' @export
-enter <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...){
+use <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...){
         if (file.exists(module)) {
                 env <- acquire(file = file, all_objects = all_objects)
         } else {
@@ -107,13 +107,13 @@ enter <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...)
 }
 
 
-#' Exit from a module
+#' Drop a module
 #'
 #' Detach a module from the search path.
 #'
 #' @param  name name of the module to exit from
 #' @export
-exit <- function(name) {
+drop <- function(name) {
         if (missing(name)) {
                 search_path <- search()
                 name <- search_path[grepl("module:", search_path)][1]
