@@ -62,7 +62,10 @@ acquire <- function(file, all_objects = FALSE) {
         return(private$.public)
 }
 
-#'@export
+#' Test if the object is a module
+#'
+#' @param x An object
+#' @export
 is_module <- function(x) {
         inherits(x, "module")
 }
@@ -87,9 +90,10 @@ refer <- function(source, target = parent.frame()){
 #' enter("~/R/my_module.R")
 #'
 #' @param module path to an R file or a symbol for a module object
-#' @param name name of the module to be used in search path
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
+#' @param as name to be used in the search path
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
+#'
 #' @export
 enter <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...){
         if (file.exists(module)) {
