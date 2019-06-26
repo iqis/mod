@@ -15,11 +15,11 @@ acquire(file, all_objects = FALSE)
 an environment containing objects from the module
 }
 \description{
-any hidden object (which name/symbol preceded by `.`) are only accessible through
-function defined in the module.
+any hidden object (which name/symbol preceded by `.`) is only accessible through
+functions defined in the module.
 }
 \examples{
-my_module_path <- system.file("misc", "my_module.R", package = "ntr")
+my_module_path <- system.file("misc", "my_module.R", package = "modular")
 my_module <- acquire(my_module_path)
 
 ls(my_module)

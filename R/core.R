@@ -21,11 +21,11 @@ provide <- function(...) {
 
 #' Acquire a module from a file
 #'
-#' any hidden object (which name/symbol preceded by `.`) are only accessible through
-#' function defined in the module.
+#' any hidden object (which name/symbol preceded by `.`) is only accessible through
+#' functions defined in the module.
 #'
 #' @examples
-#' my_module_path <- system.file("misc", "my_module.R", package = "ntr")
+#' my_module_path <- system.file("misc", "my_module.R", package = "modular")
 #' my_module <- acquire(my_module_path)
 #'
 #' ls(my_module)
@@ -84,11 +84,12 @@ refer <- function(source, target = parent.frame()){
 
 #' Enter a module
 #'
-#' Load and attach a module to the search path. This method disregards `provide()` statement.
+#' Load and attach a module to the search path
 #'
 #' @example
+#' \dontrun{
 #' enter("~/R/my_module.R")
-#'
+#' }
 #' @param module path to an R file or a symbol for a module object
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param as name to be used in the search path
