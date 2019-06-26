@@ -86,7 +86,7 @@ refer <- function(source, target = parent.frame()){
 #'
 #' Load and attach a module to the search path
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' enter("~/R/my_module.R")
 #' }

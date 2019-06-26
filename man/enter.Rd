@@ -16,5 +16,10 @@ enter(module, as = paste0(basename(file)), all_objects = FALSE, ...)
 \item{...}{dot-dot-dot, any additional arguments for 'attach' function}
 }
 \description{
-Load and attach a module to the search path. This method disregards `provide()` statement.
+Load and attach a module to the search path
+}
+\examples{
+\dontrun{
+enter("~/R/my_module.R")
+}
 }
