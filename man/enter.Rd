@@ -9,11 +9,11 @@ enter(module, as = paste0(basename(file)), all_objects = FALSE, ...)
 \arguments{
 \item{module}{path to an R file or a symbol for a module object}
 
+\item{as}{name to be used in the search path}
+
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
 
 \item{...}{dot-dot-dot, any additional arguments for 'attach' function}
-
-\item{name}{name of the module to be used in search path}
 }
 \description{
 Load and attach a module to the search path. This method disregards `provide()` statement.
