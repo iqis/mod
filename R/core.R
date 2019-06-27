@@ -124,7 +124,10 @@ use <- function(module, as, all_objects = FALSE, ...){
         } else {
                 stop("requires module object or path to R file")
         }
-        attach(what = env, name = paste0("module:",as), ...)
+
+        name <- paste0("module:",as)
+        if (name %in% search()) drop(as)
+        attach(what = env, name = name, ...)
 }
 
 
