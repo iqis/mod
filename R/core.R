@@ -1,16 +1,17 @@
 #' Declare a module in-line
 #'
 #' @param ... expression
+#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #'
 #' @return an environment containing objects from the module
 #' @export
 #'
 #' @examples
-module <- function(...){
+module <- function(..., all_objects = FALSE){
         code <- deparse(substitute(...))
         temp_file <- tempfile()
         write(code, temp_file)
-        acquire(temp_file)
+        acquire(temp_file, all_objects = all_objects)
 }
 
 
