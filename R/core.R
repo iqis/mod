@@ -9,7 +9,7 @@
 #' @examples
 module <- function(..., all_objects = FALSE){
         code <- deparse(substitute(...))
-        temp_file <- tempfile()
+        temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
         acquire(temp_file, all_objects = all_objects)
 }
@@ -57,6 +57,9 @@ provide <- function(...) {
 #' @export
 acquire <- function(file, all_objects = FALSE) {
         private <- new.env() # private environment
+        if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
+                file <- paste0(file, ".R")
+                } # if neither tempfile from module(), nor has .R ext names, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
         assign(".public", new.env(), envir = private) # public environment inside private
 
