@@ -113,14 +113,17 @@ refer <- function(source, target = parent.frame()){
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #'
 #' @export
-use <- function(module, as = paste0(basename(file)), all_objects = FALSE, ...){
-        if (file.exists(module)) {
-                env <- acquire(file = file, all_objects = all_objects)
-        } else {
+use <- function(module, as, all_objects = FALSE, ...){
+        if (is_module(module)) {
                 env <- module
+                as <- deparse(substitute(module))
+        } else if (is.character(module) || file.exists(module)) {
+                env <- acquire(file = module, all_objects = all_objects)
+                as <- bare_name(module)
+        } else {
+                stop("requires module object or path to R file")
         }
         attach(what = env, name = paste0("module:",as), ...)
-
 }
 
 
