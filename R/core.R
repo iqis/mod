@@ -1,3 +1,12 @@
+module <- function(...){
+        code <- deparse(substitute(...))
+        temp_file <- tempfile()
+        write(code, temp_file)
+        acquire(temp_file)
+}
+
+
+
 #' Provide objects from a module
 #'
 #' @examples
