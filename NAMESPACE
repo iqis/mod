@@ -3,6 +3,7 @@
 export(acquire)
 export(drop)
 export(is_module)
+export(module)
 export(provide)
 export(refer)
 export(use)

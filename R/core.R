@@ -1,3 +1,11 @@
+#' Declare a module in-line
+#'
+#' @param ... expression
+#'
+#' @return an environment containing objects from the module
+#' @export
+#'
+#' @examples
 module <- function(...){
         code <- deparse(substitute(...))
         temp_file <- tempfile()
