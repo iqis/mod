@@ -146,3 +146,7 @@ drop <- function(name) {
         detach(name = name, character.only = TRUE)
 }
 
+
+bare_name <- function(path){
+        gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
+}
