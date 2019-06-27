@@ -4,10 +4,12 @@
 \alias{module}
 \title{Declare a module in-line}
 \usage{
-module(...)
+module(..., all_objects = FALSE)
 }
 \arguments{
 \item{...}{expression}
+
+\item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
 }
 \value{
 an environment containing objects from the module

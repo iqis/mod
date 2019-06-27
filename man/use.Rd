@@ -4,7 +4,7 @@
 \alias{use}
 \title{Use a module}
 \usage{
-use(module, as = paste0(basename(file)), all_objects = FALSE, ...)
+use(module, as, all_objects = FALSE, ...)
 }
 \arguments{
 \item{module}{path to an R file or a symbol for a module object}
