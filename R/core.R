@@ -117,10 +117,10 @@ refer <- function(source, target = parent.frame()){
 use <- function(module, as, all_objects = FALSE, ...){
         if (is_module(module)) {
                 env <- module
-                as <- deparse(substitute(module))
+                if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
                 env <- acquire(file = module, all_objects = all_objects)
-                as <- bare_name(module)
+                if (missing(as)) as <- bare_name(module)
         } else {
                 stop("requires module object or path to R file")
         }
