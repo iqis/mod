@@ -98,7 +98,7 @@ is_module <- function(x) {
 #'@export
 refer <- function(source, target = parent.frame()){
         ## add arguments: only, exclude, rename(that takes a list), prefix
-        assertthat::assert_that(exists(source), exists(target))
+        assertthat::assert_that(is.environment(source), is.environment(target))
 
         for (obj_name in ls(source, all.names = TRUE)) {
                 assign(x = obj_name, value = get(obj_name, envir = as.environment(source)), envir = target)
