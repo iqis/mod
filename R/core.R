@@ -2,6 +2,7 @@
 #'
 #' @param ... expression
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
+#' @param lock_bindings Boolean; TRUE to prevent values being altered from outside the module.
 #'
 #' @return an environment containing objects from the module
 #' @export
@@ -53,6 +54,7 @@ provide <- function(...) {
 #'
 #' @param file path to an R file
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
+#' @param lock_bindings Boolean; TRUE to prevent values being altered from outside the module.
 #' @return an environment containing objects from the module
 #' @export
 acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {

@@ -4,12 +4,14 @@
 \alias{acquire}
 \title{Acquire a module from a file}
 \usage{
-acquire(file, all_objects = FALSE)
+acquire(file, all_objects = FALSE, lock_bindings = TRUE)
 }
 \arguments{
 \item{file}{path to an R file}
 
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
+
+\item{lock_bindings}{Boolean; TRUE to prevent values being altered from outside the module.}
 }
 \value{
 an environment containing objects from the module
