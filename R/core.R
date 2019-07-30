@@ -61,26 +61,29 @@ acquire <- function(file, all_objects = FALSE) {
                 file <- paste0(file, ".R")
                 } # if neither tempfile from module(), nor has .R ext names, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
-        assign(".public", new.env(), envir = private) # public environment inside private
+        assign("..public", new.env(), envir = private) # public environment inside private
 
         # list of objects to be placed in public, from .provide;
         # if undefined, everything other than hidden objs
         obj_list <- if (all_objects || !exists(x = ".provide", envir = private)) {
-                ls(private)
+                ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         } else {
                 private$.provide
         }
 
+        # Remove "private" objects with name starting w. ".." from list
+        obj_list <- obj_list[!grepl("^\\.\\.", obj_list)]
+
         # assign objects from private to public
         for (obj in obj_list) {
-                assign(x = obj, value = get(obj, envir = private), envir = private$.public)
+                assign(x = obj, value = get(obj, envir = private), envir = private$..public)
         }
 
-        lockEnvironment(private$.public, bindings = TRUE)
+        lockEnvironment(private$..public, bindings = TRUE)
 
-        class(private$.public) <- c("module", class(private$.public))
+        class(private$..public) <- c("module", class(private$..public))
 
-        return(private$.public)
+        return(private$..public)
 }
 
 #' Test if the object is a module
@@ -89,6 +92,13 @@ acquire <- function(file, all_objects = FALSE) {
 #' @export
 is_module <- function(x) {
         inherits(x, "module")
+}
+
+print.module <- function(x, ...){
+        cat("<module>", "\n")
+
+
+
 }
 
 #' Exposes the objects from one environment to another
