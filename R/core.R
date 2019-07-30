@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-module <- function(..., all_objects = FALSE){
+module <- function(..., all_objects = FALSE, lock_bindings = TRUE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
@@ -55,7 +55,7 @@ provide <- function(...) {
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @return an environment containing objects from the module
 #' @export
-acquire <- function(file, all_objects = FALSE) {
+acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
         private <- new.env() # private environment
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
@@ -79,7 +79,7 @@ acquire <- function(file, all_objects = FALSE) {
                 assign(x = obj, value = get(obj, envir = private), envir = private$..public)
         }
 
-        lockEnvironment(private$..public, bindings = TRUE)
+        lockEnvironment(private$..public, bindings = lock_bindings)
 
         class(private$..public) <- c("module", class(private$..public))
 
