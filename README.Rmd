@@ -17,9 +17,10 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/iqis/modular?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/modular)
   [![Travis build status](https://travis-ci.org/iqis/modular.svg?branch=master)](https://travis-ci.org/iqis/modular)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-The `modular` package provide a simple way to structure program and data into modules, without the formalities of R packages.
+The `modular` package is lightweight module system; It provides a simple way to structure program and data into modules for programming and interactive use, without the formalities of R packages. 
 
 ## Installation
 
@@ -30,98 +31,134 @@ devtools::install_github("iqis/modular")
 ```
 
 
-``` {r}
+``` {r include = FALSE}
 require(modular)
 ```
 
+## Programming Interface
 
-## Example
+- Make a module:`module()`, `acquire()`
+- Declare public variables within a module: `provide()`
+- Attach a module to the search path: `use()`
+- Import bindings from one module to another: `refer()`
 
-Define an inline module with `module()`:
+## Examples
+
+Define an inline module:
 ```{r}
-my_module <- module({
+my <- module({
         a <- 1
         b <- 2
         add_nums <- function(x, y) x + y
 })
 ```
 
-The resulting module is an environment that contains defined variables.
+The resulting module contains the variables defined within.
 ```{r}
-str(my_module)
-ls(my_module)
+ls(my)
 ```
 
-Subset the module with `$` operator to access the variables.
+Subset the module.
 ```{r}
-my_module$a
-my_module$b
-my_module$add_nums(my_module$a, my_module$b)
+my$a
+my$b
+my$add_nums(my$a, my$b)
 ```
 
-Using the `with()` function, the user can access everything in the module without qualifying with the module's name. 
+Use the `with()` to spare qualification.
 ```{r}
-with(my_module, 
+with(my, 
      add_nums(a,b))
 ```
 
-### Hidden & Private Variables
+
+### Attach to the Search Path
+
+Just like a package, a module can be attached to the search path.
+```{r}
+use(my)
+```
+
+The `my` module is attached to the search path as "module:my".
+```{r}
+search()
+```
+
+This is the preferred way to spare qualification.
+```{r}
+add_nums(a,b)
+```
+
+
+### Refer Bindings
+
+Use `refer()` to "import" variables from another module.
+```{r}
+ls(my)
+
+my_other<- module({
+        refer(my)
+        
+        c <- 4
+        d <- 5
+})
+
+ls(my_other)
+```
+
+
+
+### Private Variables
 
    
-If a name of a variable is prepended with `.` or `..`, they are _hidden_ or _private_, respectively.
+A variable is _private_ if its name starts with `..`.
 ```{r}
-my_module2 <- module({
-        .hidden_var <- 2
-        ..private_var <- 3
-        get_private_var <- function(){
-                ..private_var
+room_101 <- module({
+        ..diary <- "Dear Diary: I used SPSS today..."
+        get_diary <- function(){
+                ..diary
         }
 })
 ```
 
-As an R rule, a hidden variable cannot be seen, unless one specifies the `all.names` argument to be `TRUE` in `ls()`. 
+
+A private variable cannot be seen or touched. There is no way to access the `..diary` from the outside, except by a function defined within the module. This can be useful if you want to shield some information from the user or other programs. 
 ```{r}
-ls(my_module2)
-ls(my_module2, all.names = TRUE)
+ls(room_101)
+room_101$..diary
+room_101$get_diary()
 ```
 
-However, a `.hidden_var` is still directly accessible. 
+Another way is using `provide()` function to declair public variables, while all others become private.
 ```{r}
-my_module2$.hidden_var
-```
-
-A private variable, in contrast, cannot be seen or touched. There is no way to access the `..private_var` from the outside, except by a function defined within the module. This can be useful if you want to shield some information from the user or other programs. 
-```{r}
-my_module2$..private_var
-my_module2$get_private_var()
-```
-
-It is possible to use a `provide()` function to explicitly declair public variables; In the mean time, all other objects excluded from `provide()` will become private variables. 
-```{r}
-my_module3 <- module({
-        provide(a, get_b)
-        a <- 1
-        b <- 2
-        get_b <- function(){
-                b
+room_102 <- module({
+        provide(open_info, get_classified)
+        
+        open_info <- "I am a data scientist."
+        classified_info <- "I can't get the database driver to work."
+        get_classified <- function(){
+                classified_info
         }
 })
-```
 
-```{r}
-my_module3$a
-my_module3$b
-my_module3$get_b()
+ls(room_102)
+room_102$open_info
+room_102$classified_info
+room_102$get_classified()
 ```
+    
+
+
     
 ### Simlate OOP
 
-The below example, in effect simulates the behavior of an object Object-oriented Programming by manipulating the state of `..count`.
+The below example simulates the essential behavior of an object in Object-oriented Programming by manipulating the state of `..count`.
 ```{r}
-my_counter <- module({
+counter <- module({
         ..count <- 0
         add_one <- function(){
-                ..count <<- ..count + 1
+                #Its necessary to use `<<-` operator, as ..count lives in the parent frame.
+                ..count <<- ..count + 1 
         }
         reset <- function(){
                 ..count <<- 0
@@ -132,11 +169,84 @@ my_counter <- module({
 })
 ```
 
+The following demonstration should be self-explanatory:
 ```{r}
-my_counter$get_count()
-my_counter$add_one()
-my_counter$add_one()
-my_counter$get_count()
-my_counter$reset()
-my_counter$get_count()
+counter$get_count() 
+
+counter$add_one() 
+counter$add_one() 
+
+counter$get_count() 
+
+counter$reset()
+
+counter$get_count()
 ```
+
+It is imperative that `modular` be only adopted in the simplest cases, as it is not made for OOP, and do not support most typical OOP features, such as deep copy, inheritance, or else. If full-featured OOP is desired, use [`R6`](https://cran.r-project.org/web/packages/R6/index.html).
+
+
+
+## Note
+
+#### Environment
+
+A module _is_ an environment. This means that every rule that applies to environments, such as copy-by-reference, applies to modules as well.
+```{r}
+mode(my)
+is.environment(my)
+```
+
+
+#### Locked
+
+It is impossible to either change the value of a variable or add a new variable to a module. A private variable's value can only be changed by a function defined within the module, as shown previously.
+```{r error = TRUE}
+my$a <- 888
+my$c <- 666
+```
+
+#### Hidden Variables
+
+As a general R rule, names that start with `.` define hidden variables.
+```{r}
+my_yet_another <- module({
+        .var <- "I'm hidden!"
+})
+```
+
+Hidden variables are not returned by `ls()`, unless specified.
+```{r}
+ls(my_yet_another)
+ls(my_yet_another, all.names = TRUE)
+```
+
+Nonetheless, in `modular`, they are treated the same as public variables.
+```{r}
+my_yet_another$.var
+```
+
+#### Load/Attach from File
+
+```{r}
+module_path <- system.file("misc/example_module.R", package = "modular")
+```
+
+To load and assign to variable: 
+```{r}
+example_module <- acquire(module_path)
+ls(example_module)
+example_module$a
+example_module$d()
+example_module$e(100)
+```
+
+To load and attach to search path:
+```{r}
+use(module_path)
+ls("module:example_module")
+a
+d()
+e(100)
+```
+
