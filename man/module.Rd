@@ -6,14 +6,14 @@
 \alias{acquire}
 \title{Make a module}
 \usage{
-module(expr, all_objects = FALSE, parent = .GlobalEnv)
+module(..., all_objects = FALSE, parent = .GlobalEnv)
 
-object(expr)
+object(...)
 
 acquire(file, all_objects = FALSE, parent = .GlobalEnv)
 }
 \arguments{
-\item{expr}{expression}
+\item{...}{expression}
 
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
 

@@ -11,14 +11,14 @@
 #' example_module$e(123)
 #'
 #' @param file path to an R file
-#' @param expr expression
+#' @param ... expression
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param parent the enclosing environment
 #'
 #' @return an environment containing objects from the module
 #' @export
-module <- function(expr, all_objects = FALSE, parent = .GlobalEnv){
-        code <- deparse(substitute(expr))
+module <- function(..., all_objects = FALSE, parent = .GlobalEnv){
+        code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
         acquire(temp_file, all_objects = all_objects, parent = parent)
@@ -26,8 +26,8 @@ module <- function(expr, all_objects = FALSE, parent = .GlobalEnv){
 
 #' @rdname module
 #' @export
-object <- function(expr){
-        module(expr = expr, all_objects = TRUE, parent = parent.frame())
+object <- function(...){
+        module(..., all_objects = TRUE, parent = parent.frame())
 }
 
 #' @rdname module
