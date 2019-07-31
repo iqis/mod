@@ -46,8 +46,8 @@ provide <- function(...) {
 #'
 #' ls(example_module)
 #'
-#' my_module$a
-#' my_module$e(123)
+#' example_module$a
+#' exaple_module$e(123)
 #'
 #' @param file path to an R file
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
