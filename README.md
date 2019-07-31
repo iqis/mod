@@ -17,9 +17,9 @@ status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.or
 coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
 <!-- badges: end -->
 
-The `modular` package is lightweight module system; It provides a simple
-way to structure program and data into modules for programming and
-interactive use, without the formalities of R packages.
+The `modular` package is a lightweight module system; It provides a
+simple way to structure program and data into modules for programming
+and interactive use, without the formalities of R packages.
 
 ## Installation
 
