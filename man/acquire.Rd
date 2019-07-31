@@ -24,6 +24,6 @@ example_module <- acquire(module_path)
 ls(example_module)
 
 example_module$a
-exaple_module$e(123)
+example_module$e(123)
 
 }
