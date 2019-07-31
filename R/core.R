@@ -37,16 +37,14 @@ provide <- function(...) {
 }
 
 
-#' Acquire a module from a file
+#' Load a module from a file
 #'
-#' any hidden object (which name/symbol preceded by `.`) is only accessible through
-#' functions defined in the module.
 #'
 #' @examples
-#' my_module_path <- system.file("misc", "my_module.R", package = "modular")
-#' my_module <- acquire(my_module_path)
+#' module_path <- system.file("misc", "example_module.R", package = "modular")
+#' example_module <- acquire(module_path)
 #'
-#' ls(my_module)
+#' ls(example_module)
 #'
 #' my_module$a
 #' my_module$e(123)
