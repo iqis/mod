@@ -11,6 +11,10 @@ status](https://ci.appveyor.com/api/projects/status/github/iqis/modular?branch=m
 status](https://travis-ci.org/iqis/modular.svg?branch=master)](https://travis-ci.org/iqis/modular)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.org/package=modular)
+[![Codecov test
+coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
 <!-- badges: end -->
 
 The `modular` package is lightweight module system; It provides a simple
