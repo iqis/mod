@@ -2,17 +2,16 @@
 #'
 #' @param ... expression
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
-#' @param lock_bindings Boolean; TRUE to prevent values being altered from outside the module.
 #'
 #' @return an environment containing objects from the module
 #' @export
 #'
 #' @examples
-module <- function(..., all_objects = FALSE, lock_bindings = TRUE){
+module <- function(..., all_objects = FALSE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
-        acquire(temp_file, all_objects = all_objects, lock_bindings = lock_bindings)
+        acquire(temp_file, all_objects = all_objects)
 }
 
 
@@ -54,10 +53,9 @@ provide <- function(...) {
 #'
 #' @param file path to an R file
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
-#' @param lock_bindings Boolean; TRUE to prevent values being altered from outside the module.
 #' @return an environment containing objects from the module
 #' @export
-acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
+acquire <- function(file, all_objects = FALSE) {
         private <- new.env(parent = .GlobalEnv) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
@@ -77,7 +75,7 @@ acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
         # Assign stuff from obj_list to ..public
         private$..public.. <- as.environment(mget(obj_name_list, private))
 
-        lockEnvironment(private$..public.., bindings = lock_bindings)
+        lockEnvironment(private$..public.., bindings = TRUE)
 
         class(private$..public..) <- c("module", class(private$..public..))
 
