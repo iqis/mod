@@ -82,7 +82,7 @@ provide <- function(...) {
 
 #' Refer bindings from a module to another
 #'
-#'@param module the providing module
+#'@param module a module
 #'@export
 refer <- function(module){
         ## add arguments: only, exclude, rename(that takes a list), prefix

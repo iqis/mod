@@ -7,7 +7,7 @@
 refer(module)
 }
 \arguments{
-\item{module}{the providing module}
+\item{module}{a module}
 }
 \description{
 Refer bindings from a module to another
