@@ -82,16 +82,16 @@ provide <- function(...) {
 
 #' Refer bindings from a module to another
 #'
-#'@param source the providing module
+#'@param module the providing module
 #'@export
-refer <- function(source){
+refer <- function(module){
         ## add arguments: only, exclude, rename(that takes a list), prefix
 
-        obj_name_list = ls(source, all.names = TRUE)
+        obj_name_list = ls(module, all.names = TRUE)
 
         mapply(assign,
                x = obj_name_list,
-               value = mget(obj_name_list, source),
+               value = mget(obj_name_list, module),
                envir = list(parent.frame())
                )
 }
@@ -105,8 +105,8 @@ refer <- function(source){
 #' use("~/R/my_module.R")
 #' }
 #' @param module path to an R file or a symbol for a module object
-#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param as name to be used in the search path
+#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #'
 #' @export

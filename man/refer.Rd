@@ -4,10 +4,10 @@
 \alias{refer}
 \title{Refer bindings from a module to another}
 \usage{
-refer(source)
+refer(module)
 }
 \arguments{
-\item{source}{the providing module}
+\item{module}{the providing module}
 }
 \description{
 Refer bindings from a module to another
