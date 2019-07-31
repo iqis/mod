@@ -107,10 +107,10 @@ print.module <- function(x, ...){
 #'@param source the providing environment
 #'@param target the receiving environment
 #'@export
-refer <- function(source, target = parent.frame()){
+refer <- function(source, target){
+        if (missing(target)) target <- parent.frame()
         ## add arguments: only, exclude, rename(that takes a list), prefix
-        assertthat::assert_that(is.environment(source), is.environment(target))
-
+        assertthat::assert_that(is.environment(source))
         for (obj_name in ls(source, all.names = TRUE)) {
                 assign(x = obj_name, value = get(obj_name, envir = as.environment(source)), envir = target)
         }
