@@ -15,6 +15,8 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.org/package=modular)
 [![Codecov test
 coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
+![GitHub License](https://img.shields.io/github/license/iqis/modular)
+
 <!-- badges: end -->
 
 The `modular` package is a lightweight module system; It provides a

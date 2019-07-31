@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.org/package=modular)
 [![Codecov test coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
+![GitHub License](https://img.shields.io/github/license/iqis/modular)
+
 <!-- badges: end -->
 
 The `modular` package is a lightweight module system; It provides a simple way to structure program and data into modules for programming and interactive use, without the formalities of R packages. 
