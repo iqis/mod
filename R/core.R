@@ -26,7 +26,7 @@ module <- function(..., all_objects = FALSE, parent = .GlobalEnv){
 
 #' @rdname module
 #' @export
-object <- function(...){
+thing <- function(...){
         module(..., all_objects = TRUE, parent = parent.frame())
 }
 

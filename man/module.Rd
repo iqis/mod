@@ -2,13 +2,13 @@
 % Please edit documentation in R/core.R
 \name{module}
 \alias{module}
-\alias{object}
+\alias{thing}
 \alias{acquire}
 \title{Make a module}
 \usage{
 module(..., all_objects = FALSE, parent = .GlobalEnv)
 
-object(...)
+thing(...)
 
 acquire(file, all_objects = FALSE, parent = .GlobalEnv)
 }
