@@ -4,12 +4,10 @@
 \alias{refer}
 \title{Exposes the objects from one environment to another}
 \usage{
-refer(source, target = parent.frame())
+refer(source)
 }
 \arguments{
 \item{source}{the providing environment}
-
-\item{target}{the receiving environment}
 }
 \description{
 Exposes the objects from one environment to another
