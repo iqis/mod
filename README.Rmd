@@ -89,6 +89,10 @@ This is the preferred way to spare qualification.
 add_nums(a,b)
 ```
 
+Detach the module from the search path, if desired.
+```{r}
+drop("my")
+```
 
 ### Refer Bindings
 

@@ -95,6 +95,12 @@ add_nums(a,b)
 #> [1] 3
 ```
 
+Detach the module from the search path, if desired.
+
+``` r
+drop("my")
+```
+
 ### Refer Bindings
 
 Use `refer()` to “import” variables from another module.
@@ -288,9 +294,6 @@ To load and attach to search path:
 
 ``` r
 use(module_path)
-#> The following object is masked from module:my:
-#> 
-#>     a
 ls("module:example_module")
 #> [1] "a" "d" "e"
 a
