@@ -61,7 +61,7 @@ acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
         private <- new.env(parent = .GlobalEnv) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
-                } # if neither tempfile from module(), nor has .R ext names, auto suffix with .R
+                } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
         assign("..public", new.env(), envir = private) # public environment inside private
 
