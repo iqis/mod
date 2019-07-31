@@ -65,7 +65,7 @@ acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
         sys.source(file = file, envir = private) # source everything from file to private
 
         # list of objects to be placed in public, from .provide;
-        obj_name_list <- if (all_objects || !exists(x = ".provide", envir = private)) {
+        obj_name_list <- if (all_objects || !exists(x = "..provide..", envir = private)) {
                 ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         } else {
                 private$..provide..
