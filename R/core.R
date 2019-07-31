@@ -32,7 +32,7 @@ module <- function(..., all_objects = FALSE, lock_bindings = TRUE){
 #' @param ... dot-dot-dot: name of any object to be accessible by user
 #' @export
 provide <- function(...) {
-        `if`(identical(globalenv(), parent.frame()), stop("Only use in a module, as to use interactively is not meaningful"))
+        `if`(identical(globalenv(), parent.frame()), stop("Only use provide() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         assign(x = ".provide", value = dots, envir = parent.frame())
 }
