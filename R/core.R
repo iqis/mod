@@ -12,10 +12,12 @@
 #'
 #' @param file path to an R file
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
+#' @param parent the enclosing environment
+#'
 #' @return an environment containing objects from the module
 #' @export
-acquire <- function(file, all_objects = FALSE) {
-        private <- new.env(parent = .GlobalEnv) # private environment inside globalenv
+acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
+        private <- new.env(parent = parent) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
         } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R

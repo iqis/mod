@@ -4,12 +4,14 @@
 \alias{acquire}
 \title{Load a module from a file}
 \usage{
-acquire(file, all_objects = FALSE)
+acquire(file, all_objects = FALSE, parent = .GlobalEnv)
 }
 \arguments{
 \item{file}{path to an R file}
 
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
+
+\item{parent}{the enclosing environment}
 }
 \value{
 an environment containing objects from the module
