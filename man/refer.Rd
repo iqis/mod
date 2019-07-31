@@ -2,13 +2,13 @@
 % Please edit documentation in R/core.R
 \name{refer}
 \alias{refer}
-\title{Exposes the objects from one environment to another}
+\title{Refer bindings from a module to another}
 \usage{
 refer(source)
 }
 \arguments{
-\item{source}{the providing environment}
+\item{source}{the providing module}
 }
 \description{
-Exposes the objects from one environment to another
+Refer bindings from a module to another
 }

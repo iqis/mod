@@ -1,42 +1,3 @@
-#' Declare a module in-line
-#'
-#' @param ... expression
-#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
-#'
-#' @return an environment containing objects from the module
-#' @export
-#'
-#' @examples
-module <- function(..., all_objects = FALSE){
-        code <- deparse(substitute(...))
-        temp_file <- tempfile("modular_tmp")
-        write(code, temp_file)
-        acquire(temp_file, all_objects = all_objects)
-}
-
-
-
-#' Provide objects from a module
-#'
-#' @examples
-#'
-#' \dontrun{
-#' provide(a, c)
-#'
-#' a <- 1
-#' b <- 2
-#' c <- 3
-#' d <- 4
-#' }
-#' @param ... dot-dot-dot: name of any object to be accessible by user
-#' @export
-provide <- function(...) {
-        `if`(identical(globalenv(), parent.frame()), stop("Only use provide() in a module, as to use interactively is not meaningful"))
-        dots <- as.character(match.call(expand.dots = FALSE)$...)
-        assign(x = "..provide..", value = dots, envir = parent.frame())
-}
-
-
 #' Load a module from a file
 #'
 #'
@@ -57,7 +18,7 @@ acquire <- function(file, all_objects = FALSE) {
         private <- new.env(parent = .GlobalEnv) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
-                } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
+        } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
 
         # list of objects to be placed in public, from .provide;
@@ -81,10 +42,47 @@ acquire <- function(file, all_objects = FALSE) {
 }
 
 
-
-#' Exposes the objects from one environment to another
+#' Declare a module in-line
 #'
-#'@param source the providing environment
+#' @param ... expression
+#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
+#'
+#' @return an environment containing objects from the module
+#' @export
+#'
+#' @examples
+module <- function(..., all_objects = FALSE){
+        code <- deparse(substitute(...))
+        temp_file <- tempfile("modular_tmp")
+        write(code, temp_file)
+        acquire(temp_file, all_objects = all_objects)
+}
+
+
+#' Provide objects from a module
+#'
+#' @examples
+#'
+#' \dontrun{
+#' provide(a, c)
+#'
+#' a <- 1
+#' b <- 2
+#' c <- 3
+#' d <- 4
+#' }
+#' @param ... dot-dot-dot: name of any object to be accessible by user
+#' @export
+provide <- function(...) {
+        `if`(identical(globalenv(), parent.frame()), stop("Only use provide() in a module, as to use interactively is not meaningful"))
+        dots <- as.character(match.call(expand.dots = FALSE)$...)
+        assign(x = "..provide..", value = dots, envir = parent.frame())
+}
+
+
+#' Refer bindings from a module to another
+#'
+#'@param source the providing module
 #'@export
 refer <- function(source){
         ## add arguments: only, exclude, rename(that takes a list), prefix
