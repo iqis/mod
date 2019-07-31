@@ -111,7 +111,7 @@ refer <- function(source){
         mapply(assign,
                x = obj_name_list,
                value = mget(obj_name_list, source),
-               envir = parent.frame()
+               envir = list(parent.frame())
                )
 }
 
