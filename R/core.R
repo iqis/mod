@@ -12,7 +12,7 @@ module <- function(..., all_objects = FALSE, lock_bindings = TRUE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
-        acquire(temp_file, all_objects = all_objects)
+        acquire(temp_file, all_objects = all_objects, lock_bindings = lock_bindings)
 }
 
 
