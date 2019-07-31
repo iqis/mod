@@ -58,7 +58,7 @@ provide <- function(...) {
 #' @return an environment containing objects from the module
 #' @export
 acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
-        private <- new.env() # private environment
+        private <- new.env(parent = .GlobalEnv) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
                 } # if neither tempfile from module(), nor has .R ext names, auto suffix with .R
@@ -66,7 +66,6 @@ acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
         assign("..public", new.env(), envir = private) # public environment inside private
 
         # list of objects to be placed in public, from .provide;
-        # if undefined, everything other than hidden objs
         obj_list <- if (all_objects || !exists(x = ".provide", envir = private)) {
                 ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         } else {
