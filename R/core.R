@@ -1,4 +1,4 @@
-#' Load a module from a file
+#' Make a module
 #'
 #'
 #' @examples
@@ -11,10 +11,26 @@
 #' example_module$e(123)
 #'
 #' @param file path to an R file
+#' @param expr expression
 #' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param parent the enclosing environment
 #'
 #' @return an environment containing objects from the module
+#' @export
+module <- function(expr, all_objects = FALSE, parent = .GlobalEnv){
+        code <- deparse(substitute(expr))
+        temp_file <- tempfile("modular_tmp")
+        write(code, temp_file)
+        acquire(temp_file, all_objects = all_objects, parent = parent)
+}
+
+#' @rdname module
+#' @export
+object <- function(expr){
+        module(expr = expr, all_objects = TRUE, parent = parent.frame())
+}
+
+#' @rdname module
 #' @export
 acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
         private <- new.env(parent = parent) # private environment inside globalenv
@@ -44,21 +60,8 @@ acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
 }
 
 
-#' Declare a module in-line
-#'
-#' @param ... expression
-#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
-#'
-#' @return an environment containing objects from the module
-#' @export
-#'
-#' @examples
-module <- function(..., all_objects = FALSE){
-        code <- deparse(substitute(...))
-        temp_file <- tempfile("modular_tmp")
-        write(code, temp_file)
-        acquire(temp_file, all_objects = all_objects)
-}
+
+
 
 
 #' Provide objects from a module

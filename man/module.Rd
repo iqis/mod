@@ -2,18 +2,38 @@
 % Please edit documentation in R/core.R
 \name{module}
 \alias{module}
-\title{Declare a module in-line}
+\alias{object}
+\alias{acquire}
+\title{Make a module}
 \usage{
-module(..., all_objects = FALSE)
+module(expr, all_objects = FALSE, parent = .GlobalEnv)
+
+object(expr)
+
+acquire(file, all_objects = FALSE, parent = .GlobalEnv)
 }
 \arguments{
-\item{...}{expression}
+\item{expr}{expression}
 
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
+
+\item{parent}{the enclosing environment}
+
+\item{file}{path to an R file}
 }
 \value{
 an environment containing objects from the module
 }
 \description{
-Declare a module in-line
+Make a module
+}
+\examples{
+module_path <- system.file("misc", "example_module.R", package = "modular")
+example_module <- acquire(module_path)
+
+ls(example_module)
+
+example_module$a
+example_module$e(123)
+
 }
