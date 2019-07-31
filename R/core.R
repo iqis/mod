@@ -102,10 +102,8 @@ print.module <- function(x, ...){
 #' Exposes the objects from one environment to another
 #'
 #'@param source the providing environment
-#'@param target the receiving environment
 #'@export
-refer <- function(source, target){
-        if (missing(target)) target <- parent.frame()
+refer <- function(source){
         ## add arguments: only, exclude, rename(that takes a list), prefix
 
         obj_name_list = ls(source, all.names = TRUE)
@@ -113,7 +111,7 @@ refer <- function(source, target){
         mapply(assign,
                x = obj_name_list,
                value = mget(obj_name_list, source),
-               envir = list(target)
+               envir = parent.frame()
                )
 }
 
