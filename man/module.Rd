@@ -4,14 +4,12 @@
 \alias{module}
 \title{Declare a module in-line}
 \usage{
-module(..., all_objects = FALSE, lock_bindings = TRUE)
+module(..., all_objects = FALSE)
 }
 \arguments{
 \item{...}{expression}
 
 \item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
-
-\item{lock_bindings}{Boolean; TRUE to prevent values being altered from outside the module.}
 }
 \value{
 an environment containing objects from the module
