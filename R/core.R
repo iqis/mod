@@ -34,7 +34,7 @@ module <- function(..., all_objects = FALSE, lock_bindings = TRUE){
 provide <- function(...) {
         `if`(identical(globalenv(), parent.frame()), stop("Only use provide() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
-        assign(x = ".provide", value = dots, envir = parent.frame())
+        assign(x = "..provide..", value = dots, envir = parent.frame())
 }
 
 
@@ -63,28 +63,25 @@ acquire <- function(file, all_objects = FALSE, lock_bindings = TRUE) {
                 file <- paste0(file, ".R")
                 } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
-        assign("..public", new.env(), envir = private) # public environment inside private
 
         # list of objects to be placed in public, from .provide;
-        obj_list <- if (all_objects || !exists(x = ".provide", envir = private)) {
+        obj_name_list <- if (all_objects || !exists(x = ".provide", envir = private)) {
                 ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         } else {
-                private$.provide
+                private$..provide..
         }
 
         # Remove "private" objects with name starting w. ".." from list
-        obj_list <- obj_list[!grepl("^\\.\\.", obj_list)]
+        obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
-        # assign objects from private to public
-        for (obj in obj_list) {
-                assign(x = obj, value = get(obj, envir = private), envir = private$..public)
-        }
+        # Assign stuff from obj_list to ..public
+        private$..public.. <- as.environment(mget(obj_name_list, private))
 
-        lockEnvironment(private$..public, bindings = lock_bindings)
+        lockEnvironment(private$..public.., bindings = lock_bindings)
 
-        class(private$..public) <- c("module", class(private$..public))
+        class(private$..public..) <- c("module", class(private$..public..))
 
-        return(private$..public)
+        return(private$..public..)
 }
 
 #' Test if the object is a module
@@ -110,10 +107,14 @@ print.module <- function(x, ...){
 refer <- function(source, target){
         if (missing(target)) target <- parent.frame()
         ## add arguments: only, exclude, rename(that takes a list), prefix
-        assertthat::assert_that(is.environment(source))
-        for (obj_name in ls(source, all.names = TRUE)) {
-                assign(x = obj_name, value = get(obj_name, envir = as.environment(source)), envir = target)
-        }
+
+        obj_name_list = ls(source, all.names = TRUE)
+
+        mapply(assign,
+               x = obj_name_list,
+               value = mget(obj_name_list, source),
+               envir = list(target)
+               )
 }
 
 #' Use a module
