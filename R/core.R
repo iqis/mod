@@ -13,7 +13,7 @@
 #' @param ... expression
 #' @param file file path to a module file
 #' @param parent the enclosing environment
-#' @param expose_private
+#' @param expose_private expose the private environment as `..pvtenv..`
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
 #'
@@ -34,7 +34,7 @@ thing <- function(..., dot, lock = TRUE){
         if (!missing(dot)) {
                 dot <- substitute(dot)
                 makeActiveBinding(".", eval(dot, envir = res$..pvtenv..), env = res)
-                rm(..pvtenv.., envir = res)
+                rm("..pvtenv..", envir = res)
         }
 
         if (lock) lockEnvironment(res, bindings = TRUE)

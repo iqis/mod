@@ -20,7 +20,11 @@ acquire(file, parent = .GlobalEnv, lock = TRUE,
 
 \item{lock}{lock the environment}
 
+\item{expose_private}{expose the private environment as `..pvtenv..`}
+
 \item{dot}{function expression used for active binding to `.`}
+
+\item{file}{file path to a module file}
 }
 \value{
 an environment containing objects from the module
