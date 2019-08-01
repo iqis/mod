@@ -6,22 +6,21 @@
 \alias{acquire}
 \title{Make a module}
 \usage{
-module(..., parent = .GlobalEnv, force_public = FALSE, lock = TRUE)
+module(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE)
 
-thing(..., force_public = TRUE, lock = TRUE)
+thing(..., dot, lock = TRUE)
 
-acquire(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE)
+acquire(file, parent = .GlobalEnv, lock = TRUE,
+  expose_private = FALSE)
 }
 \arguments{
 \item{...}{expression}
 
 \item{parent}{the enclosing environment}
 
-\item{force_public}{force every binding to be public}
-
 \item{lock}{lock the environment}
 
-\item{file}{path to an R file}
+\item{dot}{function expression used for active binding to `.`}
 }
 \value{
 an environment containing objects from the module

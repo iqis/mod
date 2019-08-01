@@ -10,31 +10,44 @@
 #' example_module$a
 #' example_module$e(123)
 #'
-#' @param file path to an R file
 #' @param ... expression
+#' @param file file path to a module file
 #' @param parent the enclosing environment
+#' @param expose_private
 #' @param lock lock the environment
-#' @param force_public force every binding to be public
+#' @param dot function expression used for active binding to `.`
 #'
 #' @return an environment containing objects from the module
 #' @export
-module <- function(..., parent = .GlobalEnv, force_public = FALSE, lock = TRUE){
+#'
+module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
-        acquire(temp_file, parent = parent, lock = lock, force_public = force_public)
+        acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
 
 #' @rdname module
 #' @export
-thing <- function(..., force_public = TRUE, lock = TRUE){
-        module(..., parent = parent.frame(), force_public = force_public, lock = lock)
+thing <- function(..., dot, lock = TRUE){
+        res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
+        if (!missing(dot)) {
+                dot <- substitute(dot)
+                makeActiveBinding(".", eval(dot, envir = res$..pvtenv..), env = res)
+                rm(..pvtenv.., envir = res)
+        }
+
+        if (lock) lockEnvironment(res, bindings = TRUE)
+
+        res
 }
+
 
 #' @rdname module
 #' @export
-acquire <- function(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE) {
-        private <- new.env(parent = parent) # private environment inside globalenv
+#'
+acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
+        private <- new.env(parent = parent)
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
         } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
@@ -50,13 +63,13 @@ acquire <- function(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE
         # Remove "private" objects with name starting w. ".." from list
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
-        res <-
-        if (force_public){
-                private
-        } else {
-                # Assign stuff from obj_list to ..public
-                private$..public.. <- as.environment(mget(obj_name_list, private))
-                private$..public..
+
+        # Assign stuff from obj_list to ..public
+        private$..public.. <- as.environment(mget(obj_name_list, private))
+        res <- private$..public..
+
+        if (expose_private) {
+                assign("..pvtenv..", private, envir = res)
         }
 
         if (lock) lockEnvironment(res, bindings = TRUE)
@@ -65,9 +78,6 @@ acquire <- function(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE
 
         return(res)
 }
-
-
-
 
 
 
