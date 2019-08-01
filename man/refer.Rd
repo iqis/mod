@@ -4,10 +4,10 @@
 \alias{refer}
 \title{Refer bindings from a module to another}
 \usage{
-refer(module)
+refer(...)
 }
 \arguments{
-\item{module}{a module}
+\item{...}{dot-dot-dot; names of modules}
 }
 \description{
 Refer bindings from a module to another
