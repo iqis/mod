@@ -6,18 +6,20 @@
 \alias{acquire}
 \title{Make a module}
 \usage{
-module(..., all_objects = FALSE, parent = .GlobalEnv)
+module(..., parent = .GlobalEnv, force_public = FALSE, lock = TRUE)
 
-thing(...)
+thing(..., force_public = TRUE, lock = TRUE)
 
-acquire(file, all_objects = FALSE, parent = .GlobalEnv)
+acquire(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE)
 }
 \arguments{
 \item{...}{expression}
 
-\item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
-
 \item{parent}{the enclosing environment}
+
+\item{force_public}{force every binding to be public}
+
+\item{lock}{lock the environment}
 
 \item{file}{path to an R file}
 }

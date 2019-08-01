@@ -4,14 +4,12 @@
 \alias{use}
 \title{Use a module}
 \usage{
-use(module, as, all_objects = FALSE, ...)
+use(module, as, ...)
 }
 \arguments{
 \item{module}{path to an R file or a symbol for a module object}
 
 \item{as}{name to be used in the search path}
-
-\item{all_objects}{Boolean; whether to include all objects, disregarding `provide()` declarations}
 
 \item{...}{dot-dot-dot, any additional arguments for 'attach' function}
 }

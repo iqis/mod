@@ -12,27 +12,28 @@
 #'
 #' @param file path to an R file
 #' @param ... expression
-#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param parent the enclosing environment
+#' @param lock lock the environment
+#' @param force_public force every binding to be public
 #'
 #' @return an environment containing objects from the module
 #' @export
-module <- function(..., all_objects = FALSE, parent = .GlobalEnv){
+module <- function(..., parent = .GlobalEnv, force_public = FALSE, lock = TRUE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
-        acquire(temp_file, all_objects = all_objects, parent = parent)
+        acquire(temp_file, parent = parent, lock = lock, force_public = force_public)
 }
 
 #' @rdname module
 #' @export
-thing <- function(...){
-        module(..., all_objects = TRUE, parent = parent.frame())
+thing <- function(..., force_public = TRUE, lock = TRUE){
+        module(..., parent = parent.frame(), force_public = force_public, lock = lock)
 }
 
 #' @rdname module
 #' @export
-acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
+acquire <- function(file, parent = .GlobalEnv, force_public = FALSE, lock = TRUE) {
         private <- new.env(parent = parent) # private environment inside globalenv
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
@@ -40,7 +41,7 @@ acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
         sys.source(file = file, envir = private) # source everything from file to private
 
         # list of objects to be placed in public, from .provide;
-        obj_name_list <- if (all_objects || !exists(x = "..provide..", envir = private)) {
+        obj_name_list <- if (!exists(x = "..provide..", envir = private)) {
                 ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         } else {
                 private$..provide..
@@ -49,14 +50,20 @@ acquire <- function(file, all_objects = FALSE, parent = .GlobalEnv) {
         # Remove "private" objects with name starting w. ".." from list
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
-        # Assign stuff from obj_list to ..public
-        private$..public.. <- as.environment(mget(obj_name_list, private))
+        res <-
+        if (force_public){
+                private
+        } else {
+                # Assign stuff from obj_list to ..public
+                private$..public.. <- as.environment(mget(obj_name_list, private))
+                private$..public..
+        }
 
-        lockEnvironment(private$..public.., bindings = TRUE)
+        if (lock) lockEnvironment(res, bindings = TRUE)
 
-        class(private$..public..) <- c("module", class(private$..public..))
+        class(res) <- c("module", class(res))
 
-        return(private$..public..)
+        return(res)
 }
 
 
@@ -111,16 +118,15 @@ refer <- function(module){
 #' }
 #' @param module path to an R file or a symbol for a module object
 #' @param as name to be used in the search path
-#' @param all_objects Boolean; whether to include all objects, disregarding `provide()` declarations
 #' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #'
 #' @export
-use <- function(module, as, all_objects = FALSE, ...){
+use <- function(module, as, ...){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- acquire(file = module, all_objects = all_objects)
+                env <- acquire(file = module, ...)
                 if (missing(as)) as <- bare_name(module)
         } else {
                 stop("requires module object or path to R file")
