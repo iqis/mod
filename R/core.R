@@ -79,6 +79,27 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
         return(res)
 }
 
+#' Print module
+#'
+#' @param x object
+#' @param ... dot-dot-dot
+#'
+#' @return NULL
+#' @export
+#'
+print.module <- function(x, ...){
+        cat("<module>", "\n")
+        class(x) <- class(x)[2:length(class(x))]
+        print(x)
+
+        obj_name_list <- ls(x, all.names = TRUE)
+        obj_class_list <- lapply(obj_name_list, function(y) class(get(y, envir = x)))
+        print_line <- function(name, class){
+                cat(paste0("- ", name, ": <", paste(class, collapse = ", "), ">\n"))
+        }
+        mapply(print_line, name = obj_name_list, class = obj_class_list)
+        invisible(x)
+}
 
 
 #' Provide objects from a module
