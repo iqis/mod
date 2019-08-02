@@ -15,7 +15,7 @@
 #' @param parent the enclosing environment
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
-#' @param expose_private expose the private environment as `..pvtenv..`
+#' @param expose_private expose the private environment as `..private..`
 #'
 #' @return an environment containing objects from the module
 #' @export
@@ -33,10 +33,10 @@ thing <- function(..., dot, lock = TRUE){
         res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
-                makeActiveBinding(".", eval(dot, envir = res$..pvtenv..), env = res)
+                makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
         }
 
-        rm("..pvtenv..", envir = res)
+        rm("..private..", envir = res)
 
         if (lock) lockEnvironment(res, bindings = TRUE)
 
@@ -116,7 +116,7 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
 
 
         if (expose_private) {
-                assign("..pvtenv..", private, envir = private$..public..)
+                assign("..private..", private, envir = private$..public..)
         }
 
         if (lock) lockEnvironment(private$..public.., bindings = TRUE)
