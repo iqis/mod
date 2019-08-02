@@ -49,44 +49,57 @@ thing <- function(..., dot, lock = TRUE){
 #'
 acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
         private <- new.env(parent = parent)
-        # list of objects to be imported, from ..refer..
         assign("..refer..", list(), envir = private)
+        assign("..provide..", list(), envir = private)
 
         if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
                 file <- paste0(file, ".R")
         } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
         sys.source(file = file, envir = private) # source everything from file to private
 
-        # obj_name_list = ls(module, all.names = TRUE)
-        # target_obj_name_list <- ls(target, all.names = TRUE)
-        #
-        # conflict_name_list <- intersect(obj_name_list, target_obj_name_list)
-        #
-        # if (length(conflict_name_list) > 0) {
-        #         stop(paste0("name conflict: ",
-        #                     paste(conflict_name_list, collapse = ", ")))
-        # }
-        #
-        # mapply(assign,
-        #        x = obj_name_list,
-        #        value = mget(obj_name_list, source),
-        #        envir = list(target)
-        #        )
+        # = Provide =
 
         # list of objects to be placed in public, from ..provide..;
-        obj_name_list <- if (!exists(x = "..provide..", envir = private)) {
-                ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
-        } else {
+        obj_name_list <- if (length(private$..provide..) != 0) {
                 private$..provide..
+        } else {
+                ls(private, all.names = TRUE) #This includes hidden objs with name starting w. "."
         }
 
         # Remove "private" objects with name starting w. ".." from list
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
-
-
         # Assign stuff from obj_list to ..public
         private$..public.. <- as.environment(mget(obj_name_list, private))
         res <- private$..public..
+
+        # = Refer =
+
+        if (length(private$..refer..) != 0){
+                source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
+                target_obj_name_list <- ls(res, all.names = TRUE)
+
+                conflict_name_list <- lapply(source_obj_name_list,
+                                             intersect,
+                                             y = target_obj_name_list)
+
+                if (length(unlist(conflict_name_list)) > 0) {
+                        stop(paste0("name conflict: ",
+                                    paste(c(conflict_name_list), collapse = ", ")))
+                }
+
+                refer_objs <- function(source, source_obj_name_list, target){
+                        mapply(assign,
+                               x = source_obj_name_list,
+                               value = mget(source_obj_name_list, source),
+                               envir = list(target)
+                        )
+                }
+
+                for (i in 1:length(private$..refer..)) {
+                        refer_objs(private$..refer..[[i]], source_obj_name_list[[i]], res)
+                }
+        }
+
 
         if (expose_private) {
                 assign("..pvtenv..", private, envir = res)
