@@ -34,8 +34,9 @@ thing <- function(..., dot, lock = TRUE){
         if (!missing(dot)) {
                 dot <- substitute(dot)
                 makeActiveBinding(".", eval(dot, envir = res$..pvtenv..), env = res)
-                rm("..pvtenv..", envir = res)
         }
+
+        rm("..pvtenv..", envir = res)
 
         if (lock) lockEnvironment(res, bindings = TRUE)
 
@@ -157,7 +158,9 @@ refer <- function(...){
         sources <- lapply(dots, get, envir = parent.frame())
         names(sources) <- dots
 
-        assign("..refer..", c(get("..refer..", envir = parent.frame()), sources), parent.frame())
+        assign("..refer..",
+               c(get("..refer..", envir = parent.frame()), sources),
+               parent.frame())
 }
 
 #' Use a module
