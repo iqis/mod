@@ -216,7 +216,6 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
-        ## add arguments: only, exclude, rename(that takes a list), prefix
 
         `if`(identical(globalenv(), parent.frame()), stop("Only use refer() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
