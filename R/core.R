@@ -13,9 +13,9 @@
 #' @param ... expression
 #' @param file file path to a module file
 #' @param parent the enclosing environment
-#' @param expose_private expose the private environment as `..pvtenv..`
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
+#' @param expose_private expose the private environment as `..pvtenv..`
 #'
 #' @return an environment containing objects from the module
 #' @export
@@ -70,7 +70,6 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
         # Assign stuff from obj_list to ..public
         private$..public.. <- as.environment(mget(obj_name_list, private))
-        res <- private$..public..
 
         # = Refer =
 
@@ -94,7 +93,7 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                         sep = source_sep_list
                         )
 
-                target_obj_name_list <- ls(res, all.names = TRUE)
+                target_obj_name_list <- ls(private$..public.., all.names = TRUE)
 
                 conflict_name_list <- lapply(source_obj_name_list2,
                                              intersect,
@@ -110,21 +109,21 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                         mapply(assign,
                                x = source_obj_name_list2[[i]],
                                value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
-                               envir = list(res)
+                               envir = list(private$..public..)
                         )
                 }
         }
 
 
         if (expose_private) {
-                assign("..pvtenv..", private, envir = res)
+                assign("..pvtenv..", private, envir = private$..public..)
         }
 
-        if (lock) lockEnvironment(res, bindings = TRUE)
+        if (lock) lockEnvironment(private$..public.., bindings = TRUE)
 
-        class(res) <- c("module", class(res))
+        class(private$..public..) <- c("module", class(private$..public..))
 
-        return(res)
+        return(private$..public..)
 }
 
 #' Print module
@@ -199,14 +198,13 @@ refer <- function(..., prefix = "", sep = "_"){
 #'
 #' @examples
 #' \dontrun{
-#' use("~/R/my_module.R")
+#' use("~/R/example_module")
 #' }
 #' @param module path to an R file or a symbol for a module object
 #' @param as name to be used in the search path
-#' @param ... dot-dot-dot, any additional arguments for 'attach' function
 #'
 #' @export
-use <- function(module, as, ...){
+use <- function(module, as){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
