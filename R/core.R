@@ -112,17 +112,19 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
                 # Intra-source name conflict
 
                 intersect_w_others <-  function(x, i){
-                        mapply(intersect, x[-i], x[i], SIMPLIFY = TRUE)
+                        mapply(intersect, x[-i], x[i], SIMPLIFY = FALSE)
                 }
 
                 source_conflict_name_list <-
-                        lapply(seq_along(source_obj_name_list2),
-                               function(i) {
-                                       intersect_w_others(x = source_obj_name_list2,
-                                                          i = i)
-                               })
-
-                names(source_conflict_name_list) <- names(source_obj_name_list2)
+                        if (length(source_obj_name_list2) > 1){
+                                lapply(seq_along(source_obj_name_list2),
+                                       function(i) {
+                                               intersect_w_others(x = source_obj_name_list2,
+                                                                  i = i)})
+                                names(source_conflict_name_list) <- names(source_obj_name_list2)
+                        } else {
+                                list()
+                        }
 
 
                 `if`(length(unique(unlist(source_conflict_name_list))) > 0,
