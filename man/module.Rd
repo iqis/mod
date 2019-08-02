@@ -6,15 +6,16 @@
 \alias{acquire}
 \title{Make a module}
 \usage{
-module(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE)
+module(expr, parent = .GlobalEnv, lock = TRUE,
+  expose_private = FALSE)
 
-thing(..., dot, lock = TRUE)
+thing(expr, dot, lock = TRUE, expose_private = FALSE)
 
 acquire(file, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{
-\item{...}{expression}
+\item{expr}{module expression}
 
 \item{parent}{the enclosing environment}
 
@@ -25,6 +26,8 @@ acquire(file, parent = .GlobalEnv, lock = TRUE,
 \item{dot}{function expression used for active binding to `.`}
 
 \item{file}{file path to a module file}
+
+\item{...}{dot-dot-dot}
 }
 \value{
 an environment containing objects from the module

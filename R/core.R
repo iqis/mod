@@ -10,18 +10,19 @@
 #' example_module$a
 #' example_module$e(123)
 #'
-#' @param ... expression
+#' @param expr module expression
 #' @param file file path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
 #' @param expose_private expose the private environment as `..private..`
+#' @param ... dot-dot-dot
 #'
 #' @return an environment containing objects from the module
 #' @export
 #'
-module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
-        code <- deparse(substitute(...))
+module <- function(expr, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
+        code <- deparse(substitute(expr))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
@@ -29,15 +30,14 @@ module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE
 
 #' @rdname module
 #' @export
-thing <- function(..., dot, lock = TRUE){
-        res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
+thing <- function(expr, dot, lock = TRUE, expose_private = FALSE){
+        res <- module(expr, parent = parent.frame(), lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
                 makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
         }
 
-        rm("..private..", envir = res)
-
+        if (!expose_private) rm("..private..", envir = res)
         if (lock) lockEnvironment(res, bindings = TRUE)
 
         res
