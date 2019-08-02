@@ -108,7 +108,7 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                         sep = source_sep_list,
                         SIMPLIFY = FALSE)
 
-                # Intra-source name conflict
+                # Extra-source name conflict
                 source_conflict_name_list <- Reduce(intersect, source_obj_name_list2)
 
                 `if`(length(unlist(source_conflict_name_list)) > 0,
