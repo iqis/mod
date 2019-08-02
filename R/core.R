@@ -226,7 +226,9 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
         lapply(sources, `attr<-`, "refer_include", include)
         lapply(sources, `attr<-`, "refer_exclude", exclude)
-        lapply(sources, `attr<-`, "refer_prefix", prefix)
+        `if`(deparse(substitute(prefix)) == ".",
+            mapply(`attr<-`, x = sources, which = list("refer_prefix"), value = dots),
+            lapply(sources, `attr<-`, "refer_prefix", prefix))
         lapply(sources, `attr<-`, "refer_sep", sep)
 
         assign("..refer..",
