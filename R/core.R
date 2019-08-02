@@ -109,15 +109,28 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
                         sep = source_sep_list,
                         SIMPLIFY = FALSE)
 
-                # Extra-source name conflict
-                source_conflict_name_list <- Reduce(intersect, source_obj_name_list2)
+                # Intra-source name conflict
 
-                `if`(length(unlist(source_conflict_name_list)) > 0,
+                intersect_w_others <-  function(x, i){
+                        mapply(intersect, x[-i], x[i], SIMPLIFY = TRUE)
+                }
+
+                source_conflict_name_list <-
+                        lapply(seq_along(source_obj_name_list2),
+                               function(i) {
+                                       intersect_w_others(x = source_obj_name_list2,
+                                                          i = i)
+                               })
+
+                names(source_conflict_name_list) <- names(source_obj_name_list2)
+
+
+                `if`(length(unique(unlist(source_conflict_name_list))) > 0,
                      stop(paste0("name conflict among sources: ",
-                                 paste(c(source_conflict_name_list),
+                                 paste(unique(unlist(source_conflict_name_list)),
                                        collapse = ", "))))
 
-                # Ultra-source name conflct
+                # Source-target name conflict
                 target_obj_name_list <- ls(private$..public.., all.names = TRUE)
 
                 conflict_name_list <- lapply(source_obj_name_list2,
@@ -168,6 +181,8 @@ use <- function(module, as, ...){
         if (name %in% search()) drop(as)
         attach(what = env, name = name, ...)
 }
+
+
 
 
 #' Provide objects from a module
