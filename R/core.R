@@ -113,10 +113,10 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                 # Intra-source name conflict
                 source_conflict_name_list <- Reduce(intersect, source_obj_name_list2)
 
-                if (length(unlist(source_conflict_name_list)) > 0) {
-                        stop(paste0("name conflict among sources: ",
-                                    paste(c(source_conflict_name_list), collapse = ", ")))
-                }
+                `if`(length(unlist(source_conflict_name_list)) > 0,
+                     stop(paste0("name conflict among sources: ",
+                                 paste(c(source_conflict_name_list),
+                                       collapse = ", "))))
 
                 # Ultra-source name conflct
                 target_obj_name_list <- ls(private$..public.., all.names = TRUE)
@@ -125,10 +125,10 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                                              intersect,
                                              y = target_obj_name_list)
 
-                if (length(unlist(conflict_name_list)) > 0) {
+                `if`(length(unlist(conflict_name_list)) > 0,
                         stop(paste0("name conflict: ",
-                                    paste(c(conflict_name_list), collapse = ", ")))
-                }
+                                    paste(c(conflict_name_list),
+                                          collapse = ", "))))
 
                 # refer objs from source to target, with renaming
                 for (i in 1:length(private$..refer..)) {
@@ -141,9 +141,7 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
         }
 
 
-        if (expose_private) {
-                assign("..private..", private, envir = private$..public..)
-        }
+        if (expose_private) assign("..private..", private, envir = private$..public..)
 
         if (lock) lockEnvironment(private$..public.., bindings = TRUE)
 
