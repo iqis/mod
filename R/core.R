@@ -86,8 +86,6 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
 
                 source_obj_name_list <-
                         mapply(function(src_obj, src_incl, src_excl){
-                                browser()
-
                                 res <- src_obj
                                 res <- `if`(is.null(src_incl), res, intersect(res, src_incl))
                                 res <- `if`(is.null(src_excl), res, setdiff(res, src_excl))
