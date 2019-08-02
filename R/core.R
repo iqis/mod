@@ -79,12 +79,25 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                      stop("refer() a module at most once."))
 
                 source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
-
                 source_include_list <- lapply(private$..refer.., attr, which = "refer_include")
                 source_exclude_list <- lapply(private$..refer.., attr, which = "refer_exclude")
-
                 source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
                 source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
+
+                source_obj_name_list <-
+                        mapply(function(src_obj, src_incl, src_excl){
+                                browser()
+
+                                res <- src_obj
+                                res <- `if`(is.null(src_incl), res, intersect(res, src_incl))
+                                res <- `if`(is.null(src_excl), res, setdiff(res, src_excl))
+                                res
+                        },
+                        src_obj = source_obj_name_list,
+                        src_incl = source_include_list,
+                        src_excl = source_exclude_list,
+                        SIMPLIFY = FALSE)
+
                 # prefix obj names, if specified
                 source_obj_name_list2 <- mapply(
                         function(prefix, obj_name, sep){
