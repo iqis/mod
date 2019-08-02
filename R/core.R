@@ -79,20 +79,33 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                      stop("refer() a module at most once."))
 
                 source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
+
+                source_include_list <- lapply(private$..refer.., attr, which = "refer_include")
+                source_exclude_list <- lapply(private$..refer.., attr, which = "refer_exclude")
+
                 source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
                 source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
                 # prefix obj names, if specified
                 source_obj_name_list2 <- mapply(
                         function(prefix, obj_name, sep){
-                                `if`(nchar(prefix) > 1,
+                                `if`(nchar(prefix) >= 1,
                                      paste(prefix, obj_name, sep = sep),
                                      obj_name)
                         },
                         prefix = source_prefix_list,
                         obj_name = source_obj_name_list,
-                        sep = source_sep_list
-                        )
+                        sep = source_sep_list,
+                        SIMPLIFY = FALSE)
 
+                # Intra-source name conflict
+                source_conflict_name_list <- Reduce(intersect, source_obj_name_list2)
+
+                if (length(unlist(source_conflict_name_list)) > 0) {
+                        stop(paste0("name conflict among sources: ",
+                                    paste(c(source_conflict_name_list), collapse = ", ")))
+                }
+
+                # Ultra-source name conflct
                 target_obj_name_list <- ls(private$..public.., all.names = TRUE)
 
                 conflict_name_list <- lapply(source_obj_name_list2,
@@ -150,15 +163,24 @@ provide <- function(...) {
 
 #' Refer bindings from a module to another
 #'
+#' @param include
+#' @param exclude
+#' @param prefix
+#' @param sep
 #'@param ... dot-dot-dot; names of modules
+#'
 #'@export
-refer <- function(..., prefix = "", sep = "_"){
+refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "_"){
         ## add arguments: only, exclude, rename(that takes a list), prefix
 
         `if`(identical(globalenv(), parent.frame()), stop("Only use refer() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         sources <- lapply(dots, get, envir = parent.frame())
         names(sources) <- dots
+
+
+        lapply(sources, `attr<-`, "refer_include", include)
+        lapply(sources, `attr<-`, "refer_exclude", exclude)
         lapply(sources, `attr<-`, "refer_prefix", prefix)
         lapply(sources, `attr<-`, "refer_sep", sep)
 
