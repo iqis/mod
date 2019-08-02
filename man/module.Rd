@@ -4,6 +4,7 @@
 \alias{module}
 \alias{thing}
 \alias{acquire}
+\alias{use}
 \title{Make a module}
 \usage{
 module(expr, parent = .GlobalEnv, lock = TRUE,
@@ -11,8 +12,10 @@ module(expr, parent = .GlobalEnv, lock = TRUE,
 
 thing(expr, dot, lock = TRUE, expose_private = FALSE)
 
-acquire(file, parent = .GlobalEnv, lock = TRUE,
+acquire(module, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
+
+use(module, as, ...)
 }
 \arguments{
 \item{expr}{module expression}
@@ -25,7 +28,9 @@ acquire(file, parent = .GlobalEnv, lock = TRUE,
 
 \item{dot}{function expression used for active binding to `.`}
 
-\item{file}{file path to a module file}
+\item{module}{module object, or file path to a module file}
+
+\item{as}{name when attached to search path with `use()`}
 
 \item{...}{dot-dot-dot}
 }

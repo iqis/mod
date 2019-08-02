@@ -11,10 +11,11 @@
 #' example_module$e(123)
 #'
 #' @param expr module expression
-#' @param file file path to a module file
+#' @param module module object, or file path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
+#' @param as name when attached to search path with `use()`
 #' @param expose_private expose the private environment as `..private..`
 #' @param ... dot-dot-dot
 #'
@@ -47,15 +48,15 @@ thing <- function(expr, dot, lock = TRUE, expose_private = FALSE){
 #' @rdname module
 #' @export
 #'
-acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
+acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
         private <- new.env(parent = parent)
         assign("..refer..", list(), envir = private)
         assign("..provide..", list(), envir = private)
 
-        if (grepl("modular_tmp", file) | grepl("\\.r$|\\.R$", file)) {} else {
-                file <- paste0(file, ".R")
+        if (grepl("modular_tmp", module) | grepl("\\.r$|\\.R$", module)) {} else {
+                module <- paste0(module, ".R")
         } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
-        sys.source(file = file, envir = private) # source everything from file to private
+        sys.source(file = module, envir = private) # source everything from file to private
 
         # = Provide =
 
@@ -149,6 +150,26 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
 }
 
 
+#' @rdname module
+#' @export
+#'
+use <- function(module, as, ...){
+        if (is_module(module)) {
+                env <- module
+                if (missing(as)) as <- deparse(substitute(module))
+        } else if (is.character(module) || file.exists(module)) {
+                env <- acquire(module = module, ...)
+                if (missing(as)) as <- bare_name(module)
+        } else {
+                stop("requires module object or path to R file")
+        }
+
+        name <- paste0("module:",as)
+        if (name %in% search()) drop(as)
+        attach(what = env, name = name, ...)
+}
+
+
 #' Provide objects from a module
 #'
 #' @examples
@@ -198,33 +219,8 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                parent.frame())
 }
 
-#' Use a module
-#'
-#' Load and attach a module to the search path
-#'
-#' @examples
-#' \dontrun{
-#' use("~/R/example_module")
-#' }
-#' @param module path to an R file or a symbol for a module object
-#' @param as name to be used in the search path
-#'
-#' @export
-use <- function(module, as){
-        if (is_module(module)) {
-                env <- module
-                if (missing(as)) as <- deparse(substitute(module))
-        } else if (is.character(module) || file.exists(module)) {
-                env <- acquire(file = module, ...)
-                if (missing(as)) as <- bare_name(module)
-        } else {
-                stop("requires module object or path to R file")
-        }
 
-        name <- paste0("module:",as)
-        if (name %in% search()) drop(as)
-        attach(what = env, name = name, ...)
-}
+
 
 #' Print module
 #'
