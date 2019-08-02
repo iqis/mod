@@ -75,10 +75,28 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
         # = Refer =
 
         if (length(private$..refer..) != 0){
+
+                `if`(length(unique(private$..refer..)) < length(private$..refer..),
+                     stop("refer() a module at most once."))
+
                 source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
+                source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
+                source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
+                # prefix obj names, if specified
+                source_obj_name_list2 <- mapply(
+                        function(prefix, obj_name, sep){
+                                `if`(nchar(prefix) > 1,
+                                     paste(prefix, obj_name, sep = sep),
+                                     obj_name)
+                        },
+                        prefix = source_prefix_list,
+                        obj_name = source_obj_name_list,
+                        sep = source_sep_list
+                        )
+
                 target_obj_name_list <- ls(res, all.names = TRUE)
 
-                conflict_name_list <- lapply(source_obj_name_list,
+                conflict_name_list <- lapply(source_obj_name_list2,
                                              intersect,
                                              y = target_obj_name_list)
 
@@ -87,16 +105,13 @@ acquire <- function(file, parent = .GlobalEnv, lock = TRUE, expose_private = FAL
                                     paste(c(conflict_name_list), collapse = ", ")))
                 }
 
-                refer_objs <- function(source, source_obj_name_list, target){
-                        mapply(assign,
-                               x = source_obj_name_list,
-                               value = mget(source_obj_name_list, source),
-                               envir = list(target)
-                        )
-                }
-
+                # refer objs from source to target, with renaming
                 for (i in 1:length(private$..refer..)) {
-                        refer_objs(private$..refer..[[i]], source_obj_name_list[[i]], res)
+                        mapply(assign,
+                               x = source_obj_name_list2[[i]],
+                               value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
+                               envir = list(res)
+                        )
                 }
         }
 
@@ -163,13 +178,15 @@ provide <- function(...) {
 #'
 #'@param ... dot-dot-dot; names of modules
 #'@export
-refer <- function(...){
+refer <- function(..., prefix = "", sep = "_"){
         ## add arguments: only, exclude, rename(that takes a list), prefix
 
         `if`(identical(globalenv(), parent.frame()), stop("Only use refer() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         sources <- lapply(dots, get, envir = parent.frame())
         names(sources) <- dots
+        lapply(sources, `attr<-`, "refer_prefix", prefix)
+        lapply(sources, `attr<-`, "refer_sep", sep)
 
         assign("..refer..",
                c(get("..refer..", envir = parent.frame()), sources),
