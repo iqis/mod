@@ -172,14 +172,14 @@ provide <- function(...) {
 
 #' Refer bindings from a module to another
 #'
-#' @param include
-#' @param exclude
-#' @param prefix
-#' @param sep
-#'@param ... dot-dot-dot; names of modules
+#' @param ... names of modules; dot-dot-dot
+#' @param include names to include; character vector
+#' @param exclude names to excludde; character vector
+#' @param prefix prefix to names; character
+#' @param sep separator between prefix and names; character
 #'
-#'@export
-refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "_"){
+#' @export
+refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         ## add arguments: only, exclude, rename(that takes a list), prefix
 
         `if`(identical(globalenv(), parent.frame()), stop("Only use refer() in a module, as to use interactively is not meaningful"))

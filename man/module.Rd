@@ -20,7 +20,7 @@ acquire(file, parent = .GlobalEnv, lock = TRUE,
 
 \item{lock}{lock the environment}
 
-\item{expose_private}{expose the private environment as `..pvtenv..`}
+\item{expose_private}{expose the private environment as `..private..`}
 
 \item{dot}{function expression used for active binding to `.`}
 

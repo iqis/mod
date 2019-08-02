@@ -4,10 +4,18 @@
 \alias{refer}
 \title{Refer bindings from a module to another}
 \usage{
-refer(...)
+refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 }
 \arguments{
-\item{...}{dot-dot-dot; names of modules}
+\item{...}{names of modules; dot-dot-dot}
+
+\item{include}{names to include; character vector}
+
+\item{exclude}{names to excludde; character vector}
+
+\item{prefix}{prefix to names; character}
+
+\item{sep}{separator between prefix and names; character}
 }
 \description{
 Refer bindings from a module to another

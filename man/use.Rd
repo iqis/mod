@@ -4,20 +4,18 @@
 \alias{use}
 \title{Use a module}
 \usage{
-use(module, as, ...)
+use(module, as)
 }
 \arguments{
 \item{module}{path to an R file or a symbol for a module object}
 
 \item{as}{name to be used in the search path}
-
-\item{...}{dot-dot-dot, any additional arguments for 'attach' function}
 }
 \description{
 Load and attach a module to the search path
 }
 \examples{
 \dontrun{
-use("~/R/my_module.R")
+use("~/R/example_module")
 }
 }
