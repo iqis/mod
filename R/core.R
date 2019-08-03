@@ -57,7 +57,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 
         private <- new.env(parent = parent)
         assign("..refer..", list(), envir = private)
-        assign("..provide..", list(), envir = private)
+        assign("..provide..", c(), envir = private)
         assign("..module..", NULL, envir = private)
 
         if (grepl("modular_tmp", module) | grepl("\\.r$|\\.R$", module)) {} else {
@@ -214,9 +214,11 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 provide <- function(...) {
         `if`(exists("..module..", parent.frame()),NULL,
              stop("Only use provide() in a module, as to use interactively is not meaningful"))
-
-        dots <- as.character(match.call(expand.dots = FALSE)$...)
-        assign("..provide..", dots, envir = parent.frame())
+        browser()
+        obj_names <- as.character(match.call(expand.dots = FALSE)$...)
+        existing_obj_names <- get("..provide..", envir = parent.frame())
+        obj_names <- unique(c(existing_obj_names, obj_names))
+        assign("..provide..", unique(obj_names, existing_obj_names), envir = parent.frame())
 }
 
 
