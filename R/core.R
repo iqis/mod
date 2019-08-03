@@ -45,6 +45,10 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
         res
 }
 
+#' @export
+`[.thing` <- function(x, ...){
+        x$.
+}
 
 #' @rdname module
 #' @export
