@@ -2,12 +2,16 @@
 % Please edit documentation in R/core.R
 \name{module}
 \alias{module}
+\alias{bare_module}
 \alias{thing}
 \alias{acquire}
-\alias{use}
+\alias{expose}
 \title{Make a module}
 \usage{
 module(..., parent = parent.frame(), lock = TRUE,
+  expose_private = FALSE)
+
+bare_module(..., parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 thing(..., dot, parent = parent.frame(), lock = TRUE,
@@ -16,7 +20,7 @@ thing(..., dot, parent = parent.frame(), lock = TRUE,
 acquire(module, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
 
-use(module, as, parent = .GlobalEnv, lock = TRUE,
+expose(module, as, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{

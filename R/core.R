@@ -28,6 +28,13 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
 
+#' @rdname module
+#' @export
+bare_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = FALSE){
+        res <- module(..., parent = parent, lock = lock, expose_private = expose_private)
+        class(res) <- c("bare_module", class(res))
+        res
+}
 
 #' @rdname module
 #' @export
@@ -66,7 +73,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         # initialize context signatures
         assign("..module..", NULL, envir = private)
         assign("..parent..", parent, envir = private)
-        assign("..search..", search_path_envirs(parent.env(private)), envir = private)
+        assign("..search..", function() search_path_envirs(parent.env(private)), envir = private)
         assign("..file..", module, envir = private)
         assign("..provide..", c(), envir = private)
         assign("..refer..", list(), envir = private)
