@@ -213,7 +213,7 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 #' @export
 provide <- function(...) {
         `if`(exists("..module..", parent.frame()),NULL,
-             stop("Only use provide() in a module, as to use interactively is not meaningful"))
+             stop("Only use provide() in a module."))
 
         obj_names <- as.character(match.call(expand.dots = FALSE)$...)
         existing_obj_names <- get("..provide..", envir = parent.frame())
@@ -235,7 +235,7 @@ provide <- function(...) {
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(exists("..module..", parent.frame()),NULL,
-             stop("Only use provide() in a module, as to use interactively is not meaningful"))
+             stop("Only use provide() in a module."))
 
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         sources <- lapply(dots, get, envir = parent.frame())
