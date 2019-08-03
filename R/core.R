@@ -214,7 +214,7 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 provide <- function(...) {
         `if`(exists("..module..", parent.frame()),NULL,
              stop("Only use provide() in a module, as to use interactively is not meaningful"))
-        browser()
+
         obj_names <- as.character(match.call(expand.dots = FALSE)$...)
         existing_obj_names <- get("..provide..", envir = parent.frame())
         obj_names <- unique(c(existing_obj_names, obj_names))
