@@ -18,5 +18,5 @@ refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 \item{sep}{separator between prefix and names; character}
 }
 \description{
-Refer bindings from a module to another
+Only legal inside a module context
 }

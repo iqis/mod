@@ -10,7 +10,7 @@ provide(...)
 \item{...}{dot-dot-dot: name of any object to be accessible by user}
 }
 \description{
-Provide objects from a module
+Only legal inside a module context
 }
 \examples{
 

@@ -29,9 +29,10 @@ module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
 
+
 #' @rdname module
 #' @export
-thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
+submodule <- function(..., dot, lock = TRUE, expose_private = FALSE){
         res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
@@ -43,6 +44,10 @@ thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
 
         res
 }
+
+#' @rdname module
+#' @export
+thing <- submodule
 
 
 #' @rdname module

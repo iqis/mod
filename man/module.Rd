@@ -2,23 +2,26 @@
 % Please edit documentation in R/core.R
 \name{module}
 \alias{module}
+\alias{submodule}
 \alias{thing}
 \alias{acquire}
 \alias{use}
 \title{Make a module}
 \usage{
-module(expr, parent = .GlobalEnv, lock = TRUE,
-  expose_private = FALSE)
+module(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE)
 
-thing(expr, dot, lock = TRUE, expose_private = FALSE)
+submodule(..., dot, lock = TRUE, expose_private = FALSE)
+
+thing(..., dot, lock = TRUE, expose_private = FALSE)
 
 acquire(module, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
 
-use(module, as, ...)
+use(module, as, parent = .GlobalEnv, lock = TRUE,
+  expose_private = FALSE)
 }
 \arguments{
-\item{expr}{module expression}
+\item{...}{dot-dot-dot}
 
 \item{parent}{the enclosing environment}
 
@@ -32,7 +35,7 @@ use(module, as, ...)
 
 \item{as}{name when attached to search path with `use()`}
 
-\item{...}{dot-dot-dot}
+\item{expr}{module expression}
 }
 \value{
 an environment containing objects from the module
