@@ -22,7 +22,7 @@
 #' @return an environment containing objects from the module
 #' @export
 #'
-module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
+module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = FALSE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
@@ -50,8 +50,6 @@ thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
 #' @export
 #'
 acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
-        # if inside module context, evaluate here
-        parent <- `if`(exists("..module..", parent.frame()), parent.frame(), parent)
 
         private <- new.env(parent = parent)
         assign("..refer..", list(), envir = private)
