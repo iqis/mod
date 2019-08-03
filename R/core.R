@@ -117,11 +117,12 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 
                 source_conflict_name_list <-
                         if (length(source_obj_name_list2) > 1){
-                                lapply(seq_along(source_obj_name_list2),
+                                res <- lapply(seq_along(source_obj_name_list2),
                                        function(i) {
                                                intersect_w_others(x = source_obj_name_list2,
                                                                   i = i)})
-                                names(source_conflict_name_list) <- names(source_obj_name_list2)
+                                names(res) <- names(source_obj_name_list2)
+                                res
                         } else {
                                 list()
                         }
