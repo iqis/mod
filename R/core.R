@@ -52,6 +52,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         private <- new.env(parent = parent)
         assign("..refer..", list(), envir = private)
         assign("..provide..", list(), envir = private)
+        assign("..module..", NULL, envir = private)
 
         if (grepl("modular_tmp", module) | grepl("\\.r$|\\.R$", module)) {} else {
                 module <- paste0(module, ".R")
@@ -205,7 +206,9 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 #' @param ... dot-dot-dot: name of any object to be accessible by user
 #' @export
 provide <- function(...) {
-        `if`(identical(globalenv(), parent.frame()), stop("Only use provide() in a module, as to use interactively is not meaningful"))
+        `if`(exists("..module..", parent.frame()),NULL,
+             stop("Only use provide() in a module, as to use interactively is not meaningful"))
+
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         assign("..provide..", dots, envir = parent.frame())
 }
@@ -223,8 +226,9 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
+        `if`(exists("..module..", parent.frame()),NULL,
+             stop("Only use provide() in a module, as to use interactively is not meaningful"))
 
-        `if`(identical(globalenv(), parent.frame()), stop("Only use refer() in a module, as to use interactively is not meaningful"))
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         sources <- lapply(dots, get, envir = parent.frame())
         names(sources) <- dots
