@@ -229,7 +229,7 @@ expose <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private 
 #' @param ... dot-dot-dot: name of any object to be accessible by user
 #' @export
 provide <- function(...) {
-        `if`(exists("..module..", parent.frame()),NULL,
+        `if`(exists("..module..", parent.frame(), inherits = FALSE),NULL,
              stop("Only use provide() in a module."))
 
         obj_names <- as.character(match.call(expand.dots = FALSE)$...)
@@ -251,7 +251,7 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
-        `if`(exists("..module..", parent.frame()),NULL,
+        `if`(exists("..module..", parent.frame(), inherits = FALSE),NULL,
              stop("Only use provide() in a module."))
 
         dots <- as.character(match.call(expand.dots = FALSE)$...)
