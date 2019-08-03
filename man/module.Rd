@@ -2,15 +2,12 @@
 % Please edit documentation in R/core.R
 \name{module}
 \alias{module}
-\alias{submodule}
 \alias{thing}
 \alias{acquire}
 \alias{use}
 \title{Make a module}
 \usage{
 module(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE)
-
-submodule(..., dot, lock = TRUE, expose_private = FALSE)
 
 thing(..., dot, lock = TRUE, expose_private = FALSE)
 

@@ -32,7 +32,7 @@ module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE
 
 #' @rdname module
 #' @export
-submodule <- function(..., dot, lock = TRUE, expose_private = FALSE){
+thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
         res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
@@ -45,15 +45,14 @@ submodule <- function(..., dot, lock = TRUE, expose_private = FALSE){
         res
 }
 
-#' @rdname module
-#' @export
-thing <- submodule
-
 
 #' @rdname module
 #' @export
 #'
 acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
+        # if inside module context, evaluate here
+        parent <- `if`(exists("..module..", parent.frame()), parent.frame(), parent)
+
         private <- new.env(parent = parent)
         assign("..refer..", list(), envir = private)
         assign("..provide..", list(), envir = private)
