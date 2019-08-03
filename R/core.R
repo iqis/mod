@@ -23,7 +23,7 @@
 #'
 module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = FALSE){
         code <- deparse(substitute(...))
-        temp_file <- tempfile("modular_tmp")
+        temp_file <- tempfile("inline_module")
         write(code, temp_file)
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
@@ -60,7 +60,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         assign("..provide..", c(), envir = private)
         assign("..module..", NULL, envir = private)
 
-        if (grepl("modular_tmp", module) | grepl("\\.r$|\\.R$", module)) {} else {
+        if (grepl("inline_module", module) | grepl("\\.r$|\\.R$", module)) {} else {
                 module <- paste0(module, ".R")
         } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
         sys.source(file = module, envir = private) # source everything from file to private
