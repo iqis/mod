@@ -41,6 +41,7 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
         if (!expose_private) rm("..private..", envir = res)
         if (lock) lockEnvironment(res, bindings = TRUE)
 
+        class(res) <- c("thing", class(res))
         res
 }
 
