@@ -66,7 +66,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         # initialize context signatures
         assign("..module..", NULL, envir = private)
         assign("..parent..", parent, envir = private)
-        assign("..search..", search_path_envirs(), envir = private)
+        assign("..search..", search_path_envirs(parent.env(private)), envir = private)
         assign("..file..", module, envir = private)
         assign("..provide..", c(), envir = private)
         assign("..refer..", list(), envir = private)
@@ -88,8 +88,12 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 
         # Remove "private" objects with name starting w. ".." from list
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
-        # Assign stuff from obj_list to ..public
+
+        # Assign stuff from obj_list to ..public..
         private$..public.. <- as.environment(mget(obj_name_list, private))
+
+        # Assign back obj_name_list to ..provide..
+        private$..provide.. <- obj_name_list
 
         # = Refer =
 
