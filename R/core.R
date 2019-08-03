@@ -55,17 +55,28 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
 #'
 acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
 
-        private <- new.env(parent = parent)
-        assign("..refer..", list(), envir = private)
-        assign("..provide..", c(), envir = private)
-        assign("..module..", NULL, envir = private)
-
+        # if neither from module(), nor already has .R ext, auto suffix with .R
+        # small .r is forbidden
         if (grepl("inline_module", module) | grepl("\\.r$|\\.R$", module)) {} else {
                 module <- paste0(module, ".R")
-        } # if neither tempfile from module(), nor already has .R ext, auto suffix with .R
-        sys.source(file = module, envir = private) # source everything from file to private
+        }
+        # make a new environment, private. This envir has everything inside the module
+        private <- new.env(parent = parent)
+
+        # initialize context signatures
+        assign("..module..", NULL, envir = private)
+        assign("..parent..", parent, envir = private)
+        assign("..file..", module, envir = private)
+        assign("..provide..", c(), envir = private)
+        assign("..refer..", list(), envir = private)
+
+
+        # source everything from file to private
+        sys.source(file = module, envir = private)
 
         # = Provide =
+        # provide the variables specified in ..provide..
+        # if ..provide is empty, provide everything except for `..` prefixed private objs
 
         # list of objects to be placed in public, from ..provide..;
         obj_name_list <- if (length(private$..provide..) != 0) {
@@ -193,7 +204,6 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
                 what = env, name = name
         )
 }
-
 
 
 
