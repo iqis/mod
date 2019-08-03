@@ -30,7 +30,7 @@ use(module, as, parent = .GlobalEnv, lock = TRUE,
 
 \item{dot}{function expression used for active binding to `.`}
 
-\item{module}{module object, or file path to a module file}
+\item{module}{module object, or path to a module file}
 
 \item{as}{name when attached to search path with `use()`}
 }

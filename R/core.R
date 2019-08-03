@@ -11,12 +11,12 @@
 #' example_module$e(123)
 #'
 #' @param ... module expression
-#' @param module module object, or file path to a module file
+#' @param module module object, or path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment
+#' @param expose_private expose the private environment as `..private..`
 #' @param dot function expression used for active binding to `.`
 #' @param as name when attached to search path with `use()`
-#' @param expose_private expose the private environment as `..private..`
 #'
 #' @return an environment containing objects from the module
 #' @export
