@@ -22,8 +22,8 @@
 #' @return an environment containing objects from the module
 #' @export
 #'
-module <- function(expr, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
-        code <- deparse(substitute(expr))
+module <- function(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
+        code <- deparse(substitute(...))
         temp_file <- tempfile("modular_tmp")
         write(code, temp_file)
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
@@ -31,8 +31,8 @@ module <- function(expr, parent = .GlobalEnv, lock = TRUE, expose_private = FALS
 
 #' @rdname module
 #' @export
-thing <- function(expr, dot, lock = TRUE, expose_private = FALSE){
-        res <- module(expr, parent = parent.frame(), lock = FALSE, expose_private = TRUE)
+thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
+        res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
                 makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
@@ -169,12 +169,12 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 #' @rdname module
 #' @export
 #'
-use <- function(module, as, ...){
+use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- acquire(module = module, ...)
+                env <- acquire(module = module, parent = parent, lock = lock, expose_private = expose_private)
                 if (missing(as)) as <- bare_name(module)
         } else {
                 stop("requires module object or path to R file")
@@ -189,6 +189,8 @@ use <- function(module, as, ...){
 
 
 #' Provide objects from a module
+#'
+#' Only legal inside a module context
 #'
 #' @examples
 #'
@@ -210,6 +212,8 @@ provide <- function(...) {
 
 
 #' Refer bindings from a module to another
+#'
+#' Only legal inside a module context
 #'
 #' @param ... names of modules; dot-dot-dot
 #' @param include names to include; character vector
