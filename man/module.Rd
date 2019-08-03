@@ -7,9 +7,11 @@
 \alias{use}
 \title{Make a module}
 \usage{
-module(..., parent = .GlobalEnv, lock = TRUE, expose_private = FALSE)
+module(..., parent = parent.frame(), lock = TRUE,
+  expose_private = FALSE)
 
-thing(..., dot, lock = TRUE, expose_private = FALSE)
+thing(..., dot, parent = parent.frame(), lock = TRUE,
+  expose_private = FALSE)
 
 acquire(module, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
@@ -18,7 +20,7 @@ use(module, as, parent = .GlobalEnv, lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{
-\item{...}{dot-dot-dot}
+\item{...}{module expression}
 
 \item{parent}{the enclosing environment}
 
@@ -31,8 +33,6 @@ use(module, as, parent = .GlobalEnv, lock = TRUE,
 \item{module}{module object, or file path to a module file}
 
 \item{as}{name when attached to search path with `use()`}
-
-\item{expr}{module expression}
 }
 \value{
 an environment containing objects from the module

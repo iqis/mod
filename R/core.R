@@ -10,14 +10,13 @@
 #' example_module$a
 #' example_module$e(123)
 #'
-#' @param expr module expression
+#' @param ... module expression
 #' @param module module object, or file path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment
 #' @param dot function expression used for active binding to `.`
 #' @param as name when attached to search path with `use()`
 #' @param expose_private expose the private environment as `..private..`
-#' @param ... dot-dot-dot
 #'
 #' @return an environment containing objects from the module
 #' @export
@@ -32,8 +31,8 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
 
 #' @rdname module
 #' @export
-thing <- function(..., dot, lock = TRUE, expose_private = FALSE){
-        res <- module(..., parent = parent.frame(), lock = FALSE, expose_private = TRUE)
+thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){
+        res <- module(..., parent = parent, lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
                 makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
@@ -185,7 +184,7 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 
         name <- paste0("module:",as)
         if (name %in% search()) drop(as)
-        attach(what = env, name = name, ...)
+        attach(what = env, name = name)
 }
 
 
