@@ -189,7 +189,9 @@ use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = F
 
         name <- paste0("module:",as)
         if (name %in% search()) drop(as)
-        attach(what = env, name = name)
+        get("attach", envir = .BaseNamespaceEnv, mode = "function")(
+                what = env, name = name
+        )
 }
 
 
