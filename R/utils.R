@@ -54,3 +54,16 @@ drop <- function(name) {
 bare_name <- function(path){
         gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
 }
+
+
+search_path_envirs <- function(where = parent.frame()){
+        where <- `if`(is.function(where), environment(where), where)
+        `if`(!is.environment(where), stop("Not an environment"))
+        `if`(identical(where, emptyenv()),
+             list(where),
+             c(where, search_path_envirs(parent.env(where))))
+}
+
+search_path_envir_names <- function(where = parent.frame()){
+        sapply(search_path_envirs(where), environmentName)
+}

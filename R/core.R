@@ -66,6 +66,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         # initialize context signatures
         assign("..module..", NULL, envir = private)
         assign("..parent..", parent, envir = private)
+        assign("..search..", search_path_envirs(), envir = private)
         assign("..file..", module, envir = private)
         assign("..provide..", c(), envir = private)
         assign("..refer..", list(), envir = private)
