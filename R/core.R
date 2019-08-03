@@ -187,7 +187,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 #' @rdname module
 #' @export
 #'
-use <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
+expose <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
@@ -264,6 +264,22 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         assign("..refer..",
                c(get("..refer..", envir = parent.frame()), sources),
                parent.frame())
+}
+
+depend <- function(){
+        `if`(exists("..depend..", parent.frame()),NULL,
+             stop("Only use provide() in a module."))
+        # only check dependencies.
+        #
+
+}
+
+
+use <- function(){
+
+
+
+
 }
 
 
