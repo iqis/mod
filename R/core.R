@@ -53,19 +53,22 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         private <- new.env(parent = parent)
 
         # initialize context signatures
-        assign("..module..", NULL, envir = private)
-        assign("..parent..", parent, envir = private)
-        assign("..search..", function() search_path_envirs(parent.env(private)), envir = private)
-        assign("..file..", module, envir = private)
-        assign("..use..", c(), envir = private)
-        assign("..provide..", c(), envir = private)
-        assign("..refer..", list(), envir = private)
+        assign("..module..", NULL, envir = private) # an empty signature, for future use
+        assign("..file..", module, envir = private) # file path of module
+        assign("..parent..", parent, envir = private) # specified parent env
+        assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
+        assign("..use..", c(), envir = private) # names of used packages
+        assign("..link..", new.env(parent = parent), envir = private) # an environment which serves as a local search path
+        parent.env(private) <- private$..link.. # make private's parent env ..link..
+        assign("..provide..", c(), envir = private) # names of provided objects
+        assign("..refer..", list(), envir = private) # names of referred modules
+        assign("..public..", new.env(parent = private), envir = private) # public env
 
 
         # source everything from file to private
         sys.source(file = module, envir = private)
 
-        # = Provide =
+        # ====== Provide ======
         # provide the variables specified in ..provide..
         # if ..provide is empty, provide everything except for `..` prefixed private objs
 
@@ -80,93 +83,15 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
         # Assign stuff from obj_list to ..public..
-        private$..public.. <- as.environment(mget(obj_name_list, private))
+        mapply(assign,
+               x = obj_name_list,
+               value = mget(obj_name_list, private),
+               envir = list(private$..public..),
+               SIMPLIFY = FALSE)
 
         # Assign back obj_name_list to ..provide..
         private$..provide.. <- obj_name_list
 
-        # = Refer =
-
-        if (length(private$..refer..) != 0){
-
-                `if`(length(unique(private$..refer..)) < length(private$..refer..),
-                     stop("refer() a module at most once."))
-
-                source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
-                source_include_list <- lapply(private$..refer.., attr, which = "refer_include")
-                source_exclude_list <- lapply(private$..refer.., attr, which = "refer_exclude")
-                source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
-                source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
-
-                source_obj_name_list <-
-                        mapply(function(src_obj, src_incl, src_excl){
-                                res <- src_obj
-                                res <- `if`(is.null(src_incl), res, intersect(res, src_incl))
-                                res <- `if`(is.null(src_excl), res, setdiff(res, src_excl))
-                                res
-                        },
-                        src_obj = source_obj_name_list,
-                        src_incl = source_include_list,
-                        src_excl = source_exclude_list,
-                        SIMPLIFY = FALSE)
-
-                # prefix obj names, if specified
-                source_obj_name_list2 <- mapply(
-                        function(prefix, obj_name, sep){
-                                `if`(nchar(prefix) >= 1,
-                                     paste(prefix, obj_name, sep = sep),
-                                     obj_name)
-                        },
-                        prefix = source_prefix_list,
-                        obj_name = source_obj_name_list,
-                        sep = source_sep_list,
-                        SIMPLIFY = FALSE)
-
-                # Intra-source name conflict
-
-                intersect_w_others <-  function(x, i){
-                        mapply(intersect, x[-i], x[i], SIMPLIFY = FALSE)
-                }
-
-                source_conflict_name_list <-
-                        if (length(source_obj_name_list2) > 1){
-                                res <- lapply(seq_along(source_obj_name_list2),
-                                       function(i) {
-                                               intersect_w_others(x = source_obj_name_list2,
-                                                                  i = i)})
-                                names(res) <- names(source_obj_name_list2)
-                                res
-                        } else {
-                                list()
-                        }
-
-
-                `if`(length(unique(unlist(source_conflict_name_list))) > 0,
-                     stop(paste0("name conflict among sources: ",
-                                 paste(unique(unlist(source_conflict_name_list)),
-                                       collapse = ", "))))
-
-                # Source-target name conflict
-                target_obj_name_list <- ls(private$..public.., all.names = TRUE)
-
-                conflict_name_list <- lapply(source_obj_name_list2,
-                                             intersect,
-                                             y = target_obj_name_list)
-
-                `if`(length(unlist(conflict_name_list)) > 0,
-                        stop(paste0("name conflict: ",
-                                    paste(c(conflict_name_list),
-                                          collapse = ", "))))
-
-                # refer objs from source to target, with renaming
-                for (i in 1:length(private$..refer..)) {
-                        mapply(assign,
-                               x = source_obj_name_list2[[i]],
-                               value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
-                               envir = list(private$..public..)
-                        )
-                }
-        }
 
 
         if (expose_private) assign("..private..", private, envir = private$..public..)

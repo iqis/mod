@@ -17,10 +17,8 @@ is_module <- function(x) {
 print.module <- function(x, ...){
         cat("<module>", "\n")
 
-        # The following doesn't work when built, why?
-
-        # class(x) <- class(x)[2:length(x)]
-        # print(x)
+        class(x) <- class(x)[2:length(x)]
+        print(x)
 
         obj_name_list <- ls(x, all.names = TRUE)
         obj_class_list <- lapply(obj_name_list, function(y) class(get(y, envir = x)))

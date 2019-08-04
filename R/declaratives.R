@@ -55,6 +55,94 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         assign("..refer..",
                c(get("..refer..", envir = parent.frame()), sources),
                parent.frame())
+
+        # = Do Refer =
+
+        if (length(private$..refer..) != 0){
+
+                `if`(length(unique(private$..refer..)) < length(private$..refer..),
+                     stop("refer() a module at most once."))
+
+                source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
+                source_include_list <- lapply(private$..refer.., attr, which = "refer_include")
+                source_exclude_list <- lapply(private$..refer.., attr, which = "refer_exclude")
+                source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
+                source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
+
+                source_obj_name_list <-
+                        mapply(function(src_obj, src_incl, src_excl){
+                                res <- src_obj
+                                res <- `if`(is.null(src_incl), res, intersect(res, src_incl))
+                                res <- `if`(is.null(src_excl), res, setdiff(res, src_excl))
+                                res
+                        },
+                        src_obj = source_obj_name_list,
+                        src_incl = source_include_list,
+                        src_excl = source_exclude_list,
+                        SIMPLIFY = FALSE)
+
+                # prefix obj names, if specified
+                source_obj_name_list2 <- mapply(
+                        function(prefix, obj_name, sep){
+                                `if`(nchar(prefix) >= 1,
+                                     paste(prefix, obj_name, sep = sep),
+                                     obj_name)
+                        },
+                        prefix = source_prefix_list,
+                        obj_name = source_obj_name_list,
+                        sep = source_sep_list,
+                        SIMPLIFY = FALSE)
+
+                # Intra-source name conflict
+
+                intersect_w_others <-  function(x, i){
+                        mapply(intersect, x[-i], x[i], SIMPLIFY = FALSE)
+                }
+
+                source_conflict_name_list <-
+                        if (length(source_obj_name_list2) > 1){
+                                res <- lapply(seq_along(source_obj_name_list2),
+                                              function(i) {
+                                                      intersect_w_others(x = source_obj_name_list2,
+                                                                         i = i)})
+                                names(res) <- names(source_obj_name_list2)
+                                res
+                        } else {
+                                list()
+                        }
+
+
+                `if`(length(unique(unlist(source_conflict_name_list))) > 0,
+                     stop(paste0("name conflict among sources: ",
+                                 paste(unique(unlist(source_conflict_name_list)),
+                                       collapse = ", "))))
+
+                # Source-target name conflict
+                target_obj_name_list <- ls(private$..public.., all.names = TRUE)
+
+                conflict_name_list <- lapply(source_obj_name_list2,
+                                             intersect,
+                                             y = target_obj_name_list)
+
+                `if`(length(unlist(conflict_name_list)) > 0,
+                     stop(paste0("name conflict: ",
+                                 paste(c(conflict_name_list),
+                                       collapse = ", "))))
+
+                # refer objs from source to target, with renaming
+                for (i in 1:length(private$..refer..)) {
+                        mapply(assign,
+                               x = source_obj_name_list2[[i]],
+                               value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
+                               envir = list(private$..public..)
+                        )
+                }
+        }
+
+
+
+
+
 }
 
 
@@ -66,13 +154,24 @@ use <- function(package){
         `if`(!package %in% installed.packages(),
              stop(paste(package, "is not an installed package")))
 
-        parent <- parent.frame()
+        private <- parent.frame()
 
-        existing_pkg_names <- get("..use..", envir = parent.frame())
+        existing_pkg_names <- get("..use..", envir = private)
         pkg_names <- c(existing_pkg_names, package)
 
-        assign("..use..", pkg_names, parent)
+        assign("..use..", pkg_names, private)
+
+        pkg_ns <- asNamespace(package)
+        obj_names <- ls(pkg_ns, all.names = FALSE)
+
         browser()
+
+        objs <- as.environment(mget(x = obj_names, envir = pkg_ns))
+
+
+        parent.env(private) <- private$..depot..
+
+
         ##
 }
 
