@@ -23,6 +23,10 @@ The `mod` package is a lightweight module system; It provides a simple
 way to structure program and data into modules for programming and
 interactive use, without the formalities of R packages.
 
+## Why?
+
+This is a good question.
+
 ## Installation
 
 Install the development version from [GitHub](https://github.com/) with:
@@ -381,6 +385,22 @@ d()
 e(100)
 #> [1] 106
 ```
+
+#### Modules and Packages
+
+It *could* be confusing how modules and packages live together. To
+clarify:
+
+  - Attach a Package
+      - Everywhere: `require()`
+  - Attach a Module
+      - To another module: not available
+      - To the global search path: `use()`
+  - Copy Variables from a Module
+      - To another module: `refer()`
+      - To the working directory: not available
+  - Use Modules inside a Package
+      - Yes, the package must `Depends` on `mod` package
 
 #### Unattached
 
