@@ -151,6 +151,10 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
 #' @export
 use <- function(package){
+
+        package <- substitute(package)
+        package <- `if`(is.character(package),package,deparse(package))
+
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use use() in a module."))
 

@@ -83,12 +83,13 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
         # Assign stuff from obj_list to ..public..
-        mapply(assign,
-               x = obj_name_list,
-               value = mget(obj_name_list, private),
-               envir = list(private$..public..),
-               SIMPLIFY = FALSE)
-
+        if (length(obj_name_list) > 0){
+                mapply(assign,
+                       x = obj_name_list,
+                       value = mget(obj_name_list, private),
+                       envir = list(private$..public..),
+                       SIMPLIFY = FALSE)
+        }
         # Assign back obj_name_list to ..provide..
         private$..provide.. <- obj_name_list
 

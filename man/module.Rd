@@ -14,10 +14,10 @@ module(..., parent = parent.frame(), lock = TRUE,
 bare_module(..., parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
-acquire(module, parent = .GlobalEnv, lock = TRUE,
+acquire(module, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
-expose(module, as, parent = .GlobalEnv, lock = TRUE,
+expose(module, as, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 thing(..., dot, parent = parent.frame(), lock = TRUE,
