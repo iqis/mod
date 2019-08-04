@@ -37,10 +37,11 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
-        private <- parent.frame()
-
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
+
+        private <- parent.frame()
+
 
         dots <- as.character(match.call(expand.dots = FALSE)$...)
         sources <- lapply(dots, get, envir = parent.frame())
@@ -151,6 +152,8 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
 #' @export
 use <- function(package){
+        `if`(!exists("..module..", parent.frame(), inherits = FALSE),
+             stop("Only use use() in a module."))
 
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
