@@ -33,29 +33,29 @@ devtools::install_github("iqis/modular")
 
 ## Use
 
-The `mod` package is designed to be used attached or unattached to your
-working environment. If you use the package unattached, you must always
-qualify the variable name with `::`, such as `mod::ule()`. However,
-while inside a module, the `mod` package is always available, so you do
-not need to use `::`.
+The `mod` package is designed to be used either attached or unattached
+to your working environment.
 
 If you wish to attach the package:
 
 ``` r
 require(mod)
+#> Loading required package: mod
+#> 
+#> Attaching package: 'mod'
+#> The following object is masked from 'package:base':
+#> 
+#>     drop
 ```
 
-Otherwise, just move along\! This document show examples with the
-package unattached.
-
-## Programming Interface
+## Vocabulary
 
   - Make a module:
-      - Inline:`mod::module()`/`mod::ule()`
-      - From a file: `mod::acquire()`
+      - Inline:`module()`/`mod::ule()`
+      - From a file: `acquire()`
   - The search path:
-      - Attach a module to: `mod::use()`
-      - Detach a module from: `mod::drop()`
+      - Attach a module to: `use()`
+      - Detach a module from: `drop()`
   - Inside a module:
       - Declare public variables within the module: `provide()`
       - Attach a package locally: `require()`
@@ -66,7 +66,7 @@ package unattached.
 Define an inline module:
 
 ``` r
-my <- mod::ule({
+my <- module({
         a <- 1
         b <- 2
         f <- function(x, y) x + y
@@ -104,7 +104,7 @@ with(my,
 Just like a package, a module can be attached to the search path.
 
 ``` r
-mod::use(my)
+use(my)
 ```
 
 The `my` module is attached to the search path as “module:my”, before
@@ -112,13 +112,14 @@ other attached packages.
 
 ``` r
 search()
-#>  [1] ".GlobalEnv"        "module:my"         "package:stats"    
-#>  [4] "package:graphics"  "package:grDevices" "package:utils"    
-#>  [7] "package:datasets"  "package:methods"   "Autoloads"        
-#> [10] "package:base"
+#>  [1] ".GlobalEnv"        "module:my"         "package:mod"      
+#>  [4] "package:stats"     "package:graphics"  "package:grDevices"
+#>  [7] "package:utils"     "package:datasets"  "package:methods"  
+#> [10] "Autoloads"         "package:base"
 ```
 
-And you can use the variables inside directly, just like from a package.
+And you can use the variables inside directly, just like those from a
+package.
 
 ``` r
 f(a,b)
@@ -129,7 +130,6 @@ Detach the module from the search path when done, if desired.
 
 ``` r
 drop("my")
-#> [1] "my"
 ```
 
 ### Make Variables Available to another Module
@@ -140,7 +140,7 @@ Use `refer()` to “import” variables from another module.
 ls(my)
 #> [1] "a" "b" "f"
 
-my_other<- mod::ule({
+my_other<- module({
         refer(my)
         
         c <- 4
@@ -151,12 +151,47 @@ ls(my_other)
 #> [1] "a" "b" "c" "d" "f"
 ```
 
+### Use a package
+
+The `mod::require()` makes packages available for use in a module.
+
+``` r
+mpg_analysis <- module({
+    require(ggplot2)
+    plot <- qplot(mtcars$mpg)    
+})
+#> Registered S3 methods overwritten by 'ggplot2':
+#>   method         from 
+#>   [.quosures     rlang
+#>   c.quosures     rlang
+#>   print.quosures rlang
+mpg_analysis$plot
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+
+Meanwhile, your working environment’s search path remain unaffected:
+
+``` r
+search()
+#>  [1] ".GlobalEnv"        "package:mod"       "package:stats"    
+#>  [4] "package:graphics"  "package:grDevices" "package:utils"    
+#>  [7] "package:datasets"  "package:methods"   "Autoloads"        
+#> [10] "package:base"
+```
+
+``` r
+"package:ggplot2" %in% search()
+#> [1] FALSE
+```
+
 ### Private Variables
 
 A variable is *private* if its name starts with `..`.
 
 ``` r
-room_101 <- mod::ule({
+room_101 <- module({
         ..diary <- "Dear Diary: I used SPSS today..."
         get_diary <- function(){
                 ..diary
@@ -182,7 +217,7 @@ Another way is using `provide()` function to declair public variables,
 while all others become private.
 
 ``` r
-room_102 <- mod::ule({
+room_102 <- module({
         provide(open_info, get_classified)
         
         open_info <- "I am a data scientist."
@@ -208,7 +243,7 @@ The below example simulates one essential behavior of an object in
 Object-oriented Programming by manipulating the state of `..count`.
 
 ``` r
-counter <- mod::ule({
+counter <- module({
         ..count <- 0
         add_one <- function(){
                 #Its necessary to use `<<-` operator, as ..count lives in the parent frame.
@@ -243,11 +278,11 @@ counter$get_count()
 #> [1] 0
 ```
 
-It is imperative that `mod::ule` be only adopted in the simplest cases.
-If full-featured OOP is desired, use
+It is imperative that `mod` be only adopted in the simplest cases. If
+full-featured OOP is desired, use
 [`R6`](https://cran.r-project.org/web/packages/R6/index.html).
 
-## Note
+## Notes
 
 #### Environment
 
@@ -261,17 +296,18 @@ is.environment(my)
 #> [1] TRUE
 ```
 
-### `refer()` and `provide()`, why?
+#### Terms
 
-Some may wonder the choice of vocabulary. Further, why not `import()`
-and `export()`? This is because we feel `import()` and `export()` are
-used too commonly, in both R, and other popular languages with varying
-meanings. The `reticulate()` package also uses `import()`. To avoid
-confusion, we decided to introduce some synonyms. With analogous
-semantics, [`refer()`](https://clojuredocs.org/clojure.core/refer) is
-borrowed from Clojure, while
+Some may wonder the choice of terms. Why `refer()` and `provide()`?
+Further, why not `import()` and `export()`? This is because we feel
+`import()` and `export()` are used too commonly, in both R, and other
+popular languages with varying meanings. The `reticulate` package also
+uses `import()`. To avoid confusion, we decided to introduce some
+synonyms. With analogous semantics,
+[`refer()`](https://clojuredocs.org/clojure.core/refer) is borrowed from
+Clojure, while
 [`provide()`](https://docs.racket-lang.org/reference/require.html?q=provide#%28form._%28%28lib._racket%2Fprivate%2Fbase..rkt%29._provide%29%29)
-from Racket; Both languages are R’s relatives.
+from Racket; Both languages are R’s close relatives.
 
 #### Locked
 
@@ -291,7 +327,7 @@ my$c <- 666
 As a general R rule, names that start with `.` define hidden variables.
 
 ``` r
-my_yet_another <- mod::ule({
+my_yet_another <- module({
         .var <- "I'm hidden!"
 })
 ```
@@ -305,8 +341,7 @@ ls(my_yet_another, all.names = TRUE)
 #> [1] ".var"
 ```
 
-Nonetheless, in `mod::ule`, they are treated the same as public
-variables.
+Nonetheless, in a module, they are treated the same as public variables.
 
 ``` r
 my_yet_another$.var
@@ -322,7 +357,7 @@ module_path <- system.file("misc/example_module.R", package = "mod")
 To load and assign to variable:
 
 ``` r
-example_module <- mod::acquire(module_path)
+example_module <- acquire(module_path)
 ls(example_module)
 #> [1] "a" "d" "e"
 example_module$a
@@ -336,10 +371,7 @@ example_module$e(100)
 To load and attach to search path:
 
 ``` r
-mod::use(module_path)
-#> The following object is masked from module:my:
-#> 
-#>     a
+use(module_path)
 ls("module:example_module")
 #> [1] "a" "d" "e"
 a
@@ -348,4 +380,31 @@ d()
 #> [1] 6
 e(100)
 #> [1] 106
+```
+
+#### Unattached
+
+As aforementioned, the package is designed to be usable both attached
+and unattached.
+
+If you use the package unattached, you must always qualify the variable
+name with `::`, such as `mod::ule()`, a shorthand for `mod::module()`.
+However, while inside a module, the `mod` package is always available,
+so you do not need to use `::`. Note that in the following example,
+`provide()` inside the module expression is unqualified.
+
+See:
+
+``` r
+detach("package:mod")
+
+my_mind <- mod::ule({
+  provide(good_thought)
+  good_thought <- "I love working on this package!"
+  bad_thought <- "I worry that no one will appreciate it."
+})
+
+mod::use(my_mind)
+good_thought
+#> [1] "I love working on this package!"
 ```
