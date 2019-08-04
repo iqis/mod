@@ -84,7 +84,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # Assign stuff from obj_list to ..public..
         mapply(assign,
-               x = obj_name_list,
+               x = list(obj_name_list),
                value = mget(obj_name_list, private),
                envir = list(private$..public..),
                SIMPLIFY = FALSE)
