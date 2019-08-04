@@ -40,8 +40,10 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
 
+        private <- parent.frame()
+
         dots <- as.character(match.call(expand.dots = FALSE)$...)
-        sources <- lapply(dots, get, envir = parent.frame())
+        sources <- lapply(dots, get, envir = parent.frame(n = 2))
         names(sources) <- dots
 
 
@@ -57,7 +59,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                parent.frame())
 
         # = Do Refer =
-
+browser()
         if (length(private$..refer..) != 0){
 
                 `if`(length(unique(private$..refer..)) < length(private$..refer..),
@@ -118,7 +120,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                                        collapse = ", "))))
 
                 # Source-target name conflict
-                target_obj_name_list <- ls(private$..public.., all.names = TRUE)
+                target_obj_name_list <- ls(private, all.names = TRUE)
 
                 conflict_name_list <- lapply(source_obj_name_list2,
                                              intersect,
@@ -134,7 +136,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                         mapply(assign,
                                x = source_obj_name_list2[[i]],
                                value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
-                               envir = list(private$..public..)
+                               envir = list(private)
                         )
                 }
         }

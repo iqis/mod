@@ -17,9 +17,6 @@ is_module <- function(x) {
 print.module <- function(x, ...){
         cat("<module>", "\n")
 
-        class(x) <- class(x)[2:length(x)]
-        print(x)
-
         obj_name_list <- ls(x, all.names = TRUE)
         obj_class_list <- lapply(obj_name_list, function(y) class(get(y, envir = x)))
         print_line <- function(name, class){
