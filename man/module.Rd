@@ -3,7 +3,6 @@
 \name{module}
 \alias{module}
 \alias{ule}
-\alias{base_module}
 \alias{acquire}
 \alias{use}
 \alias{thing}
@@ -13,9 +12,6 @@ module(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
 ule(..., parent = parent.frame(), lock = TRUE,
-  expose_private = FALSE)
-
-base_module(..., parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 acquire(module, parent = baseenv(), lock = TRUE,

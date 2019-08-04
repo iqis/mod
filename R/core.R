@@ -33,14 +33,6 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
 #' @export
 ule <- module
 
-#' @rdname module
-#' @export
-base_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = FALSE){
-        res <- module(..., parent = parent, lock = lock, expose_private = expose_private)
-        class(res) <- c("bare_module", class(res))
-        res
-}
-
 
 #' @rdname module
 #' @export

@@ -13,6 +13,7 @@
 #' d <- 4
 #' }
 #' @param ... dot-dot-dot: name of any object to be accessible by user
+#'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))

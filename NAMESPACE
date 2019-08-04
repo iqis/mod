@@ -3,7 +3,6 @@
 S3method("[",thing)
 S3method(print,module)
 export(acquire)
-export(base_module)
 export(depend)
 export(drop)
 export(is_module)
