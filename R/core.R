@@ -61,7 +61,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..link..", new.env(parent = parent), envir = private) # an environment which serves as a local search path
         parent.env(private) <- private$..link.. # make private's parent env ..link..
         assign("..provide..", c(), envir = private) # names of provided objects
-        assign("..refer..", list(), envir = private) # list of referred modules
+        assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
 
 
@@ -84,7 +84,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # Assign stuff from obj_list to ..public..
         mapply(assign,
-               x = list(obj_name_list),
+               x = obj_name_list,
                value = mget(obj_name_list, private),
                envir = list(private$..public..),
                SIMPLIFY = FALSE)
