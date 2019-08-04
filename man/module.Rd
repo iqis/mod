@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R, R/thing.R
 \name{module}
 \alias{module}
-\alias{bare_module}
+\alias{base_module}
 \alias{acquire}
 \alias{expose}
 \alias{thing}
@@ -11,7 +11,7 @@
 module(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
-bare_module(..., parent = baseenv(), lock = TRUE,
+base_module(..., parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 acquire(module, parent = baseenv(), lock = TRUE,
