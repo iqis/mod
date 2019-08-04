@@ -28,7 +28,7 @@ interactive use, without the formalities of R packages.
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-devtools::install_github("iqis/modular")
+devtools::install_github("iqis/mod")
 ```
 
 ## Use
