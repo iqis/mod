@@ -15,16 +15,20 @@ knitr::opts_chunk$set(
 # mod::ule
 
 <!-- badges: start -->
-  [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/iqis/modular?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/modular)
-  [![Travis build status](https://travis-ci.org/iqis/modular.svg?branch=master)](https://travis-ci.org/iqis/modular)
+  [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/iqis/mod?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/mod)
+  [![Travis build status](https://travis-ci.org/iqis/mod.svg?branch=master)](https://travis-ci.org/iqis/mod)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![CRAN status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.org/package=modular)
-[![Codecov test coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
-![GitHub License](https://img.shields.io/github/license/iqis/modular)
+[![CRAN status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/package=mod)
+[![Codecov test coverage](https://codecov.io/gh/iqis/mod/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/mod?branch=master)
+![GitHub License](https://img.shields.io/github/license/iqis/mod)
 
 <!-- badges: end -->
 
 The `mod` package is a lightweight module system; It provides a simple way to structure program and data into modules for programming and interactive use, without the formalities of R packages. 
+
+## Why?
+
+This is a good question. 
 
 ## Installation
 
@@ -290,6 +294,26 @@ a
 d()
 e(100)
 ```
+
+
+#### Modules and Packages
+
+It _could_ be confusing how modules and packages live together. To clarify:
+
+- Attach a Package
+  - Everywhere: `require()`
+  
+- Attach a Module
+  - To another module: not available
+  - To the global search path: `use()`
+
+- Copy Variables from a Module
+  - To another module: `refer()`
+  - To the working directory: not available
+
+- Use Modules inside a Package
+  - Yes, the package must `Depends` on `mod` package
+
 
 #### Unattached
 As aforementioned, the package is designed to be usable both attached and unattached.
