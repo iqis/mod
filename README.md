@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# modular
+# mod::ule
 
 <!-- badges: start -->
 
@@ -19,9 +19,9 @@ coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](htt
 
 <!-- badges: end -->
 
-The `modular` package is a lightweight module system; It provides a
-simple way to structure program and data into modules for programming
-and interactive use, without the formalities of R packages.
+The `mod` package is a lightweight module system; It provides a simple
+way to structure program and data into modules for programming and
+interactive use, without the formalities of R packages.
 
 ## Installation
 
@@ -31,22 +31,45 @@ Install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("iqis/modular")
 ```
 
+## Use
+
+The `mod` package is designed to be used attached or unattached to your
+working environment. If you use the package unattached, you must always
+qualify the variable name with `::`, such as `mod::ule()`. However,
+while inside a module, the `mod` package is always available, so you do
+not need to use `::`.
+
+If you wish to attach the package:
+
+``` r
+require(mod)
+```
+
+Otherwise, just move along\! This document show examples with the
+package unattached.
+
 ## Programming Interface
 
-  - Make a module:`module()`, `acquire()`
-  - Declare public variables within a module: `provide()`
-  - Attach a module to the search path: `use()`
-  - Import bindings from one module to another: `refer()`
+  - Make a module:
+      - Inline:`mod::module()`/`mod::ule()`
+      - From a file: `mod::acquire()`
+  - The search path:
+      - Attach a module to: `mod::use()`
+      - Detach a module from: `mod::drop()`
+  - Inside a module:
+      - Declare public variables within the module: `provide()`
+      - Attach a package locally: `require()`
+      - Import variables from another module: `refer()`
 
 ## Examples
 
 Define an inline module:
 
 ``` r
-my <- module({
+my <- mod::ule({
         a <- 1
         b <- 2
-        add_nums <- function(x, y) x + y
+        f <- function(x, y) x + y
 })
 ```
 
@@ -54,7 +77,7 @@ The resulting module contains the variables defined within.
 
 ``` r
 ls(my)
-#> [1] "a"        "add_nums" "b"
+#> [1] "a" "b" "f"
 ```
 
 Subset the module.
@@ -64,7 +87,7 @@ my$a
 #> [1] 1
 my$b
 #> [1] 2
-my$add_nums(my$a, my$b)
+my$f(my$a, my$b)
 #> [1] 3
 ```
 
@@ -72,50 +95,52 @@ Use the `with()` to spare qualification.
 
 ``` r
 with(my, 
-     add_nums(a,b))
+     f(a,b))
 #> [1] 3
 ```
 
-### Attach to the Search Path
+### Attach a Module to the Search Path
 
 Just like a package, a module can be attached to the search path.
 
 ``` r
-use(my)
+mod::use(my)
 ```
 
-The `my` module is attached to the search path as “module:my”.
+The `my` module is attached to the search path as “module:my”, before
+other attached packages.
 
 ``` r
 search()
-#>  [1] ".GlobalEnv"        "module:my"         "package:modular"  
-#>  [4] "package:stats"     "package:graphics"  "package:grDevices"
-#>  [7] "package:utils"     "package:datasets"  "package:methods"  
-#> [10] "Autoloads"         "package:base"
+#>  [1] ".GlobalEnv"        "module:my"         "package:stats"    
+#>  [4] "package:graphics"  "package:grDevices" "package:utils"    
+#>  [7] "package:datasets"  "package:methods"   "Autoloads"        
+#> [10] "package:base"
 ```
 
-This is the preferred way to spare qualification.
+And you can use the variables inside directly, just like from a package.
 
 ``` r
-add_nums(a,b)
+f(a,b)
 #> [1] 3
 ```
 
-Detach the module from the search path, if desired.
+Detach the module from the search path when done, if desired.
 
 ``` r
 drop("my")
+#> [1] "my"
 ```
 
-### Refer Bindings
+### Make Variables Available to another Module
 
 Use `refer()` to “import” variables from another module.
 
 ``` r
 ls(my)
-#> [1] "a"        "add_nums" "b"
+#> [1] "a" "b" "f"
 
-my_other<- module({
+my_other<- mod::ule({
         refer(my)
         
         c <- 4
@@ -123,7 +148,7 @@ my_other<- module({
 })
 
 ls(my_other)
-#> [1] "a"        "add_nums" "b"        "c"        "d"
+#> [1] "a" "b" "c" "d" "f"
 ```
 
 ### Private Variables
@@ -131,7 +156,7 @@ ls(my_other)
 A variable is *private* if its name starts with `..`.
 
 ``` r
-room_101 <- module({
+room_101 <- mod::ule({
         ..diary <- "Dear Diary: I used SPSS today..."
         get_diary <- function(){
                 ..diary
@@ -157,7 +182,7 @@ Another way is using `provide()` function to declair public variables,
 while all others become private.
 
 ``` r
-room_102 <- module({
+room_102 <- mod::ule({
         provide(open_info, get_classified)
         
         open_info <- "I am a data scientist."
@@ -179,11 +204,11 @@ room_102$get_classified()
 
 ### Simlate OOP
 
-The below example simulates the essential behavior of an object in
+The below example simulates one essential behavior of an object in
 Object-oriented Programming by manipulating the state of `..count`.
 
 ``` r
-counter <- module({
+counter <- mod::ule({
         ..count <- 0
         add_one <- function(){
                 #Its necessary to use `<<-` operator, as ..count lives in the parent frame.
@@ -197,6 +222,8 @@ counter <- module({
         }
 })
 ```
+
+A variable must be private to be mutable like `..count`.
 
 The following demonstration should be self-explanatory:
 
@@ -216,10 +243,8 @@ counter$get_count()
 #> [1] 0
 ```
 
-It is imperative that `modular` be only adopted in the simplest cases,
-as it is not made for OOP, and do not support most typical OOP features,
-such as deep copy, inheritance, or else. If full-featured OOP is
-desired, use
+It is imperative that `mod::ule` be only adopted in the simplest cases.
+If full-featured OOP is desired, use
 [`R6`](https://cran.r-project.org/web/packages/R6/index.html).
 
 ## Note
@@ -235,6 +260,18 @@ mode(my)
 is.environment(my)
 #> [1] TRUE
 ```
+
+### `refer()` and `provide()`, why?
+
+Some may wonder the choice of vocabulary. Further, why not `import()`
+and `export()`? This is because we feel `import()` and `export()` are
+used too commonly, in both R, and other popular languages with varying
+meanings. The `reticulate()` package also uses `import()`. To avoid
+confusion, we decided to introduce some synonyms. With analogous
+semantics, [`refer()`](https://clojuredocs.org/clojure.core/refer) is
+borrowed from Clojure, while
+[`provide()`](https://docs.racket-lang.org/reference/require.html?q=provide#%28form._%28%28lib._racket%2Fprivate%2Fbase..rkt%29._provide%29%29)
+from Racket; Both languages are R’s relatives.
 
 #### Locked
 
@@ -254,7 +291,7 @@ my$c <- 666
 As a general R rule, names that start with `.` define hidden variables.
 
 ``` r
-my_yet_another <- module({
+my_yet_another <- mod::ule({
         .var <- "I'm hidden!"
 })
 ```
@@ -268,7 +305,7 @@ ls(my_yet_another, all.names = TRUE)
 #> [1] ".var"
 ```
 
-Nonetheless, in `modular`, they are treated the same as public
+Nonetheless, in `mod::ule`, they are treated the same as public
 variables.
 
 ``` r
@@ -279,13 +316,13 @@ my_yet_another$.var
 #### Load/Attach from File
 
 ``` r
-module_path <- system.file("misc/example_module.R", package = "modular")
+module_path <- system.file("misc/example_module.R", package = "mod")
 ```
 
 To load and assign to variable:
 
 ``` r
-example_module <- acquire(module_path)
+example_module <- mod::acquire(module_path)
 ls(example_module)
 #> [1] "a" "d" "e"
 example_module$a
@@ -299,7 +336,10 @@ example_module$e(100)
 To load and attach to search path:
 
 ``` r
-use(module_path)
+mod::use(module_path)
+#> The following object is masked from module:my:
+#> 
+#>     a
 ls("module:example_module")
 #> [1] "a" "d" "e"
 a

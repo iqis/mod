@@ -52,7 +52,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
-        assign("..use..", c(), envir = private) # names of used packages
+        assign("..require..", c(), envir = private) # names of used packages
         assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
         assign("..shim..", new.env(parent = private$..link..), envir = private)
         parent.env(private) <- private$..shim..
