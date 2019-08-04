@@ -54,7 +54,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # initialize context signatures
         assign("..module..", NULL, envir = private) # an empty signature, for future use
-        assign("..file..", module, envir = private) # file path of module
+        assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
         assign("..use..", c(), envir = private) # names of used packages
