@@ -165,6 +165,8 @@ require <- function(package){
 
         assign("..require..", pkg_names, private)
 
+        # mod::require() dumps all bindings from every dependency into ..link..,
+        # is this good enough? or it's necessary to implement a real local search path
         pkg_ns <- asNamespace(package)
         import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
 
