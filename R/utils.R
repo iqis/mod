@@ -1,51 +1,24 @@
-#' Test if the object is a module
-#'
-#' @param x An object
-#' @export
-is_module <- function(x) {
-        inherits(x, "module")
+# Masks
+
+library <- function(){
+        warning("Only use library() outside of a module")
 }
 
-#' Print module
-#'
-#' @param x object
-#' @param ... dot-dot-dot
-#'
-#' @return NULL
-#' @export
-#'
-print.module <- function(x, ...){
-        cat("<module>", "\n")
-
-        obj_name_list <- ls(x, all.names = TRUE)
-        obj_class_list <- lapply(obj_name_list, function(y) class(get(y, envir = x)))
-        print_line <- function(name, class){
-                cat(paste0("- ", name, ": <", paste(class, collapse = ", "), ">\n"))
-        }
-        mapply(print_line, name = obj_name_list, class = obj_class_list)
-        invisible(x)
+attach <- function(){
+        warning("Only use attach() outside of a module")
 }
 
-#' Drop a module
-#'
-#' Detach a module from the search path.
-#'
-#' @param  name name of the module to exit from
-#' @export
-drop <- function(name) {
-        if (missing(name)) {
-                search_path <- search()
-                name <- search_path[grepl("module:", search_path)][1]
-        } else {
-                name <- paste0("module:", name)
-        }
+install.packages <- function(){
+        warning("Only use install.packages() outside of a module")
+}
 
-        if (is.na(name)) stop("no module attached in search path")
-
-        detach(name = name, character.only = TRUE)
+update.packages <- function(){
+        warning("Only use update.packages() outside of a module")
 }
 
 
+
+# Helpers
 search_path_envirs <- function(where = parent.frame()){
         where <- `if`(is.function(where), environment(where), where)
         `if`(!is.environment(where), stop("Not an environment"))
