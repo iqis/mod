@@ -25,6 +25,7 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
         code <- deparse(substitute(...))
         temp_file <- tempfile("inline_module")
         write(code, temp_file)
+
         acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
 
@@ -36,26 +37,7 @@ bare_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = F
         res
 }
 
-#' @rdname module
-#' @export
-thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){
-        res <- module(..., parent = parent, lock = FALSE, expose_private = TRUE)
-        if (!missing(dot)) {
-                dot <- substitute(dot)
-                makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
-        }
 
-        if (!expose_private) rm("..private..", envir = res)
-        if (lock) lockEnvironment(res, bindings = TRUE)
-
-        class(res) <- c("thing", class(res))
-        res
-}
-
-#' @export
-`[.thing` <- function(x, ...){
-        x$.
-}
 
 #' @rdname module
 #' @export
@@ -75,6 +57,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
         assign("..parent..", parent, envir = private)
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private)
         assign("..file..", module, envir = private)
+        assign("..use..", c(), envir = private)
         assign("..provide..", c(), envir = private)
         assign("..refer..", list(), envir = private)
 
@@ -218,80 +201,5 @@ expose <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private 
 }
 
 
-
-#' Provide objects from a module
-#'
-#' Only legal inside a module context
-#'
-#' @examples
-#'
-#' \dontrun{
-#' provide(a, c)
-#'
-#' a <- 1
-#' b <- 2
-#' c <- 3
-#' d <- 4
-#' }
-#' @param ... dot-dot-dot: name of any object to be accessible by user
-#' @export
-provide <- function(...) {
-        `if`(exists("..module..", parent.frame(), inherits = FALSE),NULL,
-             stop("Only use provide() in a module."))
-
-        obj_names <- as.character(match.call(expand.dots = FALSE)$...)
-        existing_obj_names <- get("..provide..", envir = parent.frame())
-        obj_names <- unique(c(existing_obj_names, obj_names))
-        assign("..provide..", unique(obj_names, existing_obj_names), envir = parent.frame())
-}
-
-
-#' Refer bindings from a module to another
-#'
-#' Only legal inside a module context
-#'
-#' @param ... names of modules; dot-dot-dot
-#' @param include names to include; character vector
-#' @param exclude names to excludde; character vector
-#' @param prefix prefix to names; character
-#' @param sep separator between prefix and names; character
-#'
-#' @export
-refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
-        `if`(exists("..module..", parent.frame(), inherits = FALSE),NULL,
-             stop("Only use provide() in a module."))
-
-        dots <- as.character(match.call(expand.dots = FALSE)$...)
-        sources <- lapply(dots, get, envir = parent.frame())
-        names(sources) <- dots
-
-
-        lapply(sources, `attr<-`, "refer_include", include)
-        lapply(sources, `attr<-`, "refer_exclude", exclude)
-        `if`(deparse(substitute(prefix)) == ".",
-            mapply(`attr<-`, x = sources, which = list("refer_prefix"), value = dots),
-            lapply(sources, `attr<-`, "refer_prefix", prefix))
-        lapply(sources, `attr<-`, "refer_sep", sep)
-
-        assign("..refer..",
-               c(get("..refer..", envir = parent.frame()), sources),
-               parent.frame())
-}
-
-depend <- function(){
-        `if`(exists("..depend..", parent.frame()),NULL,
-             stop("Only use provide() in a module."))
-        # only check dependencies.
-        #
-
-}
-
-
-use <- function(){
-
-
-
-
-}
 
 

@@ -64,6 +64,6 @@ search_path_envirs <- function(where = parent.frame()){
              c(where, search_path_envirs(parent.env(where))))
 }
 
-search_path_envir_names <- function(where = parent.frame()){
+search_path <- function(where = parent.frame()){
         sapply(search_path_envirs(where), environmentName)
 }
