@@ -155,18 +155,15 @@ require <- function(package){
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
 
-        `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use use() in a module."))
-
         `if`(!package %in% installed.packages(),
              stop(paste(package, "is not an installed package")))
 
         private <- parent.frame()
 
-        existing_pkg_names <- get("..use..", envir = private)
+        existing_pkg_names <- get("..require..", envir = private)
         pkg_names <- c(existing_pkg_names, package)
 
-        assign("..use..", pkg_names, private)
+        assign("..require..", pkg_names, private)
 
         pkg_ns <- asNamespace(package)
         import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
