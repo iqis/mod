@@ -1,3 +1,13 @@
+#' Make a thing
+#'
+#'
+#' @param ...
+#'
+#' @param dot
+#' @param parent
+#' @param lock
+#' @param expose_private
+#'
 #' @rdname module
 #' @export
 thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){
@@ -14,6 +24,15 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
         res
 }
 
+#' Test if the object is a module
+#'
+#' @param x An object
+#' @export
+is_thing <- function(x) {
+        inherits(x, "thing")
+}
+
+#' @rdname thing
 #' @export
 `[.thing` <- function(x, ...){
         x$.
