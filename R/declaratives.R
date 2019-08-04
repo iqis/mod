@@ -167,8 +167,6 @@ use <- function(package){
         pkg_ns <- asNamespace(package)
         obj_names <- ls(pkg_ns, all.names = FALSE)
 
-        browser()
-
         objs <- as.environment(mget(x = obj_names, envir = pkg_ns))
 
 
