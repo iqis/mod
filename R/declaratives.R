@@ -37,7 +37,6 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
-
         private <- parent.frame()
 
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -61,16 +60,16 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
         # = Do Refer =
 
-        if (length(private$..refer..) != 0){
+        if (length(sources) != 0){
 
                 `if`(length(unique(private$..refer..)) < length(private$..refer..),
                      stop("refer() a module at most once."))
 
-                source_obj_name_list <- lapply(private$..refer.., ls, all.names = TRUE)
-                source_include_list <- lapply(private$..refer.., attr, which = "refer_include")
-                source_exclude_list <- lapply(private$..refer.., attr, which = "refer_exclude")
-                source_prefix_list <- lapply(private$..refer.., attr, which = "refer_prefix")
-                source_sep_list <- lapply(private$..refer.., attr, which = "refer_sep")
+                source_obj_name_list <- lapply(sources, ls, all.names = TRUE)
+                source_include_list <- lapply(sources, attr, which = "refer_include")
+                source_exclude_list <- lapply(sources, attr, which = "refer_exclude")
+                source_prefix_list <- lapply(sources, attr, which = "refer_prefix")
+                source_sep_list <- lapply(sources, attr, which = "refer_sep")
 
                 source_obj_name_list <-
                         mapply(function(src_obj, src_incl, src_excl){
@@ -133,11 +132,12 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                                        collapse = ", "))))
 
                 # refer objs from source to target, with renaming
-                for (i in 1:length(private$..refer..)) {
+                for (i in 1:length(sources)) {
                         mapply(assign,
                                x = source_obj_name_list2[[i]],
-                               value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
-                               envir = list(private)
+                               value = mget(source_obj_name_list[[i]], sources[[i]]),
+                               envir = list(private),
+                               SIMPLIFY = FALSE
                         )
                 }
         }
