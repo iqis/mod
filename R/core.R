@@ -58,12 +58,22 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
         assign("..use..", c(), envir = private) # names of used packages
-        assign("..link..", new.env(parent = parent), envir = private) # an environment which serves as a local search path
-        parent.env(private) <- private$..link.. # make private's parent env ..link..
+        assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
+        assign("..shim..", new.env(parent = private$..link..), envir = private)
+        parent.env(private) <- private$..shim..
         assign("..provide..", c(), envir = private) # names of provided objects
         assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
 
+        # inject modular bindings to private
+        modular_ns <- asNamespace("modular")
+        mapply(assign,
+               x = ls(modular_ns),
+               value = mget(ls(modular_ns), envir = asNamespace("modular")),
+               envir = list(private$..shim..))
+        parent.env(private) <- private$..shim.. # attach private to ..shim..
+
+        # ..public.. => ..private.. => ..shim.. => ..link.. => ..parent..
 
         # source everything from file to private
         sys.source(file = module, envir = private)
@@ -103,6 +113,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         return(private$..public..)
 }
+
 
 
 #' @rdname module
