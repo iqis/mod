@@ -169,15 +169,33 @@ use <- function(package){
         assign("..use..", pkg_names, private)
 
         pkg_ns <- asNamespace(package)
-        obj_names <- ls(pkg_ns, all.names = FALSE)
 
-        objs <- as.environment(mget(x = obj_names, envir = pkg_ns))
+        export_obj_names <- ls(pkg_ns$.__NAMESPACE__.$exports)
 
+        import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))
 
-        parent.env(private) <- private$..depot..
+        temp_envir <- new.env()
 
+        for (i in 2:length(import_list)) {
+                mapply(assign,
+                       x = ls(asNamespace(import_list[i])),
+                       value = mget(x = ls(asNamespace(import_list[i])),
+                                    envir = asNamespace(import_list[i])),
+                       envir = list(temp_envir))
+        }
 
-        ##
+        all_obj_names <- ls(pkg_ns)
+
+        mapply(assign,
+               x = all_obj_names,
+               value = mget(x = all_obj_names, envir = pkg_ns),
+               envir = list(temp_envir))
+
+        mapply(assign,
+               x = ls(temp_envir),
+               value = mget(x = ls(temp_envir), envir = temp_envir),
+               envir = list(private$..link..))
+
 }
 
 #' @export
