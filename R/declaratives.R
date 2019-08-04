@@ -37,6 +37,9 @@ provide <- function(...) {
 #'
 #' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
+
+        private <- parent.frame()
+
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
 
@@ -118,7 +121,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                                        collapse = ", "))))
 
                 # Source-target name conflict
-                target_obj_name_list <- ls(private$..public.., all.names = TRUE)
+                target_obj_name_list <- ls(private, all.names = TRUE)
 
                 conflict_name_list <- lapply(source_obj_name_list2,
                                              intersect,
@@ -134,7 +137,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                         mapply(assign,
                                x = source_obj_name_list2[[i]],
                                value = mget(source_obj_name_list[[i]], private$..refer..[[i]]),
-                               envir = list(private$..public..)
+                               envir = list(private)
                         )
                 }
         }
