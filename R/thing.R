@@ -1,13 +1,3 @@
-#' Make a thing
-#'
-#'
-#' @param ...
-#'
-#' @param dot
-#' @param parent
-#' @param lock
-#' @param expose_private
-#'
 #' @rdname module
 #' @export
 thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){

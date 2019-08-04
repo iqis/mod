@@ -7,7 +7,7 @@
 depend(packages = list())
 }
 \arguments{
-\item{packages}{}
+\item{packages}{package names}
 }
 \description{
 Declare dependencies

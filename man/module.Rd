@@ -45,7 +45,7 @@ an environment containing objects from the module
 Make a module
 }
 \examples{
-module_path <- system.file("misc", "example_module.R", package = "modular")
+module_path <- system.file("misc", "example_module.R", package = "mod")
 example_module <- acquire(module_path)
 
 ls(example_module)

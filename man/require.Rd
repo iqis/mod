@@ -7,7 +7,7 @@
 require(package)
 }
 \arguments{
-\item{package}{}
+\item{package}{name of the package; name or character string}
 }
 \description{
 Attach package to local search path

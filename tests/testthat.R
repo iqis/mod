@@ -1,4 +1,4 @@
 library(testthat)
-library(modular)
+library(mod)
 
-test_check("modular")
+test_check("mod")

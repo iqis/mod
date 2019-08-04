@@ -2,7 +2,7 @@
 #'
 #'
 #' @examples
-#' module_path <- system.file("misc", "example_module.R", package = "modular")
+#' module_path <- system.file("misc", "example_module.R", package = "mod")
 #' example_module <- acquire(module_path)
 #'
 #' ls(example_module)
@@ -60,7 +60,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
 
-        # inject modular bindings to private
+        # inject mod package bindings to ..shim..
         mod_ns <- asNamespace("mod")
         mapply(assign,
                x = ls(mod_ns),

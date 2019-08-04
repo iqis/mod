@@ -146,7 +146,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
 #' Attach package to local search path
 #'
-#' @param package
+#' @param package name of the package; name or character string
 #'
 require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -155,7 +155,7 @@ require <- function(package){
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
 
-        `if`(!package %in% installed.packages(),
+        `if`(!package %in% utils::installed.packages(),
              stop(paste(package, "is not an installed package")))
 
         private <- parent.frame()
@@ -201,12 +201,8 @@ require <- function(package){
 
 #' Declare dependencies
 #'
-#' @param packages
+#' @param packages  package names
 #'
-#' @return
-#' @export
-#'
-#' @examples
 depend <- function(packages = list()){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use depend() in a module."))
