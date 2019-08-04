@@ -172,33 +172,35 @@ use <- function(package){
         assign("..use..", pkg_names, private)
 
         pkg_ns <- asNamespace(package)
-
-        export_obj_names <- ls(pkg_ns$.__NAMESPACE__.$exports)
-
-        import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))
+        import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
 
         temp_envir <- new.env()
 
-        for (i in 2:length(import_list)) {
-                mapply(assign,
-                       x = ls(asNamespace(import_list[i])),
-                       value = mget(x = ls(asNamespace(import_list[i])),
-                                    envir = asNamespace(import_list[i])),
-                       envir = list(temp_envir))
+        # inject imports
+        if (length(import_list) > 0) {
+                for (i in 2:length(import_list)) {
+                        mapply(assign,
+                               x = ls(asNamespace(import_list[i])),
+                               value = mget(x = ls(asNamespace(import_list[i])),
+                                            envir = asNamespace(import_list[i])),
+                               envir = list(temp_envir))
+                }
+        } else {
+
+
         }
 
-        all_obj_names <- ls(pkg_ns)
-
+        # inject package: everything, not just exports
         mapply(assign,
-               x = all_obj_names,
-               value = mget(x = all_obj_names, envir = pkg_ns),
+               x = ls(pkg_ns),
+               value = mget(x = ls(pkg_ns), envir = pkg_ns),
                envir = list(temp_envir))
 
+        # transfer objs
         mapply(assign,
                x = ls(temp_envir),
                value = mget(x = ls(temp_envir), envir = temp_envir),
                envir = list(private$..link..))
-
 }
 
 #' @export
