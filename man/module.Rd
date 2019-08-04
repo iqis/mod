@@ -2,22 +2,22 @@
 % Please edit documentation in R/core.R, R/thing.R
 \name{module}
 \alias{module}
-\alias{base_module}
+\alias{ule}
 \alias{acquire}
-\alias{expose}
+\alias{use}
 \alias{thing}
 \title{Make a module}
 \usage{
 module(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
-base_module(..., parent = baseenv(), lock = TRUE,
+ule(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
 acquire(module, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
-expose(module, as, parent = baseenv(), lock = TRUE,
+use(module, as, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 thing(..., dot, parent = parent.frame(), lock = TRUE,
@@ -45,7 +45,7 @@ an environment containing objects from the module
 Make a module
 }
 \examples{
-module_path <- system.file("misc", "example_module.R", package = "modular")
+module_path <- system.file("misc", "example_module.R", package = "mod")
 example_module <- acquire(module_path)
 
 ls(example_module)

@@ -13,7 +13,7 @@
 #' d <- 4
 #' }
 #' @param ... dot-dot-dot: name of any object to be accessible by user
-#' @export
+#'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
@@ -35,7 +35,6 @@ provide <- function(...) {
 #' @param prefix prefix to names; character
 #' @param sep separator between prefix and names; character
 #'
-#' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
@@ -142,35 +141,32 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                         )
                 }
         }
-
-
-
-
-
 }
 
 
-#' @export
-use <- function(package){
+#' Attach package to local search path
+#'
+#' @param package name of the package; name or character string
+#'
+require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use use() in a module."))
+             stop("Only use mod::require() in a module."))
 
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
 
-        `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use use() in a module."))
-
-        `if`(!package %in% installed.packages(),
+        `if`(!package %in% utils::installed.packages(),
              stop(paste(package, "is not an installed package")))
 
         private <- parent.frame()
 
-        existing_pkg_names <- get("..use..", envir = private)
+        existing_pkg_names <- get("..require..", envir = private)
         pkg_names <- c(existing_pkg_names, package)
 
-        assign("..use..", pkg_names, private)
+        assign("..require..", pkg_names, private)
 
+        # mod::require() dumps all bindings from every dependency into ..link..,
+        # is this good enough? or it's necessary to implement a real local search path
         pkg_ns <- asNamespace(package)
         import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
 
@@ -203,7 +199,10 @@ use <- function(package){
                envir = list(private$..link..))
 }
 
-#' @export
+#' Declare dependencies
+#'
+#' @param packages  package names
+#'
 depend <- function(packages = list()){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use depend() in a module."))

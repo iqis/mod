@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# modular
+# mod::ule
 
 <!-- badges: start -->
 
@@ -19,24 +19,47 @@ coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](htt
 
 <!-- badges: end -->
 
-The `modular` package is a lightweight module system; It provides a
-simple way to structure program and data into modules for programming
-and interactive use, without the formalities of R packages.
+The `mod` package is a lightweight module system; It provides a simple
+way to structure program and data into modules for programming and
+interactive use, without the formalities of R packages.
 
 ## Installation
 
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-devtools::install_github("iqis/modular")
+devtools::install_github("iqis/mod")
 ```
 
-## Programming Interface
+## Use
 
-  - Make a module:`module()`, `acquire()`
-  - Declare public variables within a module: `provide()`
-  - Attach a module to the search path: `use()`
-  - Import bindings from one module to another: `refer()`
+The `mod` package is designed to be used either attached or unattached
+to your working environment.
+
+If you wish to attach the package:
+
+``` r
+require(mod)
+#> Loading required package: mod
+#> 
+#> Attaching package: 'mod'
+#> The following object is masked from 'package:base':
+#> 
+#>     drop
+```
+
+## Vocabulary
+
+  - Make a module:
+      - Inline:`module()`/`mod::ule()`
+      - From a file: `acquire()`
+  - The search path:
+      - Attach a module to: `use()`
+      - Detach a module from: `drop()`
+  - Inside a module:
+      - Declare public variables within the module: `provide()`
+      - Attach a package locally: `require()`
+      - Import variables from another module: `refer()`
 
 ## Examples
 
@@ -46,7 +69,7 @@ Define an inline module:
 my <- module({
         a <- 1
         b <- 2
-        add_nums <- function(x, y) x + y
+        f <- function(x, y) x + y
 })
 ```
 
@@ -54,7 +77,7 @@ The resulting module contains the variables defined within.
 
 ``` r
 ls(my)
-#> [1] "a"        "add_nums" "b"
+#> [1] "a" "b" "f"
 ```
 
 Subset the module.
@@ -64,7 +87,7 @@ my$a
 #> [1] 1
 my$b
 #> [1] 2
-my$add_nums(my$a, my$b)
+my$f(my$a, my$b)
 #> [1] 3
 ```
 
@@ -72,11 +95,11 @@ Use the `with()` to spare qualification.
 
 ``` r
 with(my, 
-     add_nums(a,b))
+     f(a,b))
 #> [1] 3
 ```
 
-### Attach to the Search Path
+### Attach a Module to the Search Path
 
 Just like a package, a module can be attached to the search path.
 
@@ -84,36 +107,38 @@ Just like a package, a module can be attached to the search path.
 use(my)
 ```
 
-The `my` module is attached to the search path as “module:my”.
+The `my` module is attached to the search path as “module:my”, before
+other attached packages.
 
 ``` r
 search()
-#>  [1] ".GlobalEnv"        "module:my"         "package:modular"  
+#>  [1] ".GlobalEnv"        "module:my"         "package:mod"      
 #>  [4] "package:stats"     "package:graphics"  "package:grDevices"
 #>  [7] "package:utils"     "package:datasets"  "package:methods"  
 #> [10] "Autoloads"         "package:base"
 ```
 
-This is the preferred way to spare qualification.
+And you can use the variables inside directly, just like those from a
+package.
 
 ``` r
-add_nums(a,b)
+f(a,b)
 #> [1] 3
 ```
 
-Detach the module from the search path, if desired.
+Detach the module from the search path when done, if desired.
 
 ``` r
 drop("my")
 ```
 
-### Refer Bindings
+### Make Variables Available to another Module
 
 Use `refer()` to “import” variables from another module.
 
 ``` r
 ls(my)
-#> [1] "a"        "add_nums" "b"
+#> [1] "a" "b" "f"
 
 my_other<- module({
         refer(my)
@@ -123,7 +148,42 @@ my_other<- module({
 })
 
 ls(my_other)
-#> [1] "a"        "add_nums" "b"        "c"        "d"
+#> [1] "a" "b" "c" "d" "f"
+```
+
+### Use a package
+
+The `mod::require()` makes packages available for use in a module.
+
+``` r
+mpg_analysis <- module({
+    require(ggplot2)
+    plot <- qplot(mtcars$mpg)    
+})
+#> Registered S3 methods overwritten by 'ggplot2':
+#>   method         from 
+#>   [.quosures     rlang
+#>   c.quosures     rlang
+#>   print.quosures rlang
+mpg_analysis$plot
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+
+Meanwhile, your working environment’s search path remain unaffected:
+
+``` r
+search()
+#>  [1] ".GlobalEnv"        "package:mod"       "package:stats"    
+#>  [4] "package:graphics"  "package:grDevices" "package:utils"    
+#>  [7] "package:datasets"  "package:methods"   "Autoloads"        
+#> [10] "package:base"
+```
+
+``` r
+"package:ggplot2" %in% search()
+#> [1] FALSE
 ```
 
 ### Private Variables
@@ -179,7 +239,7 @@ room_102$get_classified()
 
 ### Simlate OOP
 
-The below example simulates the essential behavior of an object in
+The below example simulates one essential behavior of an object in
 Object-oriented Programming by manipulating the state of `..count`.
 
 ``` r
@@ -197,6 +257,8 @@ counter <- module({
         }
 })
 ```
+
+A variable must be private to be mutable like `..count`.
 
 The following demonstration should be self-explanatory:
 
@@ -216,13 +278,11 @@ counter$get_count()
 #> [1] 0
 ```
 
-It is imperative that `modular` be only adopted in the simplest cases,
-as it is not made for OOP, and do not support most typical OOP features,
-such as deep copy, inheritance, or else. If full-featured OOP is
-desired, use
+It is imperative that `mod` be only adopted in the simplest cases. If
+full-featured OOP is desired, use
 [`R6`](https://cran.r-project.org/web/packages/R6/index.html).
 
-## Note
+## Notes
 
 #### Environment
 
@@ -235,6 +295,19 @@ mode(my)
 is.environment(my)
 #> [1] TRUE
 ```
+
+#### Terms
+
+Some may wonder the choice of terms. Why `refer()` and `provide()`?
+Further, why not `import()` and `export()`? This is because we feel
+`import()` and `export()` are used too commonly, in both R, and other
+popular languages with varying meanings. The `reticulate` package also
+uses `import()`. To avoid confusion, we decided to introduce some
+synonyms. With analogous semantics,
+[`refer()`](https://clojuredocs.org/clojure.core/refer) is borrowed from
+Clojure, while
+[`provide()`](https://docs.racket-lang.org/reference/require.html?q=provide#%28form._%28%28lib._racket%2Fprivate%2Fbase..rkt%29._provide%29%29)
+from Racket; Both languages are R’s close relatives.
 
 #### Locked
 
@@ -268,8 +341,7 @@ ls(my_yet_another, all.names = TRUE)
 #> [1] ".var"
 ```
 
-Nonetheless, in `modular`, they are treated the same as public
-variables.
+Nonetheless, in a module, they are treated the same as public variables.
 
 ``` r
 my_yet_another$.var
@@ -279,7 +351,7 @@ my_yet_another$.var
 #### Load/Attach from File
 
 ``` r
-module_path <- system.file("misc/example_module.R", package = "modular")
+module_path <- system.file("misc/example_module.R", package = "mod")
 ```
 
 To load and assign to variable:
@@ -308,4 +380,31 @@ d()
 #> [1] 6
 e(100)
 #> [1] 106
+```
+
+#### Unattached
+
+As aforementioned, the package is designed to be usable both attached
+and unattached.
+
+If you use the package unattached, you must always qualify the variable
+name with `::`, such as `mod::ule()`, a shorthand for `mod::module()`.
+However, while inside a module, the `mod` package is always available,
+so you do not need to use `::`. Note that in the following example,
+`provide()` inside the module expression is unqualified.
+
+See:
+
+``` r
+detach("package:mod")
+
+my_mind <- mod::ule({
+  provide(good_thought)
+  good_thought <- "I love working on this package!"
+  bad_thought <- "I worry that no one will appreciate it."
+})
+
+mod::use(my_mind)
+good_thought
+#> [1] "I love working on this package!"
 ```

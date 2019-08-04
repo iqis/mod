@@ -2,7 +2,7 @@
 #'
 #'
 #' @examples
-#' module_path <- system.file("misc", "example_module.R", package = "modular")
+#' module_path <- system.file("misc", "example_module.R", package = "mod")
 #' example_module <- acquire(module_path)
 #'
 #' ls(example_module)
@@ -31,12 +31,7 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
 
 #' @rdname module
 #' @export
-base_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = FALSE){
-        res <- module(..., parent = parent, lock = lock, expose_private = expose_private)
-        class(res) <- c("bare_module", class(res))
-        res
-}
-
+ule <- module
 
 
 #' @rdname module
@@ -57,7 +52,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
-        assign("..use..", c(), envir = private) # names of used packages
+        assign("..require..", c(), envir = private) # names of used packages
         assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
         assign("..shim..", new.env(parent = private$..link..), envir = private)
         parent.env(private) <- private$..shim..
@@ -65,11 +60,11 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
 
-        # inject modular bindings to private
-        modular_ns <- asNamespace("modular")
+        # inject mod package bindings to ..shim..
+        mod_ns <- asNamespace("mod")
         mapply(assign,
-               x = ls(modular_ns),
-               value = mget(ls(modular_ns), envir = asNamespace("modular")),
+               x = ls(mod_ns),
+               value = mget(ls(mod_ns), envir = asNamespace("mod")),
                envir = list(private$..shim..))
         parent.env(private) <- private$..shim.. # attach private to ..shim..
 
@@ -119,12 +114,15 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 #' @rdname module
 #' @export
 #'
-expose <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
+use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
                 env <- acquire(module = module, parent = parent, lock = lock, expose_private = expose_private)
+                bare_name <- function(path){
+                        gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
+                }
                 if (missing(as)) as <- bare_name(module)
         } else {
                 stop("requires module object or path to R file")
