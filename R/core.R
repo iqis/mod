@@ -42,7 +42,7 @@ bare_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = F
 #' @rdname module
 #' @export
 #'
-acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE) {
+acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
@@ -182,7 +182,7 @@ acquire <- function(module, parent = .GlobalEnv, lock = TRUE, expose_private = F
 #' @rdname module
 #' @export
 #'
-expose <- function(module, as, parent = .GlobalEnv, lock = TRUE, expose_private = FALSE){
+expose <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
