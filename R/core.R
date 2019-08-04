@@ -120,6 +120,9 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
                 env <- acquire(module = module, parent = parent, lock = lock, expose_private = expose_private)
+                bare_name <- function(path){
+                        gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
+                }
                 if (missing(as)) as <- bare_name(module)
         } else {
                 stop("requires module object or path to R file")
