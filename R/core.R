@@ -31,12 +31,15 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
 
 #' @rdname module
 #' @export
+ule <- module
+
+#' @rdname module
+#' @export
 base_module <- function(..., parent = baseenv(), lock = TRUE, expose_private = FALSE){
         res <- module(..., parent = parent, lock = lock, expose_private = expose_private)
         class(res) <- c("bare_module", class(res))
         res
 }
-
 
 
 #' @rdname module
@@ -66,10 +69,10 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..public..", new.env(parent = private), envir = private) # public env
 
         # inject modular bindings to private
-        modular_ns <- asNamespace("modular")
+        mod_ns <- asNamespace("mod")
         mapply(assign,
-               x = ls(modular_ns),
-               value = mget(ls(modular_ns), envir = asNamespace("modular")),
+               x = ls(mod_ns),
+               value = mget(ls(mod_ns), envir = asNamespace("mod")),
                envir = list(private$..shim..))
         parent.env(private) <- private$..shim.. # attach private to ..shim..
 
@@ -119,7 +122,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 #' @rdname module
 #' @export
 #'
-expose <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
+use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))

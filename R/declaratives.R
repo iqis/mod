@@ -13,7 +13,6 @@
 #' d <- 4
 #' }
 #' @param ... dot-dot-dot: name of any object to be accessible by user
-#' @export
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
@@ -35,7 +34,6 @@ provide <- function(...) {
 #' @param prefix prefix to names; character
 #' @param sep separator between prefix and names; character
 #'
-#' @export
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
@@ -142,18 +140,16 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                         )
                 }
         }
-
-
-
-
-
 }
 
 
-#' @export
-use <- function(package){
+#' Attach package to local search path
+#'
+#' @param package
+#'
+require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use use() in a module."))
+             stop("Only use mod::require() in a module."))
 
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
@@ -203,7 +199,14 @@ use <- function(package){
                envir = list(private$..link..))
 }
 
+#' Declare dependencies
+#'
+#' @param packages
+#'
+#' @return
 #' @export
+#'
+#' @examples
 depend <- function(packages = list()){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use depend() in a module."))

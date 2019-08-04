@@ -2,13 +2,17 @@
 % Please edit documentation in R/core.R, R/thing.R
 \name{module}
 \alias{module}
+\alias{ule}
 \alias{base_module}
 \alias{acquire}
-\alias{expose}
+\alias{use}
 \alias{thing}
 \title{Make a module}
 \usage{
 module(..., parent = parent.frame(), lock = TRUE,
+  expose_private = FALSE)
+
+ule(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
 base_module(..., parent = baseenv(), lock = TRUE,
@@ -17,7 +21,7 @@ base_module(..., parent = baseenv(), lock = TRUE,
 acquire(module, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
-expose(module, as, parent = baseenv(), lock = TRUE,
+use(module, as, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 
 thing(..., dot, parent = parent.frame(), lock = TRUE,
