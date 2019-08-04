@@ -6,16 +6,16 @@
 <!-- badges: start -->
 
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/iqis/modular?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/modular)
+status](https://ci.appveyor.com/api/projects/status/github/iqis/mod?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/mod)
 [![Travis build
-status](https://travis-ci.org/iqis/modular.svg?branch=master)](https://travis-ci.org/iqis/modular)
+status](https://travis-ci.org/iqis/mod.svg?branch=master)](https://travis-ci.org/iqis/mod)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/modular)](https://cran.r-project.org/package=modular)
+status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/package=mod)
 [![Codecov test
-coverage](https://codecov.io/gh/iqis/modular/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/modular?branch=master)
-![GitHub License](https://img.shields.io/github/license/iqis/modular)
+coverage](https://codecov.io/gh/iqis/mod/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/mod?branch=master)
+![GitHub License](https://img.shields.io/github/license/iqis/mod)
 
 <!-- badges: end -->
 
