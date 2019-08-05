@@ -26,6 +26,18 @@ interactive use, without the formalities of R packages.
 
 This is a good question.
 
+As units for code organization in R, packages are very robust. However,
+they are formal and compliated; they require additional knowledge to R
+and must be installed in the local library. Scripts, as widely
+understood, are simplistic and brittle. They are unsuitable for building
+tools and may conflict with each other.
+
+Situated between packages and scripts, modules feature characteristics
+that are somewhat similar to those from other languages. They can be
+defined either inline with other codes or in a standalone file. They can
+be created in the user’s working environment, in packages, or in other
+modules.
+
 ## Installation
 
 Install the development version from [GitHub](https://github.com/) with:
