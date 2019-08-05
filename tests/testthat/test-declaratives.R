@@ -34,19 +34,42 @@ test_that("require() gets actual, original, identical objects", {
 })
 
 
-`one` <- mod::ule({
+one <- mod::ule({
         number <- 1
         pinyin <- "yi1"
 })
 
-`two` <- mod::ule({
+two <- mod::ule({
         number <- 2
         pinyin <- "er4"
+})
+
+three <- mod::ule({
+        number <- 3
+        pinyin <- "san1"
+})
+
+four <- mod::ule({
+        number <- 4
+        pinyin <- "si4"
 })
 
 test_that("refer() actually refers", {
         target <- mod::ule({
                 refer(one)
         })
-        expect_identical(sort(ls(one)), sort(c("number", "pinyin")))
+        expect_identical(sort(ls(target)), sort(c("number", "pinyin")))
+})
+
+test_that("refer() stops name conflict", {
+        expect_error(mod::ule(refer(one, two)))
+})
+
+test_that("refer() prefixes right with `.`", {
+        target <- mod::ule({
+                refer(one, two, prefix = ., sep = ".")
+        })
+
+        expect_identical(sort(ls(target)),
+                         sort(c("one.number", "one.pinyin", "two.number", "two.pinyin")))
 })
