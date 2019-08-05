@@ -10,11 +10,10 @@ status](https://ci.appveyor.com/api/projects/status/github/iqis/mod?branch=maste
 [![Travis build
 status](https://travis-ci.org/iqis/mod.svg?branch=master)](https://travis-ci.org/iqis/mod)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/package=mod)
-[![Codecov test
-coverage](https://codecov.io/gh/iqis/mod/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/mod?branch=master)
+[![codecov](https://codecov.io/gh/iqis/mod/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/mod)
 ![GitHub License](https://img.shields.io/github/license/iqis/mod)
 
 <!-- badges: end -->
