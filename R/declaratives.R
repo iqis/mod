@@ -198,15 +198,3 @@ require <- function(package){
                value = mget(x = ls(temp_envir), envir = temp_envir),
                envir = list(private$..link..))
 }
-
-#' Declare dependencies
-#'
-#' @param packages  package names
-#'
-depend <- function(packages = list()){
-        `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use depend() in a module."))
-        # only check dependencies.
-        #
-
-}
