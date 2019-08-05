@@ -1,12 +1,13 @@
 Package: mod
 Type: Package
-Title: A Lightweight Module System
+Title: A Lightweight Module System in R
 Version: 0.1.3.9000
 Authors@R: c(
   person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
   person()
   )
-Description: Very Good, for now.
+Description: This package allows the user to define, instantiate, and attach self-contained "modules", which are able to host any R objects and functions.
+    Modules have their own scope and "search path" that does not interfere with one another or the user's working environment.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
