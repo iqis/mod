@@ -6,3 +6,10 @@ test_that("masks work inside module", {
 })
 
 
+test_that("helpers work", {
+        test_mod <- mod::ule({},
+                             parent = baseenv(),
+                             expose_private = TRUE)
+        expect_length(test_mod$..private..$..search..(), 4)
+        expect_length(mod:::search_path(test_mod$..private..), 5)
+})
