@@ -1,19 +1,19 @@
 # Masks
 
 library <- function(){
-        warning("Only use library() outside of a module")
+        stop("Only use library() outside of a module")
 }
 
 attach <- function(){
-        warning("Only use attach() outside of a module")
+        stop("Only use attach() outside of a module")
 }
 
 install.packages <- function(){
-        warning("Only use install.packages() outside of a module")
+        stop("Only use install.packages() outside of a module")
 }
 
 update.packages <- function(){
-        warning("Only use update.packages() outside of a module")
+        stop("Only use update.packages() outside of a module")
 }
 
 
