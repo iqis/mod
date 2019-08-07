@@ -296,7 +296,7 @@ counter$get_count()
 
 It is imperative that `mod` be only adopted in the simplest cases. If
 full-featured OOP is desired, use
-[`R6`](https://cran.r-project.org/web/packages/R6/index.html).
+[`R6`](https://CRAN.R-project.org/package=R6).
 
 ## Notes
 
