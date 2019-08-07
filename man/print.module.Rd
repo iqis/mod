@@ -7,9 +7,12 @@
 \method{print}{module}(x, ...)
 }
 \arguments{
-\item{x}{object}
+\item{x}{an object}
 
-\item{...}{dot-dot-dot}
+\item{...}{dot-dot-dot, ignored}
+}
+\value{
+the object itself
 }
 \description{
 Print module

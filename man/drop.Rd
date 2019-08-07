@@ -7,8 +7,17 @@
 drop(name)
 }
 \arguments{
-\item{name}{name of the module to exit from}
+\item{name}{name of the module to exit from; character}
 }
 \description{
-Detach a module from the search path.
+Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
+}
+\examples{
+
+\dontrun{
+# by name
+drop("my_module")
+# at the last position
+drop()
+}
 }

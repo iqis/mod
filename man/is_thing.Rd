@@ -7,7 +7,7 @@
 is_thing(x)
 }
 \arguments{
-\item{x}{An object}
+\item{x}{an object}
 }
 \description{
 Test if the object is a module

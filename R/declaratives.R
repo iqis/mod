@@ -1,7 +1,10 @@
 #' Provide objects from a module
 #'
-#' Only legal inside a module context
+#' Can only be used inside a module expression.
+#' If this function is used, only the names included as argument are public.
+#' If not used, every name in the module will be public.
 #'
+#' @param ... name of any object to be accessible by user; name or character
 #' @examples
 #'
 #' \dontrun{
@@ -12,7 +15,6 @@
 #' c <- 3
 #' d <- 4
 #' }
-#' @param ... dot-dot-dot: name of any object to be accessible by user
 #'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -27,7 +29,8 @@ provide <- function(...) {
 
 #' Refer bindings from a module to another
 #'
-#' Only legal inside a module context
+#' Can only be used inside a module expression.
+#' Makes reference to objects from one module, with specified filters.
 #'
 #' @param ... names of modules; dot-dot-dot
 #' @param include names to include; character vector
@@ -144,9 +147,13 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 }
 
 
-#' Attach package to local search path
+#' Load/Attach package to local search path
 #'
-#' @param package name of the package; name or character string
+#' Can only be used in a module expression.
+#' Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
+#'  Masks base::require() inside a module context.
+#'
+#' @param package name of the package; name or character
 #'
 require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),

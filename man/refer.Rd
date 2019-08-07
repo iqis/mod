@@ -18,5 +18,6 @@ refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 \item{sep}{separator between prefix and names; character}
 }
 \description{
-Only legal inside a module context
+Can only be used inside a module expression.
+Makes reference to objects from one module, with specified filters.
 }

@@ -2,13 +2,15 @@
 % Please edit documentation in R/declaratives.R
 \name{require}
 \alias{require}
-\title{Attach package to local search path}
+\title{Load/Attach package to local search path}
 \usage{
 require(package)
 }
 \arguments{
-\item{package}{name of the package; name or character string}
+\item{package}{name of the package; name or character}
 }
 \description{
-Attach package to local search path
+Can only be used in a module expression.
+Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
+ Masks base::require() inside a module context.
 }

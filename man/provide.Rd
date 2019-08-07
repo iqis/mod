@@ -7,10 +7,12 @@
 provide(...)
 }
 \arguments{
-\item{...}{dot-dot-dot: name of any object to be accessible by user}
+\item{...}{name of any object to be accessible by user; name or character}
 }
 \description{
-Only legal inside a module context
+Can only be used inside a module expression.
+If this function is used, only the names included as argument are public.
+If not used, every name in the module will be public.
 }
 \examples{
 
@@ -22,4 +24,5 @@ b <- 2
 c <- 3
 d <- 4
 }
+
 }

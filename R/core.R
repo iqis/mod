@@ -1,24 +1,34 @@
-#' Make a module
+#' Make a Module
 #'
-#'
-#' @examples
-#' module_path <- system.file("misc", "example_module.R", package = "mod")
-#' example_module <- acquire(module_path)
-#'
-#' ls(example_module)
-#'
-#' example_module$a
-#' example_module$e(123)
+#' Institute a modfule object inline or from a file.
+#' mod::ule() is a useful shorthand for module() when this package is not attached.
 #'
 #' @param ... module expression
 #' @param module module object, or path to a module file
 #' @param parent the enclosing environment
-#' @param lock lock the environment
-#' @param expose_private expose the private environment as `..private..`
-#' @param dot function expression used for active binding to `.`
-#' @param as name when attached to search path with `use()`
+#' @param lock lock the environment; logical
+#' @param expose_private expose the private environment as `..private..`; logical
 #'
 #' @return an environment containing objects from the module
+#'
+#' @examples
+#'
+#' # from file
+#' module_path <- system.file("misc", "example_module.R", package = "mod")
+#' example_module <- acquire(module_path)
+#'
+#' example_module$e(123)
+#'
+#' # inline
+#' my_module <- mod::ule({
+#'     a <- 1
+#'     .a <- 2
+#'     f <- function(){.a}
+#' })
+#'
+#' my_module$a
+#' my_module$f
+#'
 #' @export
 #'
 module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = FALSE){
@@ -31,6 +41,7 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
 
 #' @rdname module
 #' @export
+#'
 ule <- module
 
 
@@ -38,6 +49,11 @@ ule <- module
 #' @export
 #'
 acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
+
+        # if module is a package name, acqurie package's export envir.
+        if (module %in% utils::installed.packages()) {
+                return(asNamespace(module)$.__NAMESPACE__.$exports)
+        } # Otherwise....
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
@@ -110,8 +126,18 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 }
 
 
-
-#' @rdname module
+#' Load/Attach a Module to the Search Path
+#'
+#' @inheritParams module
+#' @param as name when attached to search path with `use()`; character
+#'
+#' @examples
+#' \dontrun{
+#' # Attach module object to search path
+#' use(example_module)
+#' # or directly from file
+#' use(module_path, "example_module")
+#' }
 #' @export
 #'
 use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
@@ -147,10 +173,10 @@ is_module <- function(x) {
 
 #' Print module
 #'
-#' @param x object
-#' @param ... dot-dot-dot
+#' @param x an object
+#' @param ... dot-dot-dot, ignored
 #'
-#' @return NULL
+#' @return the object itself
 #' @export
 #'
 print.module <- function(x, ...){
@@ -167,10 +193,19 @@ print.module <- function(x, ...){
 
 #' Drop a module
 #'
-#' Detach a module from the search path.
+#' Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
 #'
-#' @param  name name of the module to exit from
+#' @param  name name of the module to exit from; character
+#' @examples
+#'
+#' \dontrun{
+#' # by name
+#' drop("my_module")
+#' # at the last position
+#' drop()
+#' }
 #' @export
+#'
 drop <- function(name) {
         if (missing(name)) {
                 search_path <- search()
