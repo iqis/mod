@@ -13,8 +13,7 @@ test_that("is_module() works", {
 })
 
 
-test_that("print.module() actually prints stuff & returns insible self", {suppressMessages({
-        expect_invisible(mod:::print.module(mod_test))
+test_that("print.module() actually prints stuff ", {suppressMessages({
         expect_output(mod:::print.module(mod_test))
 })})
 
