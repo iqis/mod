@@ -41,7 +41,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
-        if (grepl("inline_module", module) | grepl("\\.r$|\\.R$", module)) {} else {
+        if (grepl("inline_module", module) | grepl("\\.R$", module)) {} else {
                 module <- paste0(module, ".R")
         }
         # make a new environment, private. This envir has everything inside the module
