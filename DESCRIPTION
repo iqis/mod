@@ -6,8 +6,8 @@ Authors@R: c(
   person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
   person()
   )
-Description: This package allows the user to define, instantiate, and attach self-contained "modules", which are able to host any R objects and functions.
-    Modules have their own scope and "search path" that does not interfere with one another or the user's working environment.
+Description: Allows the user to make and self-contained "modules", which are able to host any R objects.
+    Modules have their own scope and package "search path" that does not interfere with one another or the user's working environment.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
