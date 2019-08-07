@@ -1,6 +1,6 @@
 Package: mod
 Type: Package
-Title: A Lightweight Module System in R
+Title: A Lightweight Module System
 Version: 0.1.3
 Authors@R: c(
   person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
