@@ -1,7 +1,7 @@
 Package: mod
 Type: Package
 Title: Lightweight and Self-contained Modules for Code Organization
-Version: 0.1.3.9100
+Version: 0.1.3
 Authors@R: c(
   person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
   person()
