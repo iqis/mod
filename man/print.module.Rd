@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{print.module}
 \alias{print.module}
-\title{Print module}
+\title{Print a Module}
 \usage{
 \method{print}{module}(x, ...)
 }
@@ -15,5 +15,5 @@
 the object itself
 }
 \description{
-Print module
+Print a Module
 }

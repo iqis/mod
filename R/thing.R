@@ -31,7 +31,7 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
         res
 }
 
-#' Test if the object is a module
+#' Test if the Object is a Thing
 #'
 #' @param x an object
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{is_module}
 \alias{is_module}
-\title{Test if the object is a module}
+\title{Test if the Object is a Module}
 \usage{
 is_module(x)
 }
@@ -10,5 +10,5 @@ is_module(x)
 \item{x}{An object}
 }
 \description{
-Test if the object is a module
+Test if the Object is a Module
 }

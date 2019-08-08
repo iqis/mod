@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{drop}
 \alias{drop}
-\title{Drop a module}
+\title{Drop a Module}
 \usage{
 drop(name)
 }

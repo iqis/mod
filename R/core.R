@@ -162,7 +162,7 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
 }
 
 
-#' Test if the object is a module
+#' Test if the Object is a Module
 #'
 #' @param x An object
 #' @export
@@ -171,7 +171,7 @@ is_module <- function(x) {
 }
 
 
-#' Print module
+#' Print a Module
 #'
 #' @param x an object
 #' @param ... dot-dot-dot, ignored
@@ -191,7 +191,7 @@ print.module <- function(x, ...){
         invisible(x)
 }
 
-#' Drop a module
+#' Drop a Module
 #'
 #' Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
 #'

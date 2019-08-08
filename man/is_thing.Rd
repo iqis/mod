@@ -2,7 +2,7 @@
 % Please edit documentation in R/thing.R
 \name{is_thing}
 \alias{is_thing}
-\title{Test if the object is a module}
+\title{Test if the Object is a Thing}
 \usage{
 is_thing(x)
 }
@@ -10,5 +10,5 @@ is_thing(x)
 \item{x}{an object}
 }
 \description{
-Test if the object is a module
+Test if the Object is a Thing
 }
