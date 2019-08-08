@@ -10,6 +10,6 @@
 * This is a new release.
 
 
-- Grammartical error in title corrected
+- Grammartical error in DESCRIPTION/Description corrected
 - Examples for unexported functions(for use in module context only) are now working
 - Call to `installed.packages()` replaced with `system.file()`
