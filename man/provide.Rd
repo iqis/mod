@@ -2,7 +2,7 @@
 % Please edit documentation in R/declaratives.R
 \name{provide}
 \alias{provide}
-\title{Provide objects from a module}
+\title{Provide Objects from a Module}
 \usage{
 provide(...)
 }

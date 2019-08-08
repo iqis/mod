@@ -2,7 +2,7 @@
 % Please edit documentation in R/declaratives.R
 \name{refer}
 \alias{refer}
-\title{Refer bindings from a module to another}
+\title{Copy Bindings from a Module to Another}
 \usage{
 refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 }

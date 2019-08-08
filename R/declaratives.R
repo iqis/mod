@@ -1,4 +1,4 @@
-#' Provide objects from a module
+#' Provide Objects from a Module
 #'
 #' Can only be used inside a module expression.
 #' If this function is used, only the names included as argument are public.
@@ -27,7 +27,7 @@ provide <- function(...) {
 }
 
 
-#' Refer bindings from a module to another
+#' Copy Bindings from a Module to Another
 #'
 #' Can only be used inside a module expression.
 #' Makes reference to objects from one module, with specified filters.
@@ -147,7 +147,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 }
 
 
-#' Load/Attach package to local search path
+#' Load/Attach Package to Local Search Path
 #'
 #' Can only be used in a module expression.
 #' Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e

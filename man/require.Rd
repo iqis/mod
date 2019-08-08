@@ -2,7 +2,7 @@
 % Please edit documentation in R/declaratives.R
 \name{require}
 \alias{require}
-\title{Load/Attach package to local search path}
+\title{Load/Attach Package to Local Search Path}
 \usage{
 require(package)
 }
