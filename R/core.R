@@ -71,20 +71,28 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..require..", c(), envir = private) # names of used packages
         assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
         assign("..shim..", new.env(parent = private$..link..), envir = private)
-        parent.env(private) <- private$..shim..
+        assign("..mask..", new.env(parent = private$..shim..), envir = private)
+        parent.env(private) <- private$..mask..
         assign("..provide..", c(), envir = private) # names of provided objects
         assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
+
+
+        # inject mask binding s to ..mask..
+        mapply(assign,
+               x = ls(masks),
+               value = mget(ls(masks), envir = masks),
+               envir = list(private$..mask..))
+        parent.env(private) <- private$..mask..
 
         # inject mod package bindings to ..shim..
         mod_ns <- asNamespace("mod")
         mapply(assign,
                x = ls(mod_ns),
-               value = mget(ls(mod_ns), envir = asNamespace("mod")),
+               value = mget(ls(mod_ns), envir = mod_ns),
                envir = list(private$..shim..))
-        parent.env(private) <- private$..shim.. # attach private to ..shim..
 
-        # ..public.. => ..private.. => ..shim.. => ..link.. => ..parent..
+        # ..public.. => ..private.. => ..mask.. => ..shim.. => ..link.. => ..parent..
 
         # source everything from file to private
         sys.source(file = module, envir = private)

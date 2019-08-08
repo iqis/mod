@@ -1,21 +1,26 @@
 # Masks
 
-library <- function(){
+masks <- new.env(parent = emptyenv())
+
+masks$library <- function(){
         stop("Only use library() outside of a module")
 }
 
-attach <- function(){
+masks$attach <- function(){
         stop("Only use attach() outside of a module")
 }
 
-install.packages <- function(){
+masks$install.packages <- function(){
         stop("Only use install.packages() outside of a module")
 }
 
-update.packages <- function(){
+masks$update.packages <- function(){
         stop("Only use update.packages() outside of a module")
 }
 
+masks$use <- function(){
+        stop("Only use use() outside of a module")
+}
 
 
 # Helpers
