@@ -9,9 +9,9 @@ refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 \arguments{
 \item{...}{names of modules; dot-dot-dot}
 
-\item{include}{names to include; character vector}
+\item{include}{names to include; character}
 
-\item{exclude}{names to excludde; character vector}
+\item{exclude}{names to excludde; character}
 
 \item{prefix}{prefix to names; character}
 
@@ -20,4 +20,17 @@ refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 \description{
 Can only be used inside a module expression.
 Makes reference to objects from one module, with specified filters.
+}
+\examples{
+
+mod_a <- mod::ule(number <- 1)
+mod_b <- mod::ule(number <- 2)
+
+mod_c <- mod::ule({
+    refer(mod_a, mod_b, prefix = .)
+    number <- mod_a.number + mod_b.number
+})
+
+mod_c$number
+
 }

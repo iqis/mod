@@ -7,14 +7,24 @@
 #' @param ... name of any object to be accessible by user; name or character
 #' @examples
 #'
-#' \dontrun{
-#' provide(a, c)
+#' mod_a <- mod::ule({
+#'     # names included in provide() are public, however...
+#'     provide(var,.var, ..var)
+#'     var <- 1
+#'     .var <- 2
+#'     ..var <- 3 # objects denoted by .. prefix are always private.
+#'     another_var <- 4 # objects not included in provide() are also private.
+#' })
 #'
-#' a <- 1
-#' b <- 2
-#' c <- 3
-#' d <- 4
-#' }
+#' mod_b <- mod::ule({
+#'     # if no call to provide(), all objects are public, except...
+#'     var <- 1
+#'     .var <- 2
+#'     ..var <- 3 # objects denoted by .. prefix are always private.
+#' })
+#'
+#' ls(mod_a)
+#' ls(mod_b)
 #'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -33,16 +43,21 @@ provide <- function(...) {
 #' Makes reference to objects from one module, with specified filters.
 #'
 #' @param ... names of modules; dot-dot-dot
-#' @param include names to include; character vector
-#' @param exclude names to excludde; character vector
+#' @param include names to include; character
+#' @param exclude names to excludde; character
 #' @param prefix prefix to names; character
 #' @param sep separator between prefix and names; character
 #' @examples
 #'
-#' \dontrun{
-#' refer(mod_a, mod_b)
-#' refer(mod_c, prefix = .)
-#' }
+#' mod_a <- mod::ule(number <- 1)
+#' mod_b <- mod::ule(number <- 2)
+#'
+#' mod_c <- mod::ule({
+#'     refer(mod_a, mod_b, prefix = .)
+#'     number <- mod_a.number + mod_b.number
+#' })
+#'
+#' mod_c$number
 #'
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -160,6 +175,14 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #'  Masks base::require() inside a module context.
 #'
 #' @param package name of the package; name or character
+#' @examples
+#'
+#' mod_tcl <- mod::ule({
+#'     require(tcltk)
+#'     f <- tcl
+#' })
+#'
+#' identical(mod_tcl$f, tcltk::tcl)
 #'
 require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -168,7 +191,7 @@ require <- function(package){
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
 
-        `if`(!package %in% utils::installed.packages(),
+        `if`(system.file("", package = package) == "",
              stop(paste(package, "is not an installed package")))
 
         private <- parent.frame()
@@ -179,7 +202,7 @@ require <- function(package){
         assign("..require..", pkg_names, private)
 
         # mod::require() dumps all bindings from every dependency into ..link..,
-        # is this good enough? or it's necessary to implement a real local search path
+        # is this good enough? or it's necessary to implement a real local search path?
         pkg_ns <- asNamespace(package)
         import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
 

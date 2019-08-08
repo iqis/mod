@@ -14,3 +14,13 @@ Can only be used in a module expression.
 Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
  Masks base::require() inside a module context.
 }
+\examples{
+
+mod_tcl <- mod::ule({
+    require(tcltk)
+    f <- tcl
+})
+
+identical(mod_tcl$f, tcltk::tcl)
+
+}

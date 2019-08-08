@@ -10,6 +10,10 @@ masks$attach <- function(){
         stop("Only use attach() outside of a module")
 }
 
+masks$detach <- function(){
+        stop("Only use detach() outside of a module")
+}
+
 masks$install.packages <- function(){
         stop("Only use install.packages() outside of a module")
 }

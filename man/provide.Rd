@@ -16,13 +16,23 @@ If not used, every name in the module will be public.
 }
 \examples{
 
-\dontrun{
-provide(a, c)
+mod_a <- mod::ule({
+    # names included in provide() are public, however...
+    provide(var,.var, ..var)
+    var <- 1
+    .var <- 2
+    ..var <- 3 # objects denoted by .. prefix are always private.
+    another_var <- 4 # objects not included in provide() are also private.
+})
 
-a <- 1
-b <- 2
-c <- 3
-d <- 4
-}
+mod_b <- mod::ule({
+    # if no call to provide(), all objects are public, except...
+    var <- 1
+    .var <- 2
+    ..var <- 3 # objects denoted by .. prefix are always private.
+})
+
+ls(mod_a)
+ls(mod_b)
 
 }
