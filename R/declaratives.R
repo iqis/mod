@@ -37,6 +37,12 @@ provide <- function(...) {
 #' @param exclude names to excludde; character vector
 #' @param prefix prefix to names; character
 #' @param sep separator between prefix and names; character
+#' @examples
+#'
+#' \dontrun{
+#' refer(mod_a, mod_b)
+#' refer(mod_c, prefix = .)
+#' }
 #'
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
