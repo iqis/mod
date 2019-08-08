@@ -10,6 +10,5 @@
 * This is a new release.
 
 
-- Grammartical error in DESCRIPTION/Description corrected
-- Examples for unexported functions(for use in module context only) are now working
-- Call to `installed.packages()` replaced with `system.file()`
+- Title now in Title Case.
+- Description does not _start with the package name, 'this package' or similar. 

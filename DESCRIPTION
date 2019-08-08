@@ -6,7 +6,7 @@ Authors@R: c(
   person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
   person()
   )
-Description: Allow the use of modules, which may host any R object, and can be nested; Each module have their own scope and package "search path" that does not interfere with one another or the user's working environment.
+Description: Creates modules inline or from a file. Modules can contain any R object and be nested. Each module have their own scope and package "search path" that does not interfere with one another or the user's working environment.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
