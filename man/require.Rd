@@ -9,6 +9,9 @@ require(package)
 \arguments{
 \item{package}{name of the package; name or character}
 }
+\value{
+\code{NULL}; invisible
+}
 \description{
 Can only be used in a module expression.
 Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
@@ -17,7 +20,8 @@ Emulates the effect of base::require() in its containing module, making function
 \examples{
 
 mod_tcl <- mod::ule({
-    require(tcltk)
+    mod:::require(tcltk)
+    # It is suggested to omit mod::: when using
     f <- tcl
 })
 

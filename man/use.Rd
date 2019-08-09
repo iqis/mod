@@ -10,7 +10,7 @@ use(module, as, parent = baseenv(), lock = TRUE,
 \arguments{
 \item{module}{module object, or path to a module file}
 
-\item{as}{name when attached to search path with `use()`; character}
+\item{as}{name when attached to search; character}
 
 \item{parent}{the enclosing environment}
 
@@ -18,14 +18,20 @@ use(module, as, parent = baseenv(), lock = TRUE,
 
 \item{expose_private}{expose the private environment as `..private..`; logical}
 }
+\value{
+\code{TRUE} if successful; invisible
+}
 \description{
 Load/Attach a Module to the Search Path
 }
 \examples{
-\dontrun{
+
+module_path <- system.file("misc", "example_module.R", package = "mod")
+example_module <- acquire(module_path)
+
 # Attach module object to search path
 use(example_module)
 # or directly from file
 use(module_path, "example_module")
-}
+
 }

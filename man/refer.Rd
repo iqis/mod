@@ -17,6 +17,9 @@ refer(..., include = c(), exclude = c(), prefix = "", sep = ".")
 
 \item{sep}{separator between prefix and names; character}
 }
+\value{
+\code{NULL}; invisible
+}
 \description{
 Can only be used inside a module expression.
 Makes reference to objects from one module, with specified filters.
@@ -27,7 +30,8 @@ mod_a <- mod::ule(number <- 1)
 mod_b <- mod::ule(number <- 2)
 
 mod_c <- mod::ule({
-    refer(mod_a, mod_b, prefix = .)
+    mod:::refer(mod_a, mod_b, prefix = .)
+    # It is suggested to omit mod::: when using
     number <- mod_a.number + mod_b.number
 })
 

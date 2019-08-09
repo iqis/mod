@@ -2,16 +2,15 @@
 #'
 #' @param package name of a package; character
 #'
-#' @return a module that contains a package's exported objects
+#' @return a \code{module} that contains a package's exported objects
 #' @export
 #'
 #' @examples
 #'
-#' covr <- as_module("covr")
-#' ls(covr)
-#' \dontrun{
-#' covr$codecov()
-#' }
+#' tcltk <- as_module("tcltk")
+#' ls(tcltk)
+#'
+#' tcltk$is.tclObj(NULL)
 #'
 as_module <- function(package){
         pkg_ns <- asNamespace(package, base.OK = FALSE)

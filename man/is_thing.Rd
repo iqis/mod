@@ -2,13 +2,16 @@
 % Please edit documentation in R/thing.R
 \name{is_thing}
 \alias{is_thing}
-\title{Test if the Object is a Thing}
+\title{Test if an Object is a Thing}
 \usage{
 is_thing(x)
 }
 \arguments{
 \item{x}{an object}
 }
+\value{
+\code{TRUE} if the object is a \code{thing}, \code{FALSE} otherwise
+}
 \description{
-Test if the Object is a Thing
+Test if an Object is a Thing
 }

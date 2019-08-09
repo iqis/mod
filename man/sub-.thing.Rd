@@ -11,6 +11,9 @@
 
 \item{...}{dot-dot-dot, ignored}
 }
+\value{
+the return value of the active binding in a \code{thing}
+}
 \description{
 Invoke the Active Binding in a Thing
 }

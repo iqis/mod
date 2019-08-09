@@ -5,11 +5,13 @@
 #' If not used, every name in the module will be public.
 #'
 #' @param ... name of any object to be accessible by user; name or character
+#' @return \code{NULL}; invisible
 #' @examples
 #'
 #' mod_a <- mod::ule({
 #'     # names included in provide() are public, however...
-#'     provide(var,.var, ..var)
+#'     mod:::provide(var,.var, ..var)
+#'     # It is suggested to omit mod::: when using
 #'     var <- 1
 #'     .var <- 2
 #'     ..var <- 3 # objects denoted by .. prefix are always private.
@@ -34,6 +36,7 @@ provide <- function(...) {
         existing_obj_names <- get("..provide..", envir = parent.frame())
         obj_names <- unique(c(existing_obj_names, obj_names))
         assign("..provide..", unique(obj_names, existing_obj_names), envir = parent.frame())
+        invisible(NULL)
 }
 
 
@@ -47,13 +50,16 @@ provide <- function(...) {
 #' @param exclude names to excludde; character
 #' @param prefix prefix to names; character
 #' @param sep separator between prefix and names; character
+#' @return \code{NULL}; invisible
+#'
 #' @examples
 #'
 #' mod_a <- mod::ule(number <- 1)
 #' mod_b <- mod::ule(number <- 2)
 #'
 #' mod_c <- mod::ule({
-#'     refer(mod_a, mod_b, prefix = .)
+#'     mod:::refer(mod_a, mod_b, prefix = .)
+#'     # It is suggested to omit mod::: when using
 #'     number <- mod_a.number + mod_b.number
 #' })
 #'
@@ -165,6 +171,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                         )
                 }
         }
+        invisible()
 }
 
 
@@ -175,10 +182,13 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #'  Masks base::require() inside a module context.
 #'
 #' @param package name of the package; name or character
+#' @return \code{NULL}; invisible
+#'
 #' @examples
 #'
 #' mod_tcl <- mod::ule({
-#'     require(tcltk)
+#'     mod:::require(tcltk)
+#'     # It is suggested to omit mod::: when using
 #'     f <- tcl
 #' })
 #'
@@ -201,7 +211,7 @@ require <- function(package){
 
         assign("..require..", pkg_names, private)
 
-        # mod::require() dumps all bindings from every dependency into ..link..,
+        # mod:::require() dumps all bindings from every dependency into ..link..,
         # is this good enough? or it's necessary to implement a real local search path?
         pkg_ns <- asNamespace(package)
         import_list <- unique(names(pkg_ns$.__NAMESPACE__.$imports))[-1] # get rid of 'base"
@@ -233,4 +243,5 @@ require <- function(package){
                x = ls(temp_envir),
                value = mget(x = ls(temp_envir), envir = temp_envir),
                envir = list(private$..link..))
+        invisible()
 }

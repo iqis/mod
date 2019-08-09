@@ -5,6 +5,8 @@
 #'
 #' @inheritParams module
 #' @param dot function expression used for active binding to `.`
+#' @return a \code{module} containing an active binding
+#'
 #' @examples
 #'
 #' my_thing <- mod::thing({
@@ -31,9 +33,10 @@ thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private
         res
 }
 
-#' Test if the Object is a Thing
+#' Test if an Object is a Thing
 #'
 #' @param x an object
+#' @return \code{TRUE} if the object is a \code{thing}, \code{FALSE} otherwise
 #' @export
 is_thing <- function(x) {
         inherits(x, "thing")
@@ -43,6 +46,7 @@ is_thing <- function(x) {
 #'
 #' @param x a thing
 #' @param ... dot-dot-dot, ignored
+#' @return the return value of the active binding in a \code{thing}
 #' @export
 `[.thing` <- function(x, ...){
         x$.

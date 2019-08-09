@@ -10,17 +10,16 @@ as_module(package)
 \item{package}{name of a package; character}
 }
 \value{
-a module that contains a package's exported objects
+a \code{module} that contains a package's exported objects
 }
 \description{
 Use a Package as if a Module
 }
 \examples{
 
-covr <- as_module("covr")
-ls(covr)
-\dontrun{
-covr$codecov()
-}
+tcltk <- as_module("tcltk")
+ls(tcltk)
+
+tcltk$is.tclObj(NULL)
 
 }
