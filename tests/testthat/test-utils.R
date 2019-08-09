@@ -1,3 +1,9 @@
+test_that("as_module() works", {
+        expect_s3_class(mod::as_module("covr"), "module")
+        expect_true(is.environment(mod::as_module("covr")))
+})
+
+
 test_that("masks work inside module", {
         expect_error(mod::ule(library()))
         expect_error(mod::ule(attach()))

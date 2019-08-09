@@ -1,3 +1,28 @@
+#' Use a Package as if a Module
+#'
+#' @param package name of a package; character
+#'
+#' @return a module that contains a package's exported objects
+#' @export
+#'
+#' @examples
+#'
+#' covr <- as_module("covr")
+#' ls(covr)
+#' \dontrun{
+#' covr$codecov()
+#' }
+#'
+as_module <- function(package){
+        pkg_ns <- asNamespace(package, base.OK = FALSE)
+        res <- list2env(mget(x = ls(pkg_ns$.__NAMESPACE__.$exports),
+                             envir = pkg_ns,
+                             inherits = FALSE),
+                        parent = baseenv())
+        lockEnvironment(res, bindings = TRUE)
+        structure(res, class = "module")
+}
+
 # Masks
 
 masks <- new.env(parent = emptyenv())
