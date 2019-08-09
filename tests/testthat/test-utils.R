@@ -4,6 +4,9 @@ test_that("masks work inside module", {
         expect_error(mod::ule(detach()))
         expect_error(mod::ule(install.packages()))
         expect_error(mod::ule(update.packages()))
+        expect_error(mod::ule(use()))
+        expect_error(mod::ule(drop()))
+        expect_error(mod::ule(source()))
 })
 
 
