@@ -51,7 +51,7 @@ ule <- module
 acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
         # if module is a package name, acqurie package's export envir.
-        if (module %in% utils::installed.packages()) {
+        if (system.file("", package = package) != "") {
                 return(asNamespace(module)$.__NAMESPACE__.$exports)
         } # Otherwise....
 
