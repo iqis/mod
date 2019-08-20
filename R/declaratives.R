@@ -245,3 +245,20 @@ require <- function(package){
                envir = list(private$..link..))
         invisible()
 }
+
+
+#' Name a Module
+#'
+#' @param name the name of the module; character
+#' @return the input
+#'
+name <- function(name){
+        `if`(!exists("..module..", parent.frame(), inherits = FALSE),
+             stop("Only use mod::name() in a module."))
+
+        name <- as.character(substitute(name))
+        private <- parent.frame()
+        assign("..name..", name, envir = private)
+        invisible(name)
+}
+

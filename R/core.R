@@ -60,6 +60,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # initialize context signatures
         assign("..module..", NULL, envir = private) # an empty signature, for future use
+        assign("..name..", "", envir = private) # name of module
         assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
@@ -122,6 +123,9 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         if (expose_private) assign("..private..", private, envir = private$..public..)
 
         if (lock) lockEnvironment(private$..public.., bindings = TRUE)
+
+        attr(private$..public.., "name") <- private$..name..
+        attr(private$..public.., "path") <- private$..path..
 
         class(private$..public..) <- c("module", class(private$..public..))
 
