@@ -4,7 +4,7 @@
 \alias{thing}
 \title{Make a Thing}
 \usage{
-thing(..., dot, parent = parent.frame(), lock = FALSE,
+thing(..., dot, parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{
