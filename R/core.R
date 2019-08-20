@@ -63,10 +63,10 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
         assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
-        assign("..require..", c(), envir = private) # names of used packages
+        assign("..require..", c(), envir = private) # names of packages used in the module
         assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
-        assign("..shim..", new.env(parent = private$..link..), envir = private)
-        assign("..mask..", new.env(parent = private$..shim..), envir = private)
+        assign("..shim..", new.env(parent = private$..link..), envir = private) # bindings from this `mod` package
+        assign("..mask..", new.env(parent = private$..shim..), envir = private) # bindings that masks functions forbidden in module
         parent.env(private) <- private$..mask..
         assign("..provide..", c(), envir = private) # names of provided objects
         assign("..refer..", list(), envir = private) # names of referred modules
