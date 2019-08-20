@@ -50,11 +50,6 @@ ule <- module
 #'
 acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
-        # if module is a package name, acqurie package's export envir.
-        if (system.file("", package = package) != "") {
-                return(asNamespace(module)$.__NAMESPACE__.$exports)
-        } # Otherwise....
-
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
         if (grepl("inline_module", module) | grepl("\\.R$", module)) {} else {
