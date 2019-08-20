@@ -19,7 +19,7 @@
 #'
 #' @export
 #'
-thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){
+thing <- function(..., dot, parent = parent.frame(), lock = FALSE, expose_private = FALSE){
         res <- module(..., parent = parent, lock = FALSE, expose_private = TRUE)
         if (!missing(dot)) {
                 dot <- substitute(dot)
