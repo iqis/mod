@@ -21,4 +21,5 @@
 - __Appropriate Use of `\dontrun{}`__
   - All examples do not contain `\dontrun{}`.
   
-- 
+- __`installed.packages()`__
+  - All calls to `installed.packages()` removed 
