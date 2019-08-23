@@ -178,7 +178,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #' Load/Attach Package to Local Search Path
 #'
 #' Can only be used in a module expression.
-#' Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
+#' Emulates the effect of base::require() in its containing module, making functions and their chain of environment available.
 #'  Masks base::require() inside a module context.
 #'
 #' @param package name of the package; name or character

@@ -13,7 +13,7 @@ drop(name)
 \code{TRUE} if successful; invisible
 }
 \description{
-Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
+Detach a named module from the search path. If no argument is supplied, detach the most recently attached module.
 }
 \examples{
 

@@ -14,7 +14,7 @@ require(package)
 }
 \description{
 Can only be used in a module expression.
-Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
+Emulates the effect of base::require() in its containing module, making functions and their chain of environment available.
  Masks base::require() inside a module context.
 }
 \examples{

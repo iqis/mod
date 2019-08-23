@@ -206,7 +206,7 @@ print.module <- function(x, ...){
 
 #' Drop a Module
 #'
-#' Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
+#' Detach a named module from the search path. If no argument is supplied, detach the most recently attached module.
 #'
 #' @param  name name of the module to exit from; character
 #' @return \code{TRUE} if successful; invisible
