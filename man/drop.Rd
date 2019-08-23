@@ -9,15 +9,30 @@ drop(name)
 \arguments{
 \item{name}{name of the module to exit from; character}
 }
+\value{
+\code{TRUE} if successful; invisible
+}
 \description{
 Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
 }
 \examples{
 
-\dontrun{
+use(mod::ule({
+   a <- 1
+}), as = "my_module")
+
+use(mod::ule({
+   b <- 2
+}), as = "my_other_module")
+
+search()
+
 # by name
 drop("my_module")
-# at the last position
+
+# and at the head position
 drop()
-}
+
+search()
+
 }

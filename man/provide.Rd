@@ -2,12 +2,15 @@
 % Please edit documentation in R/declaratives.R
 \name{provide}
 \alias{provide}
-\title{Provide objects from a module}
+\title{Provide Objects from a Module}
 \usage{
 provide(...)
 }
 \arguments{
 \item{...}{name of any object to be accessible by user; name or character}
+}
+\value{
+\code{NULL}; invisible
 }
 \description{
 Can only be used inside a module expression.
@@ -16,13 +19,24 @@ If not used, every name in the module will be public.
 }
 \examples{
 
-\dontrun{
-provide(a, c)
+mod_a <- mod::ule({
+    # names included in provide() are public, however...
+    mod:::provide(var,.var, ..var)
+    # It is suggested to omit mod::: when using
+    var <- 1
+    .var <- 2
+    ..var <- 3 # objects denoted by .. prefix are always private.
+    another_var <- 4 # objects not included in provide() are also private.
+})
 
-a <- 1
-b <- 2
-c <- 3
-d <- 4
-}
+mod_b <- mod::ule({
+    # if no call to provide(), all objects are public, except...
+    var <- 1
+    .var <- 2
+    ..var <- 3 # objects denoted by .. prefix are always private.
+})
+
+ls(mod_a)
+ls(mod_b)
 
 }

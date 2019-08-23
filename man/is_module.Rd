@@ -2,13 +2,16 @@
 % Please edit documentation in R/core.R
 \name{is_module}
 \alias{is_module}
-\title{Test if the Object is a Module}
+\title{Test if an Object is a Module}
 \usage{
 is_module(x)
 }
 \arguments{
 \item{x}{An object}
 }
+\value{
+\code{TRUE} if the object is a \code{module}, \code{FALSE} otherwise
+}
 \description{
-Test if the Object is a Module
+Test if an Object is a Module
 }

@@ -18,6 +18,9 @@ thing(..., dot, parent = parent.frame(), lock = TRUE,
 
 \item{expose_private}{expose the private environment as `..private..`; logical}
 }
+\value{
+a \code{module} containing an active binding
+}
 \description{
 A "thing" is a special object made based on a module.
 Contains an active binding, defined with the `dot` argument.

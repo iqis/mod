@@ -1,6 +1,6 @@
 #' Make a Module
 #'
-#' Institute a modfule object inline or from a file.
+#' Institute a module object inline or from a file.
 #' mod::ule() is a useful shorthand for module() when this package is not attached.
 #'
 #' @param ... module expression
@@ -9,7 +9,7 @@
 #' @param lock lock the environment; logical
 #' @param expose_private expose the private environment as `..private..`; logical
 #'
-#' @return an environment containing objects from the module
+#' @return an \code{environment} of class \code{module} containing defined objects
 #'
 #' @examples
 #'
@@ -50,11 +50,6 @@ ule <- module
 #'
 acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
-        # if module is a package name, acqurie package's export envir.
-        if (module %in% utils::installed.packages()) {
-                return(asNamespace(module)$.__NAMESPACE__.$exports)
-        } # Otherwise....
-
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
         if (grepl("inline_module", module) | grepl("\\.R$", module)) {} else {
@@ -65,33 +60,42 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # initialize context signatures
         assign("..module..", NULL, envir = private) # an empty signature, for future use
+        assign("..name..", "", envir = private) # name of module
         assign("..path..", module, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
-        assign("..require..", c(), envir = private) # names of used packages
+        assign("..require..", c(), envir = private) # names of packages used in the module
         assign("..link..", new.env(parent = parent), envir = private) # an environment that has objects from used packages
-        assign("..shim..", new.env(parent = private$..link..), envir = private)
-        parent.env(private) <- private$..shim..
+        assign("..shim..", new.env(parent = private$..link..), envir = private) # bindings from this `mod` package
+        assign("..mask..", new.env(parent = private$..shim..), envir = private) # bindings that masks functions forbidden in module
+        parent.env(private) <- private$..mask..
         assign("..provide..", c(), envir = private) # names of provided objects
         assign("..refer..", list(), envir = private) # names of referred modules
         assign("..public..", new.env(parent = private), envir = private) # public env
+
+
+        # inject mask bindings to ..mask..
+        mapply(assign,
+               x = ls(masks),
+               value = mget(ls(masks), envir = masks),
+               envir = list(private$..mask..))
+        parent.env(private) <- private$..mask..
 
         # inject mod package bindings to ..shim..
         mod_ns <- asNamespace("mod")
         mapply(assign,
                x = ls(mod_ns),
-               value = mget(ls(mod_ns), envir = asNamespace("mod")),
+               value = mget(ls(mod_ns), envir = mod_ns),
                envir = list(private$..shim..))
-        parent.env(private) <- private$..shim.. # attach private to ..shim..
 
-        # ..public.. => ..private.. => ..shim.. => ..link.. => ..parent..
+        # ..public.. => ..private.. => ..mask.. => ..shim.. => ..link.. => ..parent..
 
         # source everything from file to private
         sys.source(file = module, envir = private)
 
-        # ====== Provide ======
+        # ====== Do Provide ======
         # provide the variables specified in ..provide..
-        # if ..provide is empty, provide everything except for `..` prefixed private objs
+        # if ..provide.. is empty, provide everything except for `..` prefixed private objs
 
         # list of objects to be placed in public, from ..provide..;
         obj_name_list <- if (length(private$..provide..) != 0) {
@@ -120,6 +124,9 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 
         if (lock) lockEnvironment(private$..public.., bindings = TRUE)
 
+        attr(private$..public.., "name") <- private$..name..
+        attr(private$..public.., "path") <- private$..path..
+
         class(private$..public..) <- c("module", class(private$..public..))
 
         return(private$..public..)
@@ -129,15 +136,19 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 #' Load/Attach a Module to the Search Path
 #'
 #' @inheritParams module
-#' @param as name when attached to search path with `use()`; character
+#' @param as name when attached to search; character
+#' @return \code{TRUE} if successful; invisible
 #'
 #' @examples
-#' \dontrun{
+#'
+#' module_path <- system.file("misc", "example_module.R", package = "mod")
+#' example_module <- acquire(module_path)
+#'
 #' # Attach module object to search path
 #' use(example_module)
 #' # or directly from file
 #' use(module_path, "example_module")
-#' }
+#'
 #' @export
 #'
 use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
@@ -159,12 +170,14 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
         get("attach", envir = .BaseNamespaceEnv, mode = "function")(
                 what = env, name = name
         )
+        invisible(TRUE)
 }
 
 
-#' Test if the Object is a Module
+#' Test if an Object is a Module
 #'
 #' @param x An object
+#' @return \code{TRUE} if the object is a \code{module}, \code{FALSE} otherwise
 #' @export
 is_module <- function(x) {
         inherits(x, "module")
@@ -176,7 +189,7 @@ is_module <- function(x) {
 #' @param x an object
 #' @param ... dot-dot-dot, ignored
 #'
-#' @return the object itself
+#' @return the object itself; invisible
 #' @export
 #'
 print.module <- function(x, ...){
@@ -196,14 +209,28 @@ print.module <- function(x, ...){
 #' Detach a named module from the search path. If no arguments is supplied, detach the most recently attached module.
 #'
 #' @param  name name of the module to exit from; character
+#' @return \code{TRUE} if successful; invisible
+#'
 #' @examples
 #'
-#' \dontrun{
+#' use(mod::ule({
+#'    a <- 1
+#' }), as = "my_module")
+#'
+#' use(mod::ule({
+#'    b <- 2
+#' }), as = "my_other_module")
+#'
+#' search()
+#'
 #' # by name
 #' drop("my_module")
-#' # at the last position
+#'
+#' # and at the head position
 #' drop()
-#' }
+#'
+#' search()
+#'
 #' @export
 #'
 drop <- function(name) {
@@ -217,5 +244,6 @@ drop <- function(name) {
         if (is.na(name)) stop("no module attached in search path")
 
         detach(name = name, character.only = TRUE)
+        invisible(TRUE)
 }
 

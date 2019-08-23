@@ -73,3 +73,16 @@ test_that("refer() prefixes right with `.`", {
         expect_identical(sort(ls(target)),
                          sort(c("one.number", "one.pinyin", "two.number", "two.pinyin")))
 })
+
+named_mod_1 <- mod::ule({
+        name("wow")
+})
+
+named_mod_2 <- mod::ule({
+        name(wow)
+})
+
+test_that("name() works", {
+        expect_identical(attr(named_mod_1, "name"), attr(named_mod_2, "name"), "wow")
+
+})

@@ -252,10 +252,10 @@ Some may wonder the choice of terms. Why `refer()` and `provide()`? Further, why
 
 #### Locked
 
-It is impossible to either change the value of a variable or add a new variable to a module. A private variable's value can only be changed by a function defined within the module, as shown previously.
+If a module is locked, it is impossible to either change the value of a variable or add a new variable to a module. A private variable's value can only be changed by a function defined within the module, as shown previously.
 ```{r error = TRUE}
-my$a <- 888
-my$c <- 666
+my$a <- 1
+my$new_var <- 1
 ```
 
 #### Hidden Variables

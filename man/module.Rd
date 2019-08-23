@@ -27,10 +27,10 @@ acquire(module, parent = baseenv(), lock = TRUE,
 \item{module}{module object, or path to a module file}
 }
 \value{
-an environment containing objects from the module
+an \code{environment} of class \code{module} containing defined objects
 }
 \description{
-Institute a modfule object inline or from a file.
+Institute a module object inline or from a file.
 mod::ule() is a useful shorthand for module() when this package is not attached.
 }
 \examples{

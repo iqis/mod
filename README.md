@@ -327,15 +327,16 @@ from Racket; Both languages are R’s close relatives.
 
 #### Locked
 
-It is impossible to either change the value of a variable or add a new
-variable to a module. A private variable’s value can only be changed by
-a function defined within the module, as shown previously.
+If a module is locked, it is impossible to either change the value of a
+variable or add a new variable to a module. A private variable’s value
+can only be changed by a function defined within the module, as shown
+previously.
 
 ``` r
-my$a <- 888
-#> Error in my$a <- 888: cannot change value of locked binding for 'a'
-my$c <- 666
-#> Error in my$c <- 666: cannot add bindings to a locked environment
+my$a <- 1
+#> Error in my$a <- 1: cannot change value of locked binding for 'a'
+my$new_var <- 1
+#> Error in my$new_var <- 1: cannot add bindings to a locked environment
 ```
 
 #### Hidden Variables

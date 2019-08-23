@@ -2,15 +2,29 @@
 % Please edit documentation in R/declaratives.R
 \name{require}
 \alias{require}
-\title{Load/Attach package to local search path}
+\title{Load/Attach Package to Local Search Path}
 \usage{
 require(package)
 }
 \arguments{
 \item{package}{name of the package; name or character}
 }
+\value{
+\code{NULL}; invisible
+}
 \description{
 Can only be used in a module expression.
 Emulates the effect of base::require() in its containing module, making functions and their chain of environment availab.e
  Masks base::require() inside a module context.
+}
+\examples{
+
+mod_tcl <- mod::ule({
+    mod:::require(tcltk)
+    # It is suggested to omit mod::: when using
+    f <- tcl
+})
+
+identical(mod_tcl$f, tcltk::tcl)
+
 }

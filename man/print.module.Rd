@@ -12,7 +12,7 @@
 \item{...}{dot-dot-dot, ignored}
 }
 \value{
-the object itself
+the object itself; invisible
 }
 \description{
 Print a Module
