@@ -18,28 +18,39 @@ status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/pa
 
 <!-- badges: end -->
 
-The `mod` package is a lightweight module system; It provides a simple
-way to structure program and data into modules for programming and
-interactive use, without the formalities of R packages.
+The `mod` package provides a simple way to structure program and data
+into flexible and independent units for programming and interactive use.
+Modules indtroduced by the `mod` package offer the benefit of modules
+from other languages, while keeping an authentic R flavor.
 
 ## Why?
 
-This is a good question.
+Programs need to be oraganized into units.
 
-As units for code organization in R, packages are very robust. However,
-they are formal and compliated; they require additional knowledge to R
-and must be installed in the local library. Scripts, as widely
-understood, are simplistic and brittle, unsuitable for building tools
-and may conflict with each other.
+A package is a very robust solution, but is formal and compliated;
+packages require additional knowledge to R and must be installed in the
+local library by `install.packages()`. On the other hand, simple R
+scripts, often executed by `source()`, are brittle and may create
+namespace conflict; They are unsuitable for building tools.
 
-Situated between packages and scripts, modules feature characteristics
-that are somewhat similar to those from other languages. They can be
-defined either inline with other codes or in a standalone file, and can
-be used in the user’s working environment, packages, or other modules.
-
-Let’s see.
+Modules fills the hollow middleground by allowing programs to live
+separately and work together at the same time. Each module has its own
+scope, host is own objects, an can attach different packages without
+interefering with each other or the global search path. They can be
+created either inline with other programs or from a standalone file, and
+can be used in the user’s working environment, as a part of a package,
+or in other modules.
 
 ## Installation
+
+Install the published version from
+[CRAN](https://CRAN.R-project.org/package=mod) with:
+
+``` r
+install.packages("mod")
+```
+
+or,
 
 Install the development version from [GitHub](https://github.com/) with:
 
@@ -50,9 +61,9 @@ devtools::install_github("iqis/mod")
 ## Use
 
 The `mod` package is designed to be used either attached or unattached
-to your working environment.
+to your search path.
 
-If you wish to attach the package:
+The following demonstrations show the package attached:
 
 ``` r
 require(mod)
@@ -66,16 +77,19 @@ require(mod)
 
 ## Vocabulary
 
+The `mod` package has a simple UI:
+
   - Make a module:
       - Inline:`module()`/`mod::ule()`
       - From a file: `acquire()`
   - The search path:
-      - Attach a module to: `use()`
-      - Detach a module from: `drop()`
+      - Attach a module: `use()`
+      - Detach a module: `drop()`
   - Inside a module:
-      - Declare public variables within the module: `provide()`
+      - Declare public objects: `provide()`
       - Attach a package locally: `require()`
-      - Import variables from another module: `refer()`
+      - Copy objects from another module: `refer()`
+      - Name the module: `name()`
 
 ## Examples
 
@@ -89,14 +103,14 @@ my <- module({
 })
 ```
 
-The resulting module contains the variables defined within.
+The resulting module contains the objects defined within.
 
 ``` r
 ls(my)
 #> [1] "a" "b" "f"
 ```
 
-Subset the module.
+Subset the module to access its objects.
 
 ``` r
 my$a
@@ -107,7 +121,7 @@ my$f(my$a, my$b)
 #> [1] 3
 ```
 
-Use the `with()` to spare qualification.
+Use `with()` to aceess the objects with their bare names.
 
 ``` r
 with(my, 
@@ -123,8 +137,7 @@ Just like a package, a module can be attached to the search path.
 use(my)
 ```
 
-The `my` module is attached to the search path as “module:my”, before
-other attached packages.
+The `my` module is attached to the search path as “module:my”.
 
 ``` r
 search()
@@ -134,7 +147,7 @@ search()
 #> [10] "Autoloads"         "package:base"
 ```
 
-And you can use the variables inside directly, just like those from a
+And you can use the objects inside directly, just like those from a
 package.
 
 ``` r
@@ -148,9 +161,11 @@ Detach the module from the search path when done, if desired.
 drop("my")
 ```
 
-### Make Variables Available to another Module
+### Make objects Available to another Module
 
-Use `refer()` to “import” variables from another module.
+Use `refer()` to “copy” objects from another module. In the following
+example, we create a new module `my_other` that uses the objects from
+`my`, which is previsouly defined.
 
 ``` r
 ls(my)
@@ -158,18 +173,46 @@ ls(my)
 
 my_other<- module({
         refer(my)
-        
         c <- 4
         d <- 5
+        f <- function() print("foo") 
 })
 
 ls(my_other)
 #> [1] "a" "b" "c" "d" "f"
+my_other$f()
+#> [1] "foo"
+```
+
+In addition to its own objects, `my_other` module has all objects from
+`my`, except `f`: because `my_other` module also has a `f` object, and
+replaces the `f` from `my` module.
+
+We can re-define `my_other` and prepend objects from `my` with *my*.
+This way, both `f`s are available.
+
+``` r
+my_other <- module({
+        refer(my, prefix = .)
+        c <- 4
+        d <- 5
+        f <- function() print("foo") 
+})
+
+ls(my_other)
+#> [1] "c"    "d"    "f"    "my.a" "my.b" "my.f"
+
+my_other$my.f(1, 2)
+#> [1] 3
+my_other$f()
+#> [1] "foo"
 ```
 
 ### Use a package
 
-The `mod::require()` makes packages available for use in a module.
+The `mod` package provides a `require()` function. `mod:::require()`
+works in the same manner as do `base::require()`, but makes a packages
+available for use in its containing module only.
 
 ``` r
 mpg_analysis <- module({
@@ -185,118 +228,15 @@ mpg_analysis$plot
 #> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
-Meanwhile, your working environment’s search path remain unaffected:
-
-``` r
-search()
-#>  [1] ".GlobalEnv"        "package:mod"       "package:stats"    
-#>  [4] "package:graphics"  "package:grDevices" "package:utils"    
-#>  [7] "package:datasets"  "package:methods"   "Autoloads"        
-#> [10] "package:base"
-```
+Meanwhile, the global search path remain unaffected, not containing the
+`ggplot2` package:
 
 ``` r
 "package:ggplot2" %in% search()
 #> [1] FALSE
 ```
-
-### Private Variables
-
-A variable is *private* if its name starts with `..`.
-
-``` r
-room_101 <- module({
-        ..diary <- "Dear Diary: I used SPSS today..."
-        get_diary <- function(){
-                ..diary
-        }
-})
-```
-
-A private variable cannot be seen or touched. There is no way to access
-the `..diary` from the outside, except by a function defined within the
-module. This can be useful if you want to shield some information from
-the user or other programs.
-
-``` r
-ls(room_101)
-#> [1] "get_diary"
-room_101$..diary
-#> NULL
-room_101$get_diary()
-#> [1] "Dear Diary: I used SPSS today..."
-```
-
-Another way is using `provide()` function to declair public variables,
-while all others become private.
-
-``` r
-room_102 <- module({
-        provide(open_info, get_classified)
-        
-        open_info <- "I am a data scientist."
-        classified_info <- "I can't get the database driver to work."
-        get_classified <- function(){
-                classified_info
-        }
-})
-
-ls(room_102)
-#> [1] "get_classified" "open_info"
-room_102$open_info
-#> [1] "I am a data scientist."
-room_102$classified_info
-#> NULL
-room_102$get_classified()
-#> [1] "I can't get the database driver to work."
-```
-
-### Simlate OOP
-
-The below example simulates one essential behavior of an object in
-Object-oriented Programming by manipulating the state of `..count`.
-
-``` r
-counter <- module({
-        ..count <- 0
-        add_one <- function(){
-                #Its necessary to use `<<-` operator, as ..count lives in the parent frame.
-                ..count <<- ..count + 1 
-        }
-        reset <- function(){
-                ..count <<- 0
-        }
-        get_count <- function(){
-                ..count
-        }
-})
-```
-
-A variable must be private to be mutable like `..count`.
-
-The following demonstration should be self-explanatory:
-
-``` r
-counter$get_count() 
-#> [1] 0
-
-counter$add_one() 
-counter$add_one() 
-
-counter$get_count() 
-#> [1] 2
-
-counter$reset()
-
-counter$get_count()
-#> [1] 0
-```
-
-It is imperative that `mod` be only adopted in the simplest cases. If
-full-featured OOP is desired, use
-[`R6`](https://CRAN.R-project.org/package=R6).
 
 ## Notes
 
@@ -316,9 +256,10 @@ is.environment(my)
 
 Some may wonder the choice of terms. Why `refer()` and `provide()`?
 Further, why not `import()` and `export()`? This is because we feel
-`import()` and `export()` are used too commonly, in both R, and other
-popular languages with varying meanings. The `reticulate` package also
-uses `import()`. To avoid confusion, we decided to introduce some
+*import* and *export* are used too commonly, in both R, and other
+popular languages with varying meanings. The popular
+[`reticulate`](https://CRAN.R-project.org/package=reticulate) package
+also uses `import()`. To avoid confusion, we decided to introduce some
 synonyms. With analogous semantics,
 [`refer()`](https://clojuredocs.org/clojure.core/refer) is borrowed from
 Clojure, while
@@ -327,10 +268,8 @@ from Racket; Both languages are R’s close relatives.
 
 #### Locked
 
-If a module is locked, it is impossible to either change the value of a
-variable or add a new variable to a module. A private variable’s value
-can only be changed by a function defined within the module, as shown
-previously.
+A module is locked by default. It is impossible to either change the
+value of a object or add a new object to a module.
 
 ``` r
 my$a <- 1
@@ -339,9 +278,9 @@ my$new_var <- 1
 #> Error in my$new_var <- 1: cannot add bindings to a locked environment
 ```
 
-#### Hidden Variables
+#### Hidden Objects
 
-As a general R rule, names that start with `.` define hidden variables.
+As a general R rule, names that start with `.` define hidden objects.
 
 ``` r
 my_yet_another <- module({
@@ -349,7 +288,7 @@ my_yet_another <- module({
 })
 ```
 
-Hidden variables are not returned by `ls()`, unless specified.
+Hidden objects are not returned by `ls()`, unless specified.
 
 ``` r
 ls(my_yet_another)
@@ -358,7 +297,7 @@ ls(my_yet_another, all.names = TRUE)
 #> [1] ".var"
 ```
 
-Nonetheless, in a module, they are treated the same as public variables.
+Nonetheless, in a module, they are treated the same as public objects.
 
 ``` r
 my_yet_another$.var
@@ -371,7 +310,7 @@ my_yet_another$.var
 module_path <- system.file("misc/example_module.R", package = "mod")
 ```
 
-To load and assign to variable:
+To load and assign to object:
 
 ``` r
 example_module <- acquire(module_path)
@@ -401,26 +340,36 @@ e(100)
 
 #### Modules and Packages
 
-It *could* be confusing how modules and packages live together. To
-clarify:
+As it could be confusing how to deal with modules and packages, the
+following clarification is made:
 
   - Attach a Package
-      - Everywhere: `require()`
+      - To the local “search path”, at module context: `require()`
+      - To the global search path, at global environment: `require()`
   - Attach a Module
-      - To another module: not available
+      - To another module’s local “search path”: not available\*
       - To the global search path: `use()`
-  - Copy Variables from a Module
+  - Copy Objects from a Module
       - To another module: `refer()`
-      - To the working directory: not available
-  - Use Modules inside a Package
-      - Yes, the package must `Depends` on `mod` package
+      - To the global environment: not available\*\*
+  - Use Modules inside a Package?
+      - Yes, the package must `Depends` or `Imports` the `mod` package
+
+\*: Modules cannot be attached to another module’s “seach path”. Use
+`refer()` instead to make clearly visible objects in the module context.
+\*\*: Objects cannot be batch-copied from a module to the global
+environment, use `use()` to attach the module to the global search path
+in order to use them directly.
+
+These two features seek to avoid one very important problem `mod`
+packages intends to solve: conflicting names.
 
 #### Unattached
 
 As aforementioned, the package is designed to be usable both attached
 and unattached.
 
-If you use the package unattached, you must always qualify the variable
+If you use the package unattached, you must always qualify the object
 name with `::`, such as `mod::ule()`, a shorthand for `mod::module()`.
 However, while inside a module, the `mod` package is always available,
 so you do not need to use `::`. Note that in the following example,
@@ -441,3 +390,5 @@ mod::use(my_mind)
 good_thought
 #> [1] "I love working on this package!"
 ```
+
+##
