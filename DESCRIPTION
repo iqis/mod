@@ -3,7 +3,8 @@ Type: Package
 Title: Lightweight and Self-Contained Modules for Code Organization
 Version: 0.1.4.9000
 Authors@R: c(
-  person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre")),
+  person("Siqi", "Zhang", email = "iqis.gnahz@gmail.com", role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0003-2617-5776")),
   person()
   )
 Description: Creates modules inline or from a file. Modules can contain any R object and be nested. Each module have their own scope and package "search path" that does not interfere with one another or the user's working environment.

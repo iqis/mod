@@ -50,8 +50,6 @@ Install the published version from
 install.packages("mod")
 ```
 
-or,
-
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -76,4 +74,5 @@ The `mod` package has a simple UI:
 
 ## Documentation
 
-  -
+  - [Introduction to
+    Modules](https://iqis.github.io/mod/articles/introduction.html)

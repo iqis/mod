@@ -41,7 +41,6 @@ Install the published version from [CRAN](https://CRAN.R-project.org/package=mod
 ```{r eval = FALSE}
 install.packages("mod")
 ```
-or,
 
 Install the development version from [GitHub](https://github.com/) with:
 
@@ -69,4 +68,4 @@ The `mod` package has a simple UI:
 
 ## Documentation
 
-- 
+- [Introduction to Modules](https://iqis.github.io/mod/articles/introduction.html)
