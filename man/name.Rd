@@ -15,3 +15,11 @@ the input
 \description{
 Name a Module
 }
+\examples{
+
+mod::ule({
+    name("my")
+    # ...
+})
+
+}

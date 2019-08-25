@@ -252,6 +252,13 @@ require <- function(package){
 #' @param name the name of the module; character
 #' @return the input
 #'
+#' @examples
+#'
+#' mod::ule({
+#'     name("my")
+#'     # ...
+#' })
+#'
 name <- function(name){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use mod::name() in a module."))
