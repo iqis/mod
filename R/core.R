@@ -135,6 +135,8 @@ source_module <- function(module, parent = baseenv(), lock = TRUE, expose_privat
 
 #' Attach a Module to the Search Path
 #'
+#' If the module as a name, defined by name(), it will always be used for the search path.
+#'
 #' @inheritParams module
 #' @param as name when attached to search; character
 #' @return \code{TRUE} if successful; invisible
@@ -167,7 +169,7 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
 
         # if package has name(), always use name
         module_name <- attr(env, "name")
-        as <- `if`(nchar(module_name) > 0, module_name)
+        as <- `if`(nchar(module_name) > 0, module_name, as)
 
         name <- paste0("module:",as)
         if (name %in% search()) drop(as)
