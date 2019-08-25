@@ -62,7 +62,7 @@ The `mod` package has a simple UI:
 
   - Make a module:
       - Inline:`module()`/`mod::ule()`
-      - From a file: `acquire()`
+      - From a file: `source_module()`
   - The search path:
       - Attach a module: `use()`
       - Detach a module: `drop()`
