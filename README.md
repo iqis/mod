@@ -10,11 +10,12 @@ status](https://ci.appveyor.com/api/projects/status/github/iqis/mod?branch=maste
 [![Travis build
 status](https://travis-ci.org/iqis/mod.svg?branch=master)](https://travis-ci.org/iqis/mod)
 [![codecov](https://codecov.io/gh/iqis/mod/branch/master/graph/badge.svg)](https://codecov.io/gh/iqis/mod)
-[![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/package=mod)
-![CRAN License](https://img.shields.io/cran/l/mod)
+[![CRAN
+License](https://img.shields.io/cran/l/mod)](https://cran.r-project.org/web/licenses/GPL-3)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 <!-- badges: end -->
 
@@ -22,6 +23,8 @@ The `mod` package provides a simple way to structure program and data
 into flexible and independent units for programming and interactive use.
 Modules indtroduced by the `mod` package offer the benefit of modules
 from other languages, while keeping an authentic R flavor.
+
+See package [website](https://iqis.github.io/mod).
 
 ## Why?
 
