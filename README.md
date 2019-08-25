@@ -16,7 +16,6 @@ status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/pa
 License](https://img.shields.io/cran/l/mod)](https://cran.r-project.org/web/licenses/GPL-3)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-
 <!-- badges: end -->
 
 The `mod` package provides a simple way to structure program and data
