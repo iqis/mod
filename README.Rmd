@@ -25,8 +25,6 @@ knitr::opts_chunk$set(
 
 The `mod` package provides a simple way to structure program and data into flexible and independent units for programming and interactive use. Modules indtroduced by the `mod` package offer the benefit of modules from other languages, while keeping an authentic R flavor.
 
-See package [website](https://iqis.github.io/mod).
-
 ## Why?
 Programs need to be oraganized into units. 
 
@@ -68,5 +66,6 @@ The `mod` package has a simple UI:
   - Name the module: `name()`
 
 ## Documentation
+`mod` [website](https://iqis.github.io/mod)
 
 - [Introduction to Modules](https://iqis.github.io/mod/articles/introduction.html)
