@@ -16,9 +16,10 @@ as_module <- function(package){
         pkg_ns <- asNamespace(package, base.OK = FALSE)
         res <- list2env(mget(x = ls(pkg_ns$.__NAMESPACE__.$exports),
                              envir = pkg_ns,
-                             inherits = FALSE),
+                             inherits = TRUE),
                         parent = baseenv())
         lockEnvironment(res, bindings = TRUE)
+        attr(res, "name") <- package
         structure(res, class = "module")
 }
 
