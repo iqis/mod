@@ -27,7 +27,7 @@ Attach a Module to the Search Path
 \examples{
 
 module_path <- system.file("misc", "example_module.R", package = "mod")
-example_module <- acquire(module_path)
+example_module <- source_module(module_path)
 
 # Attach module object to search path
 use(example_module)

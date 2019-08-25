@@ -130,7 +130,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 <span class='fu'>ule</span>(<span class='no'>...</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>expose_private</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>acquire</span>(<span class='no'>module</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='fu'>source_module</span>(<span class='no'>module</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>expose_private</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -167,7 +167,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
     <pre class="examples"><div class='input'>
 <span class='co'># from file</span>
 <span class='no'>module_path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"misc"</span>, <span class='st'>"example_module.R"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"mod"</span>)
-<span class='no'>example_module</span> <span class='kw'>&lt;-</span> <span class='fu'>acquire</span>(<span class='no'>module_path</span>)
+<span class='no'>example_module</span> <span class='kw'>&lt;-</span> <span class='fu'>source_module</span>(<span class='no'>module_path</span>)
 
 <span class='no'>example_module</span>$<span class='fu'>e</span>(<span class='fl'>123</span>)</div><div class='output co'>#&gt; [1] 129</div><div class='input'>
 <span class='co'># inline</span>
@@ -181,7 +181,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 #&gt; {
 #&gt;     .a
 #&gt; }
-#&gt; &lt;environment: 0x00000000200e5c70&gt;</div><div class='input'>
+#&gt; &lt;environment: 0x000000002b378008&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

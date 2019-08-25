@@ -15,7 +15,7 @@
 #'
 #' # from file
 #' module_path <- system.file("misc", "example_module.R", package = "mod")
-#' example_module <- acquire(module_path)
+#' example_module <- source_module(module_path)
 #'
 #' example_module$e(123)
 #'
@@ -36,7 +36,7 @@ module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = F
         temp_file <- tempfile("inline_module")
         write(code, temp_file)
 
-        acquire(temp_file, parent = parent, lock = lock, expose_private = expose_private)
+        source_module(temp_file, parent = parent, lock = lock, expose_private = expose_private)
 }
 
 #' @rdname module
@@ -48,7 +48,7 @@ ule <- module
 #' @rdname module
 #' @export
 #'
-acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
+source_module <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
@@ -142,7 +142,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 #' @examples
 #'
 #' module_path <- system.file("misc", "example_module.R", package = "mod")
-#' example_module <- acquire(module_path)
+#' example_module <- source_module(module_path)
 #'
 #' # Attach module object to search path
 #' use(example_module)
@@ -156,7 +156,7 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- acquire(module = module, parent = parent, lock = lock, expose_private = expose_private)
+                env <- source_module(module = module, parent = parent, lock = lock, expose_private = expose_private)
                 bare_name <- function(path){
                         gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
                 }

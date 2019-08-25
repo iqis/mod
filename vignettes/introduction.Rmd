@@ -167,7 +167,7 @@ Meanwhile, the global search path remain unaffected, not containing the `ggplot2
 
 Modules live any any other R object.
 
-You do things the R way. For example, `acquire()` and `module()` only returns a module object; It is up to you to put it into your working environemnt with `<-`.d 
+You do things the R way. For example, `source_module()` and `module()` only returns a module object; It is up to you to put it into your working environemnt with `<-`.d 
 
 
     
@@ -262,7 +262,7 @@ module_path <- system.file("misc/example_module.R", package = "mod")
 
 To load and assign to object: 
 ```{r}
-example_module <- acquire(module_path)
+example_module <- source_module(module_path)
 ls(example_module)
 example_module$a
 example_module$d()

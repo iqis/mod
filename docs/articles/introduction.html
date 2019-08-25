@@ -226,7 +226,7 @@
 <span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p><code><a href="../reference/module.html">mod::ule</a></code> is simple, lightweight and staright-forward. It is plain R and contains zero GMO.</p>
 <p>Modules live any any other R object.</p>
-<p>You do things the R way. For example, <code><a href="../reference/module.html">acquire()</a></code> and <code><a href="../reference/module.html">module()</a></code> only returns a module object; It is up to you to put it into your working environemnt with <code>&lt;-</code>.d</p>
+<p>You do things the R way. For example, <code><a href="../reference/module.html">source_module()</a></code> and <code><a href="../reference/module.html">module()</a></code> only returns a module object; It is up to you to put it into your working environemnt with <code>&lt;-</code>.d</p>
 </div>
 <div id="simulate-oop" class="section level3">
 <h3 class="hasAnchor">
@@ -315,7 +315,7 @@
 <a href="#loadattach-from-file" class="anchor"></a>Load/Attach from File</h4>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>module_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"misc/example_module.R"</span>, <span class="dt">package =</span> <span class="st">"mod"</span>)</span></code></pre></div>
 <p>To load and assign to object:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>example_module &lt;-<span class="st"> </span><span class="kw"><a href="../reference/module.html">acquire</a></span>(module_path)</span>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>example_module &lt;-<span class="st"> </span><span class="kw"><a href="../reference/module.html">source_module</a></span>(module_path)</span>
 <span id="cb25-2"><a href="#cb25-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ls">ls</a></span>(example_module)</span>
 <span id="cb25-3"><a href="#cb25-3"></a><span class="co">#&gt; [1] "a" "d" "e"</span></span>
 <span id="cb25-4"><a href="#cb25-4"></a>example_module<span class="op">$</span>a</span>
