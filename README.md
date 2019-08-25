@@ -14,7 +14,7 @@ status](https://travis-ci.org/iqis/mod.svg?branch=master)](https://travis-ci.org
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/mod)](https://cran.r-project.org/package=mod)
-![GitHub License](https://img.shields.io/github/license/iqis/mod)
+![CRAN License](https://img.shields.io/cran/l/mod)
 
 <!-- badges: end -->
 
