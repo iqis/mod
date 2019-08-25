@@ -133,7 +133,7 @@ acquire <- function(module, parent = baseenv(), lock = TRUE, expose_private = FA
 }
 
 
-#' Load/Attach a Module to the Search Path
+#' Attach a Module to the Search Path
 #'
 #' @inheritParams module
 #' @param as name when attached to search; character
@@ -204,9 +204,9 @@ print.module <- function(x, ...){
         invisible(x)
 }
 
-#' Drop a Module
+#' Detach a Module from the Search Path
 #'
-#' Detach a named module from the search path. If no argument is supplied, detach the most recently attached module.
+#' If no argument is supplied, detach the most recently attached module.
 #'
 #' @param  name name of the module to exit from; character
 #' @return \code{TRUE} if successful; invisible

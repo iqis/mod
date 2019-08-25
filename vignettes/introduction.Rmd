@@ -148,7 +148,7 @@ room_102$get_classified()
     
 ### Use a package
 The `mod` package provides a `require()` function. `mod:::require()` works in the same manner as do `base::require()`, but makes a packages available for use in its containing module only.
-```{r}
+```{r eval = FALSE}
 mpg_analysis <- module({
     require(ggplot2)
     plot <- qplot(mtcars$mpg)    

@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{drop}
 \alias{drop}
-\title{Drop a Module}
+\title{Detach a Module from the Search Path}
 \usage{
 drop(name)
 }
@@ -13,7 +13,7 @@ drop(name)
 \code{TRUE} if successful; invisible
 }
 \description{
-Detach a named module from the search path. If no argument is supplied, detach the most recently attached module.
+If no argument is supplied, detach the most recently attached module.
 }
 \examples{
 

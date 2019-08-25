@@ -1,1 +1,19 @@
 destination: docs
+reference:
+- title: Make a Module
+  desc:
+  contents:
+  - module
+  - ule
+  - acquire
+- title: Attach/Detach to Search Path
+  contents:
+  - use
+  - drop
+- title: Make Declarations inside a Module
+  desc: Available inside a module context only
+  contents:
+  - provide
+  - refer
+  - require
+  - name

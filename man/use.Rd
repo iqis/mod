@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{use}
 \alias{use}
-\title{Load/Attach a Module to the Search Path}
+\title{Attach a Module to the Search Path}
 \usage{
 use(module, as, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
@@ -22,7 +22,7 @@ use(module, as, parent = baseenv(), lock = TRUE,
 \code{TRUE} if successful; invisible
 }
 \description{
-Load/Attach a Module to the Search Path
+Attach a Module to the Search Path
 }
 \examples{
 
