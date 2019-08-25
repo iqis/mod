@@ -165,6 +165,10 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
                 stop("requires module object or path to R file")
         }
 
+        # if package has name(), always use name
+        module_name <- attr(env, "name")
+        as <- `if`(nchar(module_name) > 0, module_name)
+
         name <- paste0("module:",as)
         if (name %in% search()) drop(as)
         get("attach", envir = .BaseNamespaceEnv, mode = "function")(
