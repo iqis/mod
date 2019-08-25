@@ -8,7 +8,7 @@ use(module, as, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{
-\item{module}{module object, or path to a module file}
+\item{module}{a module object, or path to a module file}
 
 \item{as}{name when attached to search; character}
 

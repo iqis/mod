@@ -133,7 +133,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 <span class='fu'>ule</span>(<span class='no'>...</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>expose_private</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>source_module</span>(<span class='no'>module</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='fu'>source_module</span>(<span class='no'>path</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>expose_private</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -156,8 +156,8 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
       <td><p>expose the private environment as `..private..`; logical</p></td>
     </tr>
     <tr>
-      <th>module</th>
-      <td><p>module object, or path to a module file</p></td>
+      <th>path</th>
+      <td><p>path to a module file</p></td>
     </tr>
     </table>
     
@@ -184,7 +184,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 #&gt; {
 #&gt;     .a
 #&gt; }
-#&gt; &lt;environment: 0x000000002b513668&gt;</div><div class='input'>
+#&gt; &lt;environment: 0x000000002b512fa8&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

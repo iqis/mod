@@ -12,7 +12,7 @@ module(..., parent = parent.frame(), lock = TRUE,
 ule(..., parent = parent.frame(), lock = TRUE,
   expose_private = FALSE)
 
-source_module(module, parent = baseenv(), lock = TRUE,
+source_module(path, parent = baseenv(), lock = TRUE,
   expose_private = FALSE)
 }
 \arguments{
@@ -24,7 +24,7 @@ source_module(module, parent = baseenv(), lock = TRUE,
 
 \item{expose_private}{expose the private environment as `..private..`; logical}
 
-\item{module}{module object, or path to a module file}
+\item{path}{path to a module file}
 }
 \value{
 an \code{environment} of class \code{module} containing defined objects

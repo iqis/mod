@@ -4,7 +4,7 @@
 #' mod::ule() is a useful shorthand for module() when this package is not attached.
 #'
 #' @param ... module expression
-#' @param module module object, or path to a module file
+#' @param path path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment; logical
 #' @param expose_private expose the private environment as `..private..`; logical
@@ -48,12 +48,12 @@ ule <- module
 #' @rdname module
 #' @export
 #'
-source_module <- function(module, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
+source_module <- function(path, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
-        if (grepl("inline_module", module) | grepl("\\.R$", module)) {} else {
-                module <- paste0(module, ".R")
+        if (grepl("inline_module", path) | grepl("\\.R$", path)) {} else {
+                path <- paste0(path, ".R")
         }
         # make a new environment, private. This envir has everything inside the module
         private <- new.env(parent = parent)
@@ -61,7 +61,7 @@ source_module <- function(module, parent = baseenv(), lock = TRUE, expose_privat
         # initialize context signatures
         assign("..module..", NULL, envir = private) # an empty signature, for future use
         assign("..name..", "", envir = private) # name of module
-        assign("..path..", module, envir = private) # file path of module
+        assign("..path..", path, envir = private) # file path of module
         assign("..parent..", parent, envir = private) # specified parent env
         assign("..search..", function() search_path_envirs(parent.env(private)), envir = private) # private's search path
         assign("..require..", c(), envir = private) # names of packages used in the module
@@ -91,7 +91,7 @@ source_module <- function(module, parent = baseenv(), lock = TRUE, expose_privat
         # ..public.. => ..private.. => ..mask.. => ..shim.. => ..link.. => ..parent..
 
         # source everything from file to private
-        sys.source(file = module, envir = private)
+        sys.source(file = path, envir = private)
 
         # Do Provide
         # provide the variables specified in ..provide..
@@ -138,6 +138,7 @@ source_module <- function(module, parent = baseenv(), lock = TRUE, expose_privat
 #' If the module as a name, defined by name(), it will always be used for the search path.
 #'
 #' @inheritParams module
+#' @param module a module object, or path to a module file
 #' @param as name when attached to search; character
 #' @return \code{TRUE} if successful; invisible
 #'
@@ -158,7 +159,7 @@ use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FA
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- source_module(module = module, parent = parent, lock = lock, expose_private = expose_private)
+                env <- source_module(path = module, parent = parent, lock = lock, expose_private = expose_private)
                 bare_name <- function(path){
                         gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
                 }
