@@ -93,7 +93,7 @@ source_module <- function(module, parent = baseenv(), lock = TRUE, expose_privat
         # source everything from file to private
         sys.source(file = module, envir = private)
 
-        # ====== Do Provide ======
+        # Do Provide
         # provide the variables specified in ..provide..
         # if ..provide.. is empty, provide everything except for `..` prefixed private objs
 
@@ -193,7 +193,11 @@ is_module <- function(x) {
 #' @export
 #'
 print.module <- function(x, ...){
-        cat("<module>", "\n")
+        module_name <- attr(x, "name")
+        cat(paste0("<module",
+                   `if`(nchar(module_name) > 0, paste0(":", module_name)),
+                   ">"),
+            "\n")
 
         obj_name_list <- ls(x, all.names = TRUE)
         obj_class_list <- lapply(obj_name_list, function(y) class(get(y, envir = x)))
