@@ -19,14 +19,15 @@
 #'
 #' @export
 #'
-thing <- function(..., dot, parent = parent.frame(), lock = TRUE, expose_private = FALSE){
-        res <- module(..., parent = parent, lock = FALSE, expose_private = TRUE)
+thing <- function(..., dot, parent = parent.frame(), lock = TRUE){
+        private <- attr(module(..., parent = parent, lock = FALSE), "private")
+        res <- private$..public..
+
         if (!missing(dot)) {
                 dot <- substitute(dot)
-                makeActiveBinding(".", eval(dot, envir = res$..private..), env = res)
+                makeActiveBinding(".", eval(dot, envir = private), env = res)
         }
 
-        if (!expose_private) rm("..private..", envir = res)
         if (lock) lockEnvironment(res, bindings = TRUE)
 
         class(res) <- c("thing", class(res))

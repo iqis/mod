@@ -6,14 +6,11 @@
 \alias{source_module}
 \title{Make a Module}
 \usage{
-module(..., parent = parent.frame(), lock = TRUE,
-  expose_private = FALSE)
+module(..., parent = parent.frame(), lock = TRUE)
 
-ule(..., parent = parent.frame(), lock = TRUE,
-  expose_private = FALSE)
+ule(..., parent = parent.frame(), lock = TRUE)
 
-source_module(path, parent = baseenv(), lock = TRUE,
-  expose_private = FALSE)
+source_module(path, parent = baseenv(), lock = TRUE)
 }
 \arguments{
 \item{...}{module expression}
@@ -21,8 +18,6 @@ source_module(path, parent = baseenv(), lock = TRUE,
 \item{parent}{the enclosing environment}
 
 \item{lock}{lock the environment; logical}
-
-\item{expose_private}{expose the private environment as `..private..`; logical}
 
 \item{path}{path to a module file}
 }

@@ -17,10 +17,6 @@ test_that("print.module() actually prints stuff ", {suppressMessages({
         expect_output(mod:::print.module(mod_test))
 })})
 
-test_that("module has ..private.. when exposing private envir", {
-        mod_ep <- mod::ule({}, expose_private = TRUE)
-        expect_true("..private.." %in% ls(mod_ep, all.names = TRUE))
-})
 
 test_that("use() can attach a module to the search path", {
         mod::use(mod_test)

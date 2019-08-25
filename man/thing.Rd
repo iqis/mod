@@ -4,8 +4,7 @@
 \alias{thing}
 \title{Make a Thing}
 \usage{
-thing(..., dot, parent = parent.frame(), lock = TRUE,
-  expose_private = FALSE)
+thing(..., dot, parent = parent.frame(), lock = TRUE)
 }
 \arguments{
 \item{...}{module expression}
@@ -15,8 +14,6 @@ thing(..., dot, parent = parent.frame(), lock = TRUE,
 \item{parent}{the enclosing environment}
 
 \item{lock}{lock the environment; logical}
-
-\item{expose_private}{expose the private environment as `..private..`; logical}
 }
 \value{
 a \code{module} containing an active binding

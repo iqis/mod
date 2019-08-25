@@ -7,7 +7,6 @@
 #' @param path path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment; logical
-#' @param expose_private expose the private environment as `..private..`; logical
 #'
 #' @return an \code{environment} of class \code{module} containing defined objects
 #'
@@ -31,12 +30,12 @@
 #'
 #' @export
 #'
-module <- function(..., parent = parent.frame(), lock = TRUE, expose_private = FALSE){
+module <- function(..., parent = parent.frame(), lock = TRUE){
         code <- deparse(substitute(...))
         temp_file <- tempfile("inline_module")
         write(code, temp_file)
 
-        source_module(temp_file, parent = parent, lock = lock, expose_private = expose_private)
+        source_module(temp_file, parent = parent, lock = lock)
 }
 
 #' @rdname module
@@ -48,7 +47,7 @@ ule <- module
 #' @rdname module
 #' @export
 #'
-source_module <- function(path, parent = baseenv(), lock = TRUE, expose_private = FALSE) {
+source_module <- function(path, parent = baseenv(), lock = TRUE) {
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
@@ -118,14 +117,11 @@ source_module <- function(path, parent = baseenv(), lock = TRUE, expose_private 
         # Assign back obj_name_list to ..provide..
         private$..provide.. <- obj_name_list
 
-
-
-        if (expose_private) assign("..private..", private, envir = private$..public..)
-
         if (lock) lockEnvironment(private$..public.., bindings = TRUE)
 
         attr(private$..public.., "name") <- private$..name..
         attr(private$..public.., "path") <- private$..path..
+        attr(private$..public.., "private") <- private
 
         class(private$..public..) <- c("module", class(private$..public..))
 
@@ -154,12 +150,12 @@ source_module <- function(path, parent = baseenv(), lock = TRUE, expose_private 
 #'
 #' @export
 #'
-use <- function(module, as, parent = baseenv(), lock = TRUE, expose_private = FALSE){
+use <- function(module, as, parent = baseenv(), lock = TRUE){
         if (is_module(module)) {
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- source_module(path = module, parent = parent, lock = lock, expose_private = expose_private)
+                env <- source_module(path = module, parent = parent, lock = lock)
                 bare_name <- function(path){
                         gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
                 }

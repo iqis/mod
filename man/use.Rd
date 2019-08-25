@@ -4,8 +4,7 @@
 \alias{use}
 \title{Attach a Module to the Search Path}
 \usage{
-use(module, as, parent = baseenv(), lock = TRUE,
-  expose_private = FALSE)
+use(module, as, parent = baseenv(), lock = TRUE)
 }
 \arguments{
 \item{module}{a module object, or path to a module file}
@@ -15,8 +14,6 @@ use(module, as, parent = baseenv(), lock = TRUE,
 \item{parent}{the enclosing environment}
 
 \item{lock}{lock the environment; logical}
-
-\item{expose_private}{expose the private environment as `..private..`; logical}
 }
 \value{
 \code{TRUE} if successful; invisible
