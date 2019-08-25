@@ -22,7 +22,7 @@ use(module, as, parent = baseenv(), lock = TRUE,
 \code{TRUE} if successful; invisible
 }
 \description{
-Attach a Module to the Search Path
+If the module as a name, defined by name(), it will always be used for the search path.
 }
 \examples{
 
