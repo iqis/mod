@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mod::ule
+# mod::ule <img src="man/figures/logo.png" align="right" width=15% />
 
 <!-- badges: start -->
 
@@ -20,8 +20,8 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 
 The `mod` package provides a simple way to structure program and data
 into flexible and independent units for programming and interactive use.
-Modules indtroduced by the `mod` package offer the benefit of modules
-from other languages, while keeping an authentic R flavor.
+Modules indtroduced by the `mod` package offer merits and conveniences
+currently absent from R, while keeping R’s authentic flavor.
 
 ## Why?
 
@@ -71,6 +71,24 @@ The `mod` package has a simple UI:
       - Attach a package locally: `require()`
       - Copy objects from another module: `refer()`
       - Name the module: `name()`
+
+## Quickstart
+
+``` r
+m <- mod::ule({
+        numbers <- c(1,2,2,2,3,3,4,5,6)
+        numbers_plot <- function(x = numbers) {
+                plot(x, col = "purple", pch = 15)
+                title("Numbers", ylab = "Value")
+        }
+})
+
+m$numbers
+#> [1] 1 2 2 2 3 3 4 5 6
+m$numbers_plot()
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Documentation
 

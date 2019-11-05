@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Introduction to Modules</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to Modules</h1>
+
+
+
+<div id="use" class="section level2">
+<h2>Use</h2>
+<p>The <code>mod</code> package is designed to be used either attached or unattached to your search path.</p>
+<p>The following demonstrations show the package attached:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">require</span>(mod)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; Loading required package: mod</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; Attaching package: &#39;mod&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt; The following object is masked from &#39;package:base&#39;:</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;     drop</span></span></code></pre></div>
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>Define an inline module:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>my &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb2-2"><a href="#cb2-2"></a>        a &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>        b &lt;-<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>        f &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y</span>
+<span id="cb2-5"><a href="#cb2-5"></a>})</span></code></pre></div>
+<p>The resulting module contains the objects defined within.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">ls</span>(my)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;f&quot;</span></span></code></pre></div>
+<p>Subset the module to access its objects.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my<span class="op">$</span>a</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>my<span class="op">$</span>b</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>my<span class="op">$</span><span class="kw">f</span>(my<span class="op">$</span>a, my<span class="op">$</span>b)</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p>Use <code>with()</code> to aceess the objects with their bare names.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">with</span>(my, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>     <span class="kw">f</span>(a,b))</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<div id="attach-a-module-to-the-search-path" class="section level3">
+<h3>Attach a Module to the Search Path</h3>
+<p>Just like a package, a module can be attached to the search path.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">use</span>(my)</span></code></pre></div>
+<p>The <code>my</code> module is attached to the search path as “module:my”.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">search</span>()</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt;  [1] &quot;.GlobalEnv&quot;        &quot;module:my&quot;         &quot;package:mod&quot;      </span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;  [4] &quot;package:stats&quot;     &quot;package:graphics&quot;  &quot;package:grDevices&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt;  [7] &quot;package:utils&quot;     &quot;package:datasets&quot;  &quot;package:methods&quot;  </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; [10] &quot;Autoloads&quot;         &quot;package:base&quot;</span></span></code></pre></div>
+<p>And you can use the objects inside directly, just like those from a package.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">f</span>(a,b)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p>Detach the module from the search path when done, if desired.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">drop</span>(<span class="st">&quot;my&quot;</span>)</span></code></pre></div>
+</div>
+<div id="make-objects-available-to-another-module" class="section level3">
+<h3>Make objects Available to another Module</h3>
+<p>Use <code>refer()</code> to “copy” objects from another module. In the following example, we create a new module <code>my_other</code> that uses the objects from <code>my</code>, which is previsouly defined.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">ls</span>(my)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;f&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a>my_other&lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb10-5"><a href="#cb10-5"></a>        <span class="kw">refer</span>(my)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>        c &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>        d &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a>        f &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">print</span>(<span class="st">&quot;foo&quot;</span>) </span>
+<span id="cb10-9"><a href="#cb10-9"></a>})</span>
+<span id="cb10-10"><a href="#cb10-10"></a></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="kw">ls</span>(my_other)</span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;f&quot;</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>my_other<span class="op">$</span><span class="kw">f</span>()</span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span></code></pre></div>
+<p>In addition to its own objects, <code>my_other</code> module has all objects from <code>my</code>, except <code>f</code>: because <code>my_other</code> module also has a <code>f</code> object, and replaces the <code>f</code> from <code>my</code> module.</p>
+<p>We can re-define <code>my_other</code> and prepend objects from <code>my</code> with <em>my</em>. This way, both <code>f</code>s are available.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>my_other &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb11-2"><a href="#cb11-2"></a>        <span class="kw">refer</span>(my, <span class="dt">prefix =</span> .)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>        c &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>        d &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>        f &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">print</span>(<span class="st">&quot;foo&quot;</span>) </span>
+<span id="cb11-6"><a href="#cb11-6"></a>})</span>
+<span id="cb11-7"><a href="#cb11-7"></a></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="kw">ls</span>(my_other)</span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; [1] &quot;c&quot;    &quot;d&quot;    &quot;f&quot;    &quot;my.a&quot; &quot;my.b&quot; &quot;my.f&quot;</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a></span>
+<span id="cb11-11"><a href="#cb11-11"></a>my_other<span class="op">$</span><span class="kw">my.f</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a>my_other<span class="op">$</span><span class="kw">f</span>()</span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span></code></pre></div>
+</div>
+<div id="public-and-private-variables" class="section level3">
+<h3>Public and Private Variables</h3>
+<p>A variable is <em>private</em> if its name starts with <code>..</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>room_<span class="dv">101</span> &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb12-2"><a href="#cb12-2"></a>        ..diary &lt;-<span class="st"> &quot;Dear Diary: I used SPSS today...&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>        get_diary &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb12-4"><a href="#cb12-4"></a>                ..diary</span>
+<span id="cb12-5"><a href="#cb12-5"></a>        }</span>
+<span id="cb12-6"><a href="#cb12-6"></a>})</span></code></pre></div>
+<p>A private variable cannot be seen or touched. There is no way to directly access <code>..diary</code> from the outside, except by a function defined within the module, <code>get_diary()</code>. This can be useful if you want to shield some information from the other users or programs.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">ls</span>(room_<span class="dv">101</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; [1] &quot;get_diary&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>room_<span class="dv">101</span><span class="op">$</span>..diary</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>room_<span class="dv">101</span><span class="op">$</span><span class="kw">get_diary</span>()</span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; [1] &quot;Dear Diary: I used SPSS today...&quot;</span></span></code></pre></div>
+<p>If using <code>provide()</code> function to explicitly declair public variables, all others become private.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>room_<span class="dv">102</span> &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb14-2"><a href="#cb14-2"></a>        <span class="kw">provide</span>(open_info, get_classified)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>        </span>
+<span id="cb14-4"><a href="#cb14-4"></a>        open_info &lt;-<span class="st"> &quot;I am a data scientist.&quot;</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>        classified_info &lt;-<span class="st"> &quot;I can&#39;t get the database driver to work.&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>        get_classified &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb14-7"><a href="#cb14-7"></a>                classified_info</span>
+<span id="cb14-8"><a href="#cb14-8"></a>        }</span>
+<span id="cb14-9"><a href="#cb14-9"></a>})</span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="kw">ls</span>(room_<span class="dv">102</span>)</span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; [1] &quot;get_classified&quot; &quot;open_info&quot;</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a>room_<span class="dv">102</span><span class="op">$</span>open_info</span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; [1] &quot;I am a data scientist.&quot;</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a>room_<span class="dv">102</span><span class="op">$</span>classified_info</span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a>room_<span class="dv">102</span><span class="op">$</span><span class="kw">get_classified</span>()</span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt; [1] &quot;I can&#39;t get the database driver to work.&quot;</span></span></code></pre></div>
+</div>
+<div id="use-a-package" class="section level3">
+<h3>Use a package</h3>
+<p>The <code>mod</code> package provides a <code>require()</code> function. <code>mod:::require()</code> works in the same manner as do <code>base::require()</code>, but makes a packages available for use in its containing module only.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>mpg_analysis &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="kw">require</span>(ggplot2)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    plot &lt;-<span class="st"> </span><span class="kw">qplot</span>(mtcars<span class="op">$</span>mpg)    </span>
+<span id="cb15-4"><a href="#cb15-4"></a>})</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; Registered S3 methods overwritten by &#39;ggplot2&#39;:</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt;   method         from </span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt;   [.quosures     rlang</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt;   c.quosures     rlang</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;   print.quosures rlang</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a>mpg_analysis<span class="op">$</span>plot</span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Meanwhile, the global search path remain unaffected, not containing the <code>ggplot2</code> package:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="st">&quot;package:ggplot2&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">search</span>()</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p><code>mod::ule</code> is simple, lightweight and staright-forward. It is plain R and contains zero GMO.</p>
+<p>Modules live any any other R object.</p>
+<p>You do things the R way. For example, <code>acquire()</code> and <code>module()</code> only returns a module object; It is up to you to put it into your working environemnt with <code>&lt;-</code>.d</p>
+</div>
+<div id="simulate-oop" class="section level3">
+<h3>Simulate OOP</h3>
+<p>The below example simulates one essential behavior of an object in Object-oriented Programming(OOP) by manipulating the state of <code>..count</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>counter &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb17-2"><a href="#cb17-2"></a>        ..count &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>        add_one &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb17-4"><a href="#cb17-4"></a>                <span class="co">#Its necessary to use `&lt;&lt;-` operator.</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>                ..count &lt;&lt;-<span class="st"> </span>..count <span class="op">+</span><span class="st"> </span><span class="dv">1</span> </span>
+<span id="cb17-6"><a href="#cb17-6"></a>        }</span>
+<span id="cb17-7"><a href="#cb17-7"></a>        reset &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb17-8"><a href="#cb17-8"></a>                ..count &lt;&lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>        }</span>
+<span id="cb17-10"><a href="#cb17-10"></a>        get_count &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb17-11"><a href="#cb17-11"></a>                ..count</span>
+<span id="cb17-12"><a href="#cb17-12"></a>        }</span>
+<span id="cb17-13"><a href="#cb17-13"></a>})</span></code></pre></div>
+<p>A variable must be private to be mutable like, <code>..count</code>.</p>
+<p>The following demonstrates:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># initial count: 0</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>counter<span class="op">$</span><span class="kw">get_count</span>() </span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co"># add_one() twice</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>counter<span class="op">$</span><span class="kw">add_one</span>() </span>
+<span id="cb18-7"><a href="#cb18-7"></a>counter<span class="op">$</span><span class="kw">add_one</span>() </span>
+<span id="cb18-8"><a href="#cb18-8"></a></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># ..count is now 2</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>counter<span class="op">$</span><span class="kw">get_count</span>() </span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co"># reset ..count to 0</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>counter<span class="op">$</span><span class="kw">reset</span>()</span>
+<span id="cb18-15"><a href="#cb18-15"></a></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co"># ..count is back to 0 again</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a>counter<span class="op">$</span><span class="kw">get_count</span>()</span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>It is imperative that <code>mod</code> be only adopted in the simplest cases. If full-featured OOP is desired, use <a href="https://CRAN.R-project.org/package=R6"><code>R6</code></a>. The user is further warned that OOP, in general, should be used sparingly and with caution, especially during data analysis.</p>
+</div>
+</div>
+<div id="notes" class="section level2">
+<h2>Notes</h2>
+<div id="environment" class="section level4">
+<h4>Environment</h4>
+<p>A module <em>is</em> an environment. This means that every rule that applies to environments, such as copy-by-reference, applies to modules as well.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">mode</span>(my)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; [1] &quot;environment&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="kw">is.environment</span>(my)</span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="terms" class="section level4">
+<h4>Terms</h4>
+<p>Some may wonder the choice of terms. Why <code>refer()</code> and <code>provide()</code>? Further, why not <code>import()</code> and <code>export()</code>? This is because we feel <em>import</em> and <em>export</em> are used too commonly, in both R, and other popular languages with varying meanings. The popular <a href="https://CRAN.R-project.org/package=reticulate"><code>reticulate</code></a> package also uses <code>import()</code>. To avoid confusion, we decided to introduce some synonyms. With analogous semantics, <a href="https://clojuredocs.org/clojure.core/refer"><code>refer()</code></a> is borrowed from Clojure, while <a href="https://docs.racket-lang.org/reference/require.html?q=provide#%28form._%28%28lib._racket%2Fprivate%2Fbase..rkt%29._provide%29%29"><code>provide()</code></a> from Racket; Both languages are R’s close relatives.</p>
+</div>
+<div id="locked" class="section level4">
+<h4>Locked</h4>
+<p>A module is locked by default. It is impossible to either change the value of a object or add a new object to a module.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>my<span class="op">$</span>a &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">#&gt; Error in my$a &lt;- 1: cannot change value of locked binding for &#39;a&#39;</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>my<span class="op">$</span>new_var &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#&gt; Error in my$new_var &lt;- 1: cannot add bindings to a locked environment</span></span></code></pre></div>
+</div>
+<div id="hidden-objects" class="section level4">
+<h4>Hidden Objects</h4>
+<p>As a general R rule, names that start with <code>.</code> define hidden objects.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>my_yet_another &lt;-<span class="st"> </span><span class="kw">module</span>({</span>
+<span id="cb21-2"><a href="#cb21-2"></a>        .var &lt;-<span class="st"> &quot;I&#39;m hidden!&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>})</span></code></pre></div>
+<p>Hidden objects are not returned by <code>ls()</code>, unless specified.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">ls</span>(my_yet_another)</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#&gt; character(0)</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="kw">ls</span>(my_yet_another, <span class="dt">all.names =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co">#&gt; [1] &quot;.var&quot;</span></span></code></pre></div>
+<p>Nonetheless, in a module, they are treated the same as public objects.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>my_yet_another<span class="op">$</span>.var</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#&gt; [1] &quot;I&#39;m hidden!&quot;</span></span></code></pre></div>
+</div>
+<div id="loadattach-from-file" class="section level4">
+<h4>Load/Attach from File</h4>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>module_path &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;misc/example_module.R&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;mod&quot;</span>)</span></code></pre></div>
+<p>To load and assign to object:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>example_module &lt;-<span class="st"> </span><span class="kw">acquire</span>(module_path)</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="kw">ls</span>(example_module)</span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;d&quot; &quot;e&quot;</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a>example_module<span class="op">$</span>a</span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>example_module<span class="op">$</span><span class="kw">d</span>()</span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="co">#&gt; [1] 6</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>example_module<span class="op">$</span><span class="kw">e</span>(<span class="dv">100</span>)</span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="co">#&gt; [1] 106</span></span></code></pre></div>
+<p>To load and attach to search path:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">use</span>(module_path)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="kw">ls</span>(<span class="st">&quot;module:example_module&quot;</span>)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;d&quot; &quot;e&quot;</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>a</span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="kw">d</span>()</span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="co">#&gt; [1] 6</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="kw">e</span>(<span class="dv">100</span>)</span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">#&gt; [1] 106</span></span></code></pre></div>
+</div>
+<div id="modules-and-packages" class="section level4">
+<h4>Modules and Packages</h4>
+<p>As it could be confusing how to deal with modules and packages, the following clarification is made:</p>
+<ul>
+<li>Attach a Package
+<ul>
+<li>To the local “search path”, at module context: <code>require()</code></li>
+<li>To the global search path, at global environment: <code>require()</code></li>
+</ul></li>
+<li>Attach a Module
+<ul>
+<li>To another module’s local “search path”: not available*</li>
+<li>To the global search path: <code>use()</code></li>
+</ul></li>
+<li>Copy Objects from a Module
+<ul>
+<li>To another module: <code>refer()</code></li>
+<li>To the global environment: not available**</li>
+</ul></li>
+<li>Use Modules inside a Package?
+<ul>
+<li>Yes, the package must <code>Depends</code> or <code>Imports</code> the <code>mod</code> package</li>
+</ul></li>
+</ul>
+<p>*: Modules cannot be attached to another module’s “seach path”. Use <code>refer()</code> instead to make clearly visible objects in the module context. **: Objects cannot be batch-copied from a module to the global environment, use <code>use()</code> to attach the module to the global search path in order to use them directly.</p>
+<p>These two features seek to avoid one very important problem <code>mod</code> packages intends to solve: conflicting names.</p>
+</div>
+<div id="unattached" class="section level4">
+<h4>Unattached</h4>
+<p>As aforementioned, the package is designed to be usable both attached and unattached.</p>
+<p>If you use the package unattached, you must always qualify the object name with <code>::</code>, such as <code>mod::ule()</code>, a shorthand for <code>mod::module()</code>. However, while inside a module, the <code>mod</code> package is always available, so you do not need to use <code>::</code>. Note that in the following example, <code>provide()</code> inside the module expression is unqualified.</p>
+<p>See:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">detach</span>(<span class="st">&quot;package:mod&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2"></a></span>
+<span id="cb27-3"><a href="#cb27-3"></a>my_mind &lt;-<span class="st"> </span>mod<span class="op">::</span><span class="kw">ule</span>({</span>
+<span id="cb27-4"><a href="#cb27-4"></a>  <span class="kw">provide</span>(good_thought)</span>
+<span id="cb27-5"><a href="#cb27-5"></a>  good_thought &lt;-<span class="st"> &quot;I love working on this package!&quot;</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a>  bad_thought &lt;-<span class="st"> &quot;I worry that no one will appreciate it.&quot;</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a>})</span>
+<span id="cb27-8"><a href="#cb27-8"></a></span>
+<span id="cb27-9"><a href="#cb27-9"></a>mod<span class="op">::</span><span class="kw">use</span>(my_mind)</span>
+<span id="cb27-10"><a href="#cb27-10"></a>good_thought</span>
+<span id="cb27-11"><a href="#cb27-11"></a><span class="co">#&gt; [1] &quot;I love working on this package!&quot;</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

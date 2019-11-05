@@ -14,7 +14,7 @@
 #'
 #' # from file
 #' module_path <- system.file("misc", "example_module.R", package = "mod")
-#' example_module <- source_module(module_path)
+#' example_module <- acquire(module_path)
 #'
 #' example_module$e(123)
 #'
@@ -35,7 +35,7 @@ module <- function(..., parent = parent.frame(), lock = TRUE){
         temp_file <- tempfile("inline_module")
         write(code, temp_file)
 
-        source_module(temp_file, parent = parent, lock = lock)
+        acquire(temp_file, parent = parent, lock = lock)
 }
 
 #' @rdname module
@@ -43,11 +43,10 @@ module <- function(..., parent = parent.frame(), lock = TRUE){
 #'
 ule <- module
 
-
 #' @rdname module
 #' @export
 #'
-source_module <- function(path, parent = baseenv(), lock = TRUE) {
+acquire <- function(path, parent = baseenv(), lock = TRUE) {
 
         # if neither from module(), nor already has .R ext, auto suffix with .R
         # small .r is forbidden
@@ -57,7 +56,7 @@ source_module <- function(path, parent = baseenv(), lock = TRUE) {
         # make a new environment, private. This envir has everything inside the module
         private <- new.env(parent = parent)
 
-        # initialize context signatures
+        # initialize context & signatures
         assign("..module..", NULL, envir = private) # an empty signature, for future use
         assign("..name..", "", envir = private) # name of module
         assign("..path..", path, envir = private) # file path of module
@@ -117,15 +116,35 @@ source_module <- function(path, parent = baseenv(), lock = TRUE) {
         # Assign back obj_name_list to ..provide..
         private$..provide.. <- obj_name_list
 
-        if (lock) lockEnvironment(private$..public.., bindings = TRUE)
+        res <- private$..public..
 
-        attr(private$..public.., "name") <- private$..name..
-        attr(private$..public.., "path") <- private$..path..
-        attr(private$..public.., "private") <- private
+        if (lock) lockEnvironment(res, bindings = TRUE)
 
-        class(private$..public..) <- c("module", class(private$..public..))
+        structure(res,
+                  class = "module",
+                  name = private$..name..,
+                  path = private$..path..,
+                  private = private
+        )
+}
 
-        return(private$..public..)
+
+#' Extract the Private Environment of a Module
+#'
+#' @param module a module
+#'
+#' @return environment
+#' @export
+#'
+#' @examples
+#'
+#' m <- mod::ule({a <- 1})
+#' pvt <- private(m)
+#'
+#' ls(pvt, all.names = TRUE)
+private <- function(module){
+        `if`(!is_module(module), stop("Not a module"))
+        attr(module, "private")
 }
 
 
@@ -141,7 +160,7 @@ source_module <- function(path, parent = baseenv(), lock = TRUE) {
 #' @examples
 #'
 #' module_path <- system.file("misc", "example_module.R", package = "mod")
-#' example_module <- source_module(module_path)
+#' example_module <- acquire(module_path)
 #'
 #' # Attach module object to search path
 #' use(example_module)
@@ -155,7 +174,7 @@ use <- function(module, as, parent = baseenv(), lock = TRUE){
                 env <- module
                 if (missing(as)) as <- deparse(substitute(module))
         } else if (is.character(module) || file.exists(module)) {
-                env <- source_module(path = module, parent = parent, lock = lock)
+                env <- acquire(path = module, parent = parent, lock = lock)
                 bare_name <- function(path){
                         gsub("(\\.+)(?!.*\\1).*$", "", basename(path), perl = TRUE)
                 }

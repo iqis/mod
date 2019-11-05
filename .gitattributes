@@ -1,0 +1,3 @@
+docs/* linguist-documentation
+pkgdown/* linguist-documentation
+*.html linguist-detectable=false

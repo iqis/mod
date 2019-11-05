@@ -8,6 +8,13 @@
 
 <title>Make a Module — module • mod</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -34,6 +41,8 @@
 
 <meta property="og:description" content="Institute a module object inline or from a file.
 mod::ule() is a useful shorthand for module() when this package is not attached." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -131,7 +140,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 
 <span class='fu'>ule</span>(<span class='no'>...</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>source_module</span>(<span class='no'>path</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>acquire</span>(<span class='no'>path</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/environment'>baseenv</a></span>(), <span class='kw'>lock</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,7 +172,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
     <pre class="examples"><div class='input'>
 <span class='co'># from file</span>
 <span class='no'>module_path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"misc"</span>, <span class='st'>"example_module.R"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"mod"</span>)
-<span class='no'>example_module</span> <span class='kw'>&lt;-</span> <span class='fu'>source_module</span>(<span class='no'>module_path</span>)
+<span class='no'>example_module</span> <span class='kw'>&lt;-</span> <span class='fu'>acquire</span>(<span class='no'>module_path</span>)
 
 <span class='no'>example_module</span>$<span class='fu'>e</span>(<span class='fl'>123</span>)</div><div class='output co'>#&gt; [1] 129</div><div class='input'>
 <span class='co'># inline</span>
@@ -177,7 +186,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 #&gt; {
 #&gt;     .a
 #&gt; }
-#&gt; &lt;environment: 0x000000002b3e52b8&gt;</div><div class='input'>
+#&gt; &lt;environment: 0x000000002b461fa8&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# mod::ule
+# mod::ule <img src="man/figures/logo.png" align="right" width=15% />
 
 <!-- badges: start -->
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/iqis/mod?branch=master&svg=true)](https://ci.appveyor.com/project/iqis/mod)
@@ -23,7 +23,8 @@ knitr::opts_chunk$set(
   [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-The `mod` package provides a simple way to structure program and data into flexible and independent units for programming and interactive use. Modules indtroduced by the `mod` package offer the benefit of modules from other languages, while keeping an authentic R flavor.
+The `mod` package provides a simple way to structure program and data into flexible and independent units for programming and interactive use. Modules indtroduced by the `mod` package offer merits and conveniences currently absent from R, while keeping R's authentic flavor.
+
 
 ## Why?
 Programs need to be oraganized into units. 
@@ -37,15 +38,16 @@ Modules fills the hollow middleground by allowing programs to live separately an
 
 Install the published version from [CRAN](https://CRAN.R-project.org/package=mod) with:
 
-```{r eval = FALSE}
+```{r eval=FALSE}
 install.packages("mod")
 ```
 
 Install the development version from [GitHub](https://github.com/) with:
 
-``` {r eval = FALSE}
+```{r eval=FALSE}
 devtools::install_github("iqis/mod")
 ```
+
 
 ## Vocabulary
 
@@ -64,6 +66,23 @@ The `mod` package has a simple UI:
   - Attach a package locally: `require()`
   - Copy objects from another module: `refer()`
   - Name the module: `name()`
+
+
+## Quickstart
+
+```{r fig.width=6, fig.align='center'}
+m <- mod::ule({
+        numbers <- c(1,2,2,2,3,3,4,5,6)
+        numbers_plot <- function(x = numbers) {
+                plot(x, col = "purple", pch = 15)
+                title("Numbers", ylab = "Value")
+        }
+})
+
+m$numbers
+m$numbers_plot()
+```
+
 
 ## Documentation
 `mod` [website](https://iqis.github.io/mod)

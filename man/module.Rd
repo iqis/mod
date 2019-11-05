@@ -3,14 +3,14 @@
 \name{module}
 \alias{module}
 \alias{ule}
-\alias{source_module}
+\alias{acquire}
 \title{Make a Module}
 \usage{
 module(..., parent = parent.frame(), lock = TRUE)
 
 ule(..., parent = parent.frame(), lock = TRUE)
 
-source_module(path, parent = baseenv(), lock = TRUE)
+acquire(path, parent = baseenv(), lock = TRUE)
 }
 \arguments{
 \item{...}{module expression}
@@ -32,7 +32,7 @@ mod::ule() is a useful shorthand for module() when this package is not attached.
 
 # from file
 module_path <- system.file("misc", "example_module.R", package = "mod")
-example_module <- source_module(module_path)
+example_module <- acquire(module_path)
 
 example_module$e(123)
 

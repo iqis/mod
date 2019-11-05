@@ -24,7 +24,7 @@ If the module as a name, defined by name(), it will always be used for the searc
 \examples{
 
 module_path <- system.file("misc", "example_module.R", package = "mod")
-example_module <- source_module(module_path)
+example_module <- acquire(module_path)
 
 # Attach module object to search path
 use(example_module)

@@ -167,7 +167,7 @@ Meanwhile, the global search path remain unaffected, not containing the `ggplot2
 
 Modules live any any other R object.
 
-You do things the R way. For example, `source_module()` and `module()` only returns a module object; It is up to you to put it into your working environemnt with `<-`.d 
+You do things the R way. For example, `acquire()` and `module()` only returns a module object; It is up to you to put it into your working environemnt with `<-`.d 
 
 
     
@@ -210,7 +210,39 @@ counter$reset()
 counter$get_count()
 ```
 
-It is imperative that `mod` be only adopted in the simplest cases. If full-featured OOP is desired, use [`R6`](https://CRAN.R-project.org/package=R6). The user is further warned that OOP, in general, should be used sparingly and with caution, especially during data analysis.
+In the next example, Bobby gets hungry, Dad complains and calls Mom:
+```{r}
+bobby <- mod::ule({
+        age_now <- 14
+        favorite_food <- c("hamburger", "pizza", "chow mein")
+        set.seed(666)
+        hungry_for <- sample(favorite_food, 1)
+        cry <- function(){
+                sprintf("I just really really want some %s, now!!!", hungry_for)
+        }
+})
+
+dad <- mod::ule({
+        refer(bobby, prefix = .)
+        provide(complain, call_mom)
+        complain <- function(){
+                sprintf("When I was %d, I've already earned a living on the dock.",
+                        bobby.age_now)
+        }
+        call_mom <- function(){
+                sprintf("Honey, can you stop by the convenience store and get some %s?", 
+                        bobby.hungry_for)
+        }
+})
+```
+
+```{r}
+bobby$cry()
+dad$complain()
+dad$call_mom()
+```
+
+It is imperative that `mod` be only adopted in simple cases. If full-featured OOP is desired, use [`R6`](https://CRAN.R-project.org/package=R6). The user is reminded that OOP, in general, should be used sparingly and with deliberation.
 
 ## Notes
 
@@ -262,7 +294,7 @@ module_path <- system.file("misc/example_module.R", package = "mod")
 
 To load and assign to object: 
 ```{r}
-example_module <- source_module(module_path)
+example_module <- acquire(module_path)
 ls(example_module)
 example_module$a
 example_module$d()

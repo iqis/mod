@@ -4,9 +4,9 @@ reference:
   desc:
   contents:
   - module
-  - ule
-  - source_module
-- title: Attach/Detach to Search Path
+  - module
+  - acquire
+- title: Attach/Detach a Module to the Search Path
   contents:
   - use
   - drop
@@ -21,3 +21,4 @@ reference:
   contents:
   - as_module
   - is_module
+  - private

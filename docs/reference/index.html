@@ -8,6 +8,13 @@
 
 <title>Function reference • mod</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -31,6 +38,9 @@
 
 
 <meta property="og:title" content="Function reference" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -132,14 +142,14 @@
       <tr>
         
         <td>
-          <p><code><a href="module.html">module()</a></code> <code><a href="module.html">ule()</a></code> <code><a href="module.html">source_module()</a></code> </p>
+          <p><code><a href="module.html">module()</a></code> <code><a href="module.html">ule()</a></code> <code><a href="module.html">acquire()</a></code> </p>
         </td>
         <td><p>Make a Module</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-attach-detach-to-search-path" class="hasAnchor"><a href="#section-attach-detach-to-search-path" class="anchor"></a>Attach/Detach to Search Path</h2>
+          <h2 id="section-attach-detach-a-module-to-the-search-path" class="hasAnchor"><a href="#section-attach-detach-a-module-to-the-search-path" class="anchor"></a>Attach/Detach a Module to the Search Path</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -207,6 +217,12 @@
           <p><code><a href="is_module.html">is_module()</a></code> </p>
         </td>
         <td><p>Test if an Object is a Module</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="private.html">private()</a></code> </p>
+        </td>
+        <td><p>Extract the Private Environment of a Module</p></td>
       </tr>
     </tbody>
     </table>
@@ -216,7 +232,7 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#section-make-a-module">Make a Module</a></li>
-      <li><a href="#section-attach-detach-to-search-path">Attach/Detach to Search Path</a></li>
+      <li><a href="#section-attach-detach-a-module-to-the-search-path">Attach/Detach a Module to the Search Path</a></li>
       <li><a href="#section-make-declarations-inside-a-module">Make Declarations inside a Module</a></li>
       <li><a href="#section-utilities">Utilities</a></li>
     </ul>
