@@ -59,6 +59,10 @@ acquire <- function(path, parent = baseenv(), lock = TRUE) {
         private <- new.env(parent = parent)
 
         # initialize context & signatures
+
+        # TODO
+        # The naming of things here can be quite confusing. Change
+
         assign("..module..", NULL, envir = private) # an empty signature, for future use
         assign("..name..", "", envir = private) # name of module
         assign("..path..", path, envir = private) # file path of module
