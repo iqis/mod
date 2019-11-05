@@ -36,3 +36,6 @@ drop()
 search()
 
 }
+\seealso{
+\code{\link{use}}
+}

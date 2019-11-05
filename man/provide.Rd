@@ -40,3 +40,8 @@ ls(mod_a)
 ls(mod_b)
 
 }
+\seealso{
+Other declaratives: \code{\link{name}},
+  \code{\link{refer}}, \code{\link{require}}
+}
+\concept{declaratives}

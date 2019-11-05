@@ -23,3 +23,8 @@ mod::ule({
 })
 
 }
+\seealso{
+Other declaratives: \code{\link{provide}},
+  \code{\link{refer}}, \code{\link{require}}
+}
+\concept{declaratives}

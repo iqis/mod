@@ -47,3 +47,6 @@ my_module$a
 my_module$f
 
 }
+\seealso{
+\code{\link{use}}, \code{\link{drop}}
+}

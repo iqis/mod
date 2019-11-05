@@ -32,3 +32,6 @@ use(example_module)
 use(module_path, "example_module")
 
 }
+\seealso{
+\code{\link{drop}}
+}

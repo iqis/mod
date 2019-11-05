@@ -28,6 +28,8 @@
 #' my_module$a
 #' my_module$f
 #'
+#' @seealso \code{\link{use}}, \code{\link{drop}}
+#'
 #' @export
 #'
 module <- function(..., parent = parent.frame(), lock = TRUE){
@@ -167,6 +169,8 @@ private <- function(module){
 #' # or directly from file
 #' use(module_path, "example_module")
 #'
+#' @seealso \code{\link{drop}}
+#'
 #' @export
 #'
 use <- function(module, as, parent = baseenv(), lock = TRUE){
@@ -192,6 +196,52 @@ use <- function(module, as, parent = baseenv(), lock = TRUE){
         get("attach", envir = .BaseNamespaceEnv, mode = "function")(
                 what = env, name = name
         )
+        invisible(TRUE)
+}
+
+
+#' Detach a Module from the Search Path
+#'
+#' If no argument is supplied, detach the most recently attached module.
+#'
+#' @param  name name of the module to exit from; character
+#' @return \code{TRUE} if successful; invisible
+#'
+#' @examples
+#'
+#' use(mod::ule({
+#'    a <- 1
+#' }), as = "my_module")
+#'
+#' use(mod::ule({
+#'    b <- 2
+#' }), as = "my_other_module")
+#'
+#' search()
+#'
+#' # by name
+#' drop("my_module")
+#'
+#' # and at the head position
+#' drop()
+#'
+#' search()
+#'
+#' @seealso \code{\link{use}}
+#'
+#' @export
+#'
+drop <- function(name) {
+        if (missing(name)) {
+                search_path <- search()
+                name <- search_path[grepl("module:", search_path)][1]
+        } else {
+                name <- paste0("module:", name)
+        }
+
+        if (is.na(name)) stop("no module attached in search path")
+
+        detach(name = name, character.only = TRUE)
         invisible(TRUE)
 }
 
@@ -229,47 +279,3 @@ print.module <- function(x, ...){
         mapply(print_line, name = obj_name_list, class = obj_class_list)
         invisible(x)
 }
-
-#' Detach a Module from the Search Path
-#'
-#' If no argument is supplied, detach the most recently attached module.
-#'
-#' @param  name name of the module to exit from; character
-#' @return \code{TRUE} if successful; invisible
-#'
-#' @examples
-#'
-#' use(mod::ule({
-#'    a <- 1
-#' }), as = "my_module")
-#'
-#' use(mod::ule({
-#'    b <- 2
-#' }), as = "my_other_module")
-#'
-#' search()
-#'
-#' # by name
-#' drop("my_module")
-#'
-#' # and at the head position
-#' drop()
-#'
-#' search()
-#'
-#' @export
-#'
-drop <- function(name) {
-        if (missing(name)) {
-                search_path <- search()
-                name <- search_path[grepl("module:", search_path)][1]
-        } else {
-                name <- paste0("module:", name)
-        }
-
-        if (is.na(name)) stop("no module attached in search path")
-
-        detach(name = name, character.only = TRUE)
-        invisible(TRUE)
-}
-

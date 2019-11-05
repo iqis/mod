@@ -28,6 +28,8 @@
 #' ls(mod_a)
 #' ls(mod_b)
 #'
+#' @family declaratives
+#'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
              stop("Only use provide() in a module."))
@@ -64,6 +66,8 @@ provide <- function(...) {
 #' })
 #'
 #' mod_c$number
+#'
+#' @family declaratives
 #'
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -178,7 +182,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #' Load/Attach Package to Local Search Path
 #'
 #' Can only be used in a module expression.
-#' Emulates the effect of base::require() in its containing module, making functions and their chain of environment available.
+#' Emulates the effect of base::require() in its containing module, making functions and their chain of environment available. Will not automatically attach dependencies of the package, and the user must do it separately.
 #'  Masks base::require() inside a module context.
 #'
 #' @param package name of the package; name or character
@@ -193,6 +197,8 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #' })
 #'
 #' identical(mod_tcl$f, tcltk::tcl)
+#'
+#' @family declaratives
 #'
 require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
@@ -258,6 +264,8 @@ require <- function(package){
 #'     name("my")
 #'     # ...
 #' })
+#'
+#' @family declaratives
 #'
 name <- function(name){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),

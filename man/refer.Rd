@@ -38,3 +38,8 @@ mod_c <- mod::ule({
 mod_c$number
 
 }
+\seealso{
+Other declaratives: \code{\link{name}},
+  \code{\link{provide}}, \code{\link{require}}
+}
+\concept{declaratives}
