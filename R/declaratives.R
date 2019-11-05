@@ -207,7 +207,7 @@ require <- function(package){
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
 
-        `if`(system.file("", package = package) == "",
+        `if`(!package %in% .packages(TRUE),
              stop(paste(package, "is not an installed package")))
 
         private <- parent.frame()
