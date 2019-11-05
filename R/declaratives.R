@@ -32,7 +32,7 @@
 #'
 provide <- function(...) {
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use provide() in a module."))
+             stop("Only use mod:::provide() in a module."))
 
         obj_names <- as.character(match.call(expand.dots = FALSE)$...)
         existing_obj_names <- get("..provide..", envir = parent.frame())
@@ -71,7 +71,7 @@ provide <- function(...) {
 #'
 refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use provide() in a module."))
+             stop("Only use mod:::refer() in a module."))
 
         private <- parent.frame()
 
@@ -202,7 +202,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 #'
 require <- function(package){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use mod::require() in a module."))
+             stop("Only use mod:::require() in a module."))
 
         package <- substitute(package)
         package <- `if`(is.character(package),package,deparse(package))
@@ -269,7 +269,7 @@ require <- function(package){
 #'
 name <- function(name){
         `if`(!exists("..module..", parent.frame(), inherits = FALSE),
-             stop("Only use mod::name() in a module."))
+             stop("Only use mod:::name() in a module."))
 
         name <- as.character(substitute(name))
         private <- parent.frame()
