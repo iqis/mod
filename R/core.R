@@ -64,6 +64,7 @@ acquire <- function(path, parent = baseenv(), lock = TRUE) {
         # The naming of things here can be quite confusing. Change
         # make a gadget to chain together environments?
 
+        assign("..this..", private, envir = private) # an alias of private inside itself
         assign("..module..", NULL, envir = private) # an empty signature, for future use
         assign("..name..", "", envir = private) # name of module
         assign("..path..", path, envir = private) # file path of module
