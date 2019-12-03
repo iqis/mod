@@ -62,6 +62,7 @@ acquire <- function(path, parent = baseenv(), lock = TRUE) {
 
         # TODO
         # The naming of things here can be quite confusing. Change
+        # make a gadget to chain together environments?
 
         assign("..module..", NULL, envir = private) # an empty signature, for future use
         assign("..name..", "", envir = private) # name of module
@@ -112,7 +113,7 @@ acquire <- function(path, parent = baseenv(), lock = TRUE) {
         obj_name_list <- obj_name_list[!grepl("^\\.\\.", obj_name_list)]
 
         # Assign stuff from obj_list to ..public..
-        if (length(obj_name_list) > 0){
+        if (length(obj_name_list) > 0) {
                 mapply(assign,
                        x = obj_name_list,
                        value = mget(obj_name_list, private),

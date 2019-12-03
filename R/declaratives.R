@@ -94,7 +94,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
 
         # = Do Refer =
 
-        if (length(sources) != 0){
+        if (length(sources) != 0) {
 
                 `if`(length(unique(private$..refer..)) < length(private$..refer..),
                      stop("refer() a module at most once."))
@@ -136,7 +136,7 @@ refer <- function(..., include = c(), exclude = c(), prefix = "", sep = "."){
                 }
 
                 source_conflict_name_list <-
-                        if (length(source_obj_name_list2) > 1){
+                        if (length(source_obj_name_list2) > 1) {
                                 res <- lapply(seq_along(source_obj_name_list2),
                                               function(i) {
                                                       intersect_w_others(x = source_obj_name_list2,
