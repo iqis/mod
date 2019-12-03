@@ -64,6 +64,10 @@ masks$source <- function(...){
              To make a nested module, use module()/acquire().")
 }
 
+masks$`<<-` <- function(...){
+        stop("Only use `<<-` outside of a module.")
+}
+
 
 # Helpers
 search_path_envirs <- function(where = parent.frame()){
