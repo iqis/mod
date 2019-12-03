@@ -173,52 +173,17 @@ You do things the R way. For example, `acquire()` and `module()` only returns a 
     
 ### Simulate OOP
 
-The below example simulates one essential behavior of an object in Object-oriented Programming(OOP) by manipulating the state of `..count`.
-```{r}
-counter <- module({
-        ..count <- 0
-        add_one <- function(){
-                #Its necessary to use `<<-` operator.
-                ..count <<- ..count + 1 
-        }
-        reset <- function(){
-                ..count <<- 0
-        }
-        get_count <- function(){
-                ..count
-        }
-})
-```
-A variable must be private to be mutable like, `..count`. 
-
-The following demonstrates:
-```{r}
-# initial count: 0
-counter$get_count() 
-
-# add_one() twice
-counter$add_one() 
-counter$add_one() 
-
-# ..count is now 2
-counter$get_count() 
-
-# reset ..count to 0
-counter$reset()
-
-# ..count is back to 0 again
-counter$get_count()
-```
-
-In the next example, Bobby gets hungry, Dad complains and calls Mom:
+In this example, Bobby gets hungry, Dad complains and calls Mom:
 ```{r}
 bobby <- mod::ule({
         age_now <- 14
         favorite_food <- c("hamburger", "pizza", "chow mein")
-        set.seed(666)
-        hungry_for <- sample(favorite_food, 1)
+        hungry_for <- function() {
+          set.seed(Sys.Date())
+          sample(favorite_food, 1)
+        }
         cry <- function(){
-                sprintf("I just really really want some %s, now!!!", hungry_for)
+                sprintf("I just really really want some %s, now!!!", hungry_for())
         }
 })
 
@@ -231,7 +196,7 @@ dad <- mod::ule({
         }
         call_mom <- function(){
                 sprintf("Honey, can you stop by the convenience store and get some %s?", 
-                        bobby.hungry_for)
+                        bobby.hungry_for())
         }
 })
 ```
@@ -242,7 +207,7 @@ dad$complain()
 dad$call_mom()
 ```
 
-It is imperative that `mod` be only adopted in simple cases. If full-featured OOP is desired, use [`R6`](https://CRAN.R-project.org/package=R6). The user is reminded that OOP, in general, should be used sparingly and with deliberation.
+It is imperative that `mod` be only adopted in simple cases; no mutable state is allowed in modules. If full-featured OOP is desired, use [`R6`](https://CRAN.R-project.org/package=R6). The user is reminded that OOP, in general, should be used sparingly and with deliberation.
 
 ## Notes
 
