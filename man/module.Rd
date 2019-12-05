@@ -6,14 +6,14 @@
 \alias{acquire}
 \title{Make a Module}
 \usage{
-module(..., parent = parent.frame(), lock = TRUE)
+module(expr, parent = parent.frame(), lock = TRUE)
 
-ule(..., parent = parent.frame(), lock = TRUE)
+ule(expr, parent = parent.frame(), lock = TRUE)
 
 acquire(path, parent = baseenv(), lock = TRUE)
 }
 \arguments{
-\item{...}{module expression}
+\item{expr}{module expression}
 
 \item{parent}{the enclosing environment}
 
@@ -27,6 +27,9 @@ an \code{environment} of class \code{module} containing defined objects
 \description{
 Institute a module object inline or from a file.
 mod::ule() is a useful shorthand for module() when this package is not attached.
+}
+\details{
+Only use \code{lock = FALSE} for runtime debugging. It is otherwise necessary to keep the module locked.
 }
 \examples{
 

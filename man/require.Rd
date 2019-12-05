@@ -15,7 +15,7 @@ require(package)
 \description{
 Can only be used in a module expression.
 Emulates the effect of base::require() in its containing module, making functions and their chain of environment available. Will not automatically attach dependencies of the package, and the user must do it separately.
- Masks base::require() inside a module context.
+ Masks base::require() inside a module context. Unlike base::require(), gives an error when package is not installed.
 }
 \examples{
 

@@ -3,7 +3,7 @@
 #' Institute a module object inline or from a file.
 #' mod::ule() is a useful shorthand for module() when this package is not attached.
 #'
-#' @param ... module expression
+#' @param expr module expression
 #' @param path path to a module file
 #' @param parent the enclosing environment
 #' @param lock lock the environment; logical
@@ -29,14 +29,15 @@
 #' my_module$f
 #'
 #' @seealso \code{\link{use}}, \code{\link{drop}}
+#' @details
+#'    Only use \code{lock = FALSE} for runtime debugging. It is otherwise necessary to keep the module locked.
 #'
 #' @export
 #'
-module <- function(..., parent = parent.frame(), lock = TRUE){
-        code <- deparse(substitute(...))
+module <- function(expr, parent = parent.frame(), lock = TRUE){
+        code <- deparse(substitute(expr))
         temp_file <- tempfile("inline_module")
         write(code, temp_file)
-
         acquire(temp_file, parent = parent, lock = lock)
 }
 
